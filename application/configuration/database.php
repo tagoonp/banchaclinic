@@ -7,10 +7,16 @@ class Database{
   private $dbname;
 
   function __construct(){
-    $this->host = DB_HOST;
-    $this->user = DB_USER;
-    $this->password = DB_PASSWORD;
-    $this->dbname = DB_NAME;
+    // $this->host = DB_HOST;
+    // $this->user = DB_USER;
+    // $this->password = DB_PASSWORD;
+    // $this->dbname = DB_NAME;
+
+    $this->host = 'wisnior.com';
+    $this->user = 'banchac';
+    $this->password = 'id%66F3dS';
+    $this->dbname = 'banchaclinic';
+    
   }
 
   function conn(){
@@ -73,3 +79,4 @@ class Database{
   }
 }
 ?>
+

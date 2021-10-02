@@ -1,4 +1,5 @@
 <?php 
+require('../configuration/local.inc.php');
 require('../configuration/server.inc.php');
 require('../configuration/configuration.php');
 require('../configuration/database.php'); 
@@ -23,8 +24,21 @@ if(!isset($_GET['stage'])){
 
 $stage = mysqli_real_escape_string($conn, $_GET['stage']);
 
-if($stage == 'check'){
-    // $strSQL = "SELECT * FROM ";
+if($stage == 'sync_up'){
+
+    $conn_server = mysqli_connect(DB_HOS_SVT, DB_USER_SV, DB_PASSWORD_SV, DB_NAME_SV);
+    $conn_server->set_charset("utf8");
+    if($conn_server){
+      return false;
+    }else{
+        $return['status'] = 'Fail';
+        $return['error_stage'] = '0';
+        echo json_encode($return);
+        $db->close(); 
+        die(); 
+    }
+    
+    $strSQL = "SELECT * FROM bnc_drug_tmp WHERE sync_status = ";
 }
 
 if($stage == 'generate_sync_session'){

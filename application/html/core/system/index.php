@@ -633,7 +633,8 @@ $page_id = 0;
 
     <script>
         $(document).ready(function(){
-            app.syncheck()
+            // app.syncheck()
+            preload.hide()
         })
     </script>
 

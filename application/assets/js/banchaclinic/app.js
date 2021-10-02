@@ -80,7 +80,7 @@ var app = {
 
 
 
-        var syn_url = 'https://banchaclinic.wisnior.com/application/api/sync.php??stage=check';
+        var syn_url = 'https://banchaclinic.wisnior.com/application/api/sync.php?stage=check';
         var jxr = $.post(syn_url, function(){}, 'json')
                    .always(function(snap){
                        if(snap.status == 'Success'){
@@ -98,7 +98,7 @@ var app = {
     syncro(){
         console.log('Synchronousing ....');
         preload.show()
-        var syn_url = 'https://banchaclinic.wisnior.com/application/api/sync.php??stage=sync';
+        var syn_url = 'https://banchaclinic.wisnior.com/application/api/sync.php?stage=sync';
         var jxr = $.post(syn_url, function(){}, 'json')
                    .always(function(snap){
                        if(snap.status == 'Success'){

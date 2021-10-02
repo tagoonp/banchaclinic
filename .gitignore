@@ -5,6 +5,7 @@
 
 application/configuration/server.inc.php
 application/configuration/local.inc.php
+application/configuration/database.php
 application/assets/js/banchaclinic/core.js
 
 
