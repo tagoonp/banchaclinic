@@ -1,18 +1,12 @@
-# Build and Release Folders
-bin-debug/
-bin-release/
-[Oo]bj/
-[Bb]in/
+# ignore node dependency directories
+application/tmp_file/
 
-# Other files and folders
-.settings/
+# ignore log files and databases
+*.log
+*.sql
+*.sqlite
 
-# Executables
-*.swf
-*.air
-*.ipa
-*.apk
+application/configuration/server.inc.php
+application/assets/1.0.1/js/core.js
 
-# Project files, i.e. `.project`, `.actionScriptProperties` and `.flexProperties`
-# should NOT be excluded as they contain compiler settings and other important
-# information for Eclipse / Flash Builder.
+
