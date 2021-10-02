@@ -520,6 +520,33 @@ if($stage == 'newstock'){
     die(); 
 }
 
+if($stage == 'checkstock'){
+    if(
+        (!isset($_REQUEST['did']))
+    ){
+        $return['status'] = 'Fail';
+        $return['error_stage'] = '1';
+        echo json_encode($return);
+        $db->close(); 
+        die(); 
+    }
+
+    $did = mysqli_real_escape_string($conn, $_REQUEST['did']);
+
+    $strSQL = "SELECT * FROM bnc_drug_tmp WHERE ID = '$did'";
+    $res = $db->fetch($strSQL, false);
+    if($res){
+        $return['status'] = 'Success';
+        $return['data'] = $res;
+    }else{
+        $return['status'] = 'Fail';
+        $return['error_stage'] = '2';
+    }
+    echo json_encode($return);
+    $db->close(); 
+    die(); 
+}
+
 if($stage == 'updatestock'){
     if(
         (!isset($_REQUEST['did'])) ||

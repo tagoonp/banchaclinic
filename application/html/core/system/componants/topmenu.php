@@ -14,6 +14,6 @@
         <li class="nav-item <?php if($page_id == 9){ echo "active"; } ?>" data-menu="dropdown"><a class="dropdown-toggle nav-link" href="app-bill-list.php"><i class="menu-livicon" data-icon="us-dollar"></i><span data-i18n="UI">บิล/Check</span></a></li>
         <li class="nav-item <?php if($page_id == 7){ echo "active"; } ?>" data-menu="dropdown"><a class="dropdown-toggle nav-link" href="app-calendar.php"><i class="menu-livicon" data-icon="calendar"></i><span data-i18n="UI">การนัดหมาย</span></a></li>
 
-        <li class="nav-item" data-menu="dropdown"><a class="dropdown-toggle nav-link" href="JavaScript:app.syncro()"><i class="menu-livicon" data-icon="upload"></i><span data-i18n="UI">ซิงโครนัสข้อมูล</span></a></li>
+        <!-- <li class="nav-item" data-menu="dropdown"><a class="dropdown-toggle nav-link" href="JavaScript:app.syncro()"><i class="menu-livicon" data-icon="upload"></i><span data-i18n="UI">ซิงโครนัสข้อมูล</span></a></li> -->
     </ul>
 </div>

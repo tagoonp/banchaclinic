@@ -966,14 +966,44 @@ function finallizeService(){
 }
 
 function updateDrugStock(id, dname, recent_q){
-    $('#modalStock').modal()
-    $('#txtDrugId').val(id)
-    $('#txtDrugTrade').val(dname)
-    $('#txtDrugQ').val(recent_q)
-    $('#txtNewTotal').val($('#dstock_' + id).text().trim())
-    setTimeout(()=>{
-        $('#txtNewQ').focus()
-    }, 500)
+    var param = {
+        did: id
+    }
+
+    var jst = $.post(authen_api + 'drug.php?stage=checkstock', param, function(){}, 'json')
+                        .always(function(snap){
+                            preload.hide()
+                            console.log(snap);
+                            if(snap.status == 'Success'){
+                                $('#modalStock').modal()
+                                $('#txtDrugId').val(id)
+                                $('#txtDrugTrade').val(dname)
+                                $('#txtDrugQ').val(snap.data.dstock)
+                                $('#txtNewTotal').val($('#dstock_' + id).text().trim())
+                                setTimeout(()=>{
+                                    $('#txtNewQ').focus()
+                                }, 500)
+                            }else{
+                                Swal.fire(
+                                    {
+                                    icon: "error",
+                                    title: 'เกิดข้อผิดพลาด',
+                                    text: 'ไม่พบข้อมูลยา',
+                                    confirmButtonClass: 'btn btn-danger',
+                                    }
+                                )
+                            }
+                        })
+
+    // var jxr = $.post()
+    // $('#modalStock').modal()
+    // $('#txtDrugId').val(id)
+    // $('#txtDrugTrade').val(dname)
+    // $('#txtDrugQ').val(recent_q)
+    // $('#txtNewTotal').val($('#dstock_' + id).text().trim())
+    // setTimeout(()=>{
+    //     $('#txtNewQ').focus()
+    // }, 500)
 }
 
 function editDrugStock(id, dname, recent_q){
