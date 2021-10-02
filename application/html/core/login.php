@@ -1,9 +1,8 @@
 <?php 
-// require('../../../../database_config/banchaclinic/config.inc.php');
 require('../../configuration/local.inc.php');
 require('../../configuration/configuration.php');
 require('../../configuration/database.php'); 
-
+die();
 $db = new Database();
 $conn = $db->conn();
 ?>
