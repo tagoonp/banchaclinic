@@ -8,6 +8,6 @@ application/tmp_file/
 
 application/configuration/server.inc.php
 application/configuration/local.inc.php
-application/js/assets/banchaclinic/core.js
+application/assets/js/assets/banchaclinic/core.js
 
 
