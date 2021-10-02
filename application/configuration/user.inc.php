@@ -1,5 +1,5 @@
 <?php 
-if($_SESSION['bnc_id'] != session_id()){
+if((isset($_SESSION['bnc_id'])) && ($_SESSION['bnc_id'] != session_id())){
     header('Location: '. ROOT_DOMAIN .'application/html/core/login.php');
     die();
 }
