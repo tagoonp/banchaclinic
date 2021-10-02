@@ -1,6 +1,3 @@
-# ignore node dependency directories
-application/tmp_file/
-
 # ignore log files and databases
 *.log
 *.sql
