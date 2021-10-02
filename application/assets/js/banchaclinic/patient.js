@@ -33,259 +33,325 @@ $(function(){
                 $lname = $lname_b[1];
             }
 
+            $b = [];
             for (var i = 0; i < $lname.length; i++) {
-                console.log($lname.charAt(i));
+                if($arr_thchar.includes($lname.charAt(i))){
+                    $b.push($lname.charAt(i))
+                }
+            }
+
+            $lname = $b.join('');
+            
+
+            for (var i = 0; i < $lname.length; i++) {
                 if($prefix_found == false){
                     if($arr_thchar.includes($lname.charAt(i))){
                         $code_prefix = ($lname.charAt(i) + '.')
                         $prefix_found = true;
                     }
-                }else{
-                    if($arr1.includes($lname.charAt(i))){
-                        if(($arr_thchar.includes($lname.charAt(i))) && ($code_lname.length <= 3)){
-                            if((i != 0) && ($code_lname[$code_lname.length - 1] != '1')){
-                                $code_lname.push('1')
-                            }else{
-                                $code_lname.push('1')
-                            }
-                        }
+                }
+                if($arr1.includes($lname.charAt(i))){
+                    if($arr_thchar.includes($lname.charAt(i))){
+                        $code_lname.push('1')
                     }
-                    if($arr2.includes($lname.charAt(i))){
-                        if(($arr_thchar.includes($lname.charAt(i))) && ($code_lname.length <= 3)){
-                            if((i != 0) && ($code_lname[$code_lname.length - 1] != '2')){
-                                $code_lname.push('2')
-                            }else{
-                                $code_lname.push('2')
-                            }
-                        }
+                }
+                if($arr2.includes($lname.charAt(i))){
+                    if($arr_thchar.includes($lname.charAt(i))){
+                        $code_lname.push('2')
                     }
-        
-                    if($arr3.includes($lname.charAt(i))){
-                        if(($arr_thchar.includes($lname.charAt(i))) && ($code_lname.length <= 3)){
-                            if((i != 0) && ($code_lname[$code_lname.length - 1] != '3')){
-                                $code_lname.push('3')
-                            }else{
-                                $code_lname.push('3')
-                            }
-                        }
+                }
+    
+                if($arr3.includes($lname.charAt(i))){
+                    if($arr_thchar.includes($lname.charAt(i))){
+                        $code_lname.push('3')
                     }
-        
-                    if($arr4.includes($lname.charAt(i))){
-                        if(($arr_thchar.includes($lname.charAt(i))) && ($code_lname.length <= 3)){
-                            if((i != 0) && ($code_lname[$code_lname.length - 1] != '4')){
-                                $code_lname.push('4')
-                            }else{
-                                $code_lname.push('4')
-                            }
-                        }
+                }
+    
+                if($arr4.includes($lname.charAt(i))){
+                    if($arr_thchar.includes($lname.charAt(i))){
+                        $code_lname.push('4')
                     }
-        
-                    if($arr5.includes($lname.charAt(i))){
-                        if(($arr_thchar.includes($lname.charAt(i))) && ($code_lname.length <= 3)){
-                            if((i != 0) && ($code_lname[$code_lname.length - 1] != '5')){
-                                $code_lname.push('5')
-                            }else{
-                                $code_lname.push('5')
-                            }
-                        }
+                }
+    
+                if($arr5.includes($lname.charAt(i))){
+                    if($arr_thchar.includes($lname.charAt(i))){
+                        $code_lname.push('5')
                     }
-        
-                    if($arr6.includes($lname.charAt(i))){
-                        if(($arr_thchar.includes($lname.charAt(i))) && ($code_lname.length <= 3)){
-                            if((i != 0) && ($code_lname[$code_lname.length - 1] != '6')){
-                                $code_lname.push('6')
-                            }else{
-                                $code_lname.push('6')
-                            }
-                        }
+                }
+    
+                if($arr6.includes($lname.charAt(i))){
+                    if($arr_thchar.includes($lname.charAt(i))){
+                        $code_lname.push('6')
                     }
-                }    
+                }
             }
         }else{
             $prefix_found = false;
         }
 
+        $buff_lname = [];
+        for (let index = 0; index < $code_lname.length; index++) {
+            if(index == 0){
+                $buff_lname.push($code_lname[index])
+            }else{
+                if(($buff_lname[index - 1] != $code_lname[index]) && ($buff_lname.length < 3)){
+                    $buff_lname.push($code_lname[index])
+                }
+            }
+        }
 
         $fname = $('#txtFname').val()
+
+        $b = [];
+        for (var i = 0; i < $fname.length; i++) {
+            if($arr_thchar.includes($fname.charAt(i))){
+                $b.push($fname.charAt(i))
+            }
+        }
+        $fname = $b.join('');
+            
         if($fname != ''){
+
+            $b = [];
             for (var i = 0; i < $fname.length; i++) {
-                if($code_fname.length < 2){
-                    if($arr1.includes($fname.charAt(i))){
+                if($arr_thchar.includes($fname.charAt(i))){
+                    $b.push($fname.charAt(i))
+                }
+            }
 
+            $fname = $b.join('');
 
-                        if(($arr_thchar.includes($fname.charAt(i))) && ($code_fname.length < 2)){
-                            console.log($fname.charAt(i) + ' g1');
-                            if((i != 0) && ($code_fname[$code_fname.length - 1] != '1')){
-                                $code_fname.push('1')
-                            }else{
-                                $code_fname.push('1')
-                            }
-                        }
+            for (var i = 0; i < $fname.length; i++) {
+                if($arr1.includes($fname.charAt(i))){
+                    if($arr_thchar.includes($fname.charAt(i))){
+                        $code_fname.push('1')
                     }
-                    if($arr2.includes($fname.charAt(i))){
-                        if(($arr_thchar.includes($fname.charAt(i))) && ($code_fname.length < 2)){
-                            console.log($fname.charAt(i) + ' g2');
-                            if((i != 0) && ($code_fname[$code_fname.length - 1] != '2')){
-                                $code_fname.push('2')
-                            }else{
-                                $code_fname.push('2')
-                            }
-                        }
+                }
+
+                if($arr2.includes($fname.charAt(i))){
+                    if($arr_thchar.includes($fname.charAt(i))){
+                        $code_fname.push('2')
                     }
-        
-                    if($arr3.includes($fname.charAt(i))){
-                        if(($arr_thchar.includes($fname.charAt(i))) && ($code_fname.length < 2)){
-                            console.log($fname.charAt(i) + ' g3');
-                            if((i != 0) && ($code_fname[$code_fname.length - 1] != '3')){
-                                $code_fname.push('3')
-                            }else{
-                                $code_fname.push('3')
-                            }
-                        }
+                }
+
+                if($arr3.includes($fname.charAt(i))){
+                    if($arr_thchar.includes($fname.charAt(i))){
+                        $code_fname.push('3')
                     }
-        
-                    if($arr4.includes($fname.charAt(i))){
-                        if(($arr_thchar.includes($fname.charAt(i))) && ($code_fname.length < 2)){
-                            console.log($fname.charAt(i) + ' g4');
-                            if((i != 0) && ($code_fname[$code_fname.length - 1] != '4')){
-                                $code_fname.push('4')
-                            }else{
-                                $code_fname.push('4')
-                            }
-                        }
+                }
+
+                if($arr4.includes($fname.charAt(i))){
+                    if($arr_thchar.includes($fname.charAt(i))){
+                        $code_fname.push('4')
                     }
-        
-                    if($arr5.includes($fname.charAt(i))){
-                        if(($arr_thchar.includes($fname.charAt(i))) && ($code_fname.length < 2)){
-                            console.log($fname.charAt(i) + ' g5');
-                            if((i != 0) && ($code_fname[$code_fname.length - 1] != '5')){
-                                $code_fname.push('5')
-                            }else{
-                                $code_fname.push('5')
-                            }
-                        }
+                }
+
+                if($arr5.includes($fname.charAt(i))){
+                    if($arr_thchar.includes($fname.charAt(i))){
+                        $code_fname.push('5')
                     }
-        
-                    if($arr6.includes($fname.charAt(i))){
-                        if(($arr_thchar.includes($fname.charAt(i))) && ($code_fname.length < 2)){
-                            console.log($fname.charAt(i) + ' g6');
-                            if((i != 0) && ($code_fname[$code_fname.length - 1] != '6')){
-                                $code_fname.push('6')
-                            }else{
-                                $code_fname.push('6')
-                            }
-                        }
+                }
+
+                if($arr6.includes($fname.charAt(i))){
+                    if($arr_thchar.includes($fname.charAt(i))){
+                        $code_fname.push('6')
                     }
                 }
             }
         }
 
-        if($code_fname.length < 2){
-            for (let index = $code_fname.length; index < 2; index++) {
-                $code_fname.push('0')
+        $buff_fname = [];
+        for (let index = 0; index < $code_fname.length; index++) {
+            if(index == 0){
+                $buff_fname.push($code_fname[index])
+            }else{
+                if(($buff_fname[index - 1] != $code_fname[index]) && ($buff_fname.length < 2)){
+                    $buff_fname.push($code_fname[index])
+                }
             }
         }
 
-        if($code_lname.length < 2){
-            for (let index = $code_lname.length; index < 2; index++) {
-                $code_lname.push('0')
+        console.log($buff_fname);
+
+        if($buff_fname.length < 2){
+            for (let index = $buff_fname.length; index < 2; index++) {
+                $buff_fname.push('0')
             }
         }
-        console.log($code_prefix +  $code_lname.join('') + '.' + $code_fname.join(''));   
-        $('#txtHn').val($code_prefix +  $code_lname.join('') + '.' + $code_fname.join(''))
+
+        if($buff_lname.length < 3){
+            for (let index = $buff_lname.length; index < 3; index++) {
+                $buff_lname.push('0')
+            }
+        } 
+        $('#txtHn').val($code_prefix +  $buff_lname.join('') + '.' + $buff_fname.join(''))
     })
 
     $('#txtFname').keyup(function(){
+
+        $prefix_found = false;
         $code_lname = [];
         $code_fname = [];
-        $fname = $('#txtFname').val()
-        if($fname != ''){
-            for (var i = 0; i < $fname.length; i++) {
-                if($code_fname.length < 2){
-                    if($arr1.includes($fname.charAt(i))){
 
+        // 1.ตัดแซ่
+        // 2.ตัดสระ
+        // 3.ทำให่้ครบจำนวน
+        
+        $lname = $('#txtLname').val()
 
-                        if(($arr_thchar.includes($fname.charAt(i))) && ($code_fname.length < 2)){
-                            console.log($fname.charAt(i) + ' g1');
-                            if((i != 0) && ($code_fname[$code_fname.length - 1] != '1')){
-                                $code_fname.push('1')
-                            }else{
-                                $code_fname.push('1')
-                            }
-                        }
-                    }
-                    if($arr2.includes($fname.charAt(i))){
-                        if(($arr_thchar.includes($fname.charAt(i))) && ($code_fname.length < 2)){
-                            console.log($fname.charAt(i) + ' g2');
-                            if((i != 0) && ($code_fname[$code_fname.length - 1] != '2')){
-                                $code_fname.push('2')
-                            }else{
-                                $code_fname.push('2')
-                            }
-                        }
-                    }
-        
-                    if($arr3.includes($fname.charAt(i))){
-                        if(($arr_thchar.includes($fname.charAt(i))) && ($code_fname.length < 2)){
-                            console.log($fname.charAt(i) + ' g3');
-                            if((i != 0) && ($code_fname[$code_fname.length - 1] != '3')){
-                                $code_fname.push('3')
-                            }else{
-                                $code_fname.push('3')
-                            }
-                        }
-                    }
-        
-                    if($arr4.includes($fname.charAt(i))){
-                        if(($arr_thchar.includes($fname.charAt(i))) && ($code_fname.length < 2)){
-                            console.log($fname.charAt(i) + ' g4');
-                            if((i != 0) && ($code_fname[$code_fname.length - 1] != '4')){
-                                $code_fname.push('4')
-                            }else{
-                                $code_fname.push('4')
-                            }
-                        }
-                    }
-        
-                    if($arr5.includes($fname.charAt(i))){
-                        if(($arr_thchar.includes($fname.charAt(i))) && ($code_fname.length < 2)){
-                            console.log($fname.charAt(i) + ' g5');
-                            if((i != 0) && ($code_fname[$code_fname.length - 1] != '5')){
-                                $code_fname.push('5')
-                            }else{
-                                $code_fname.push('5')
-                            }
-                        }
-                    }
-        
-                    if($arr6.includes($fname.charAt(i))){
-                        if(($arr_thchar.includes($fname.charAt(i))) && ($code_fname.length < 2)){
-                            console.log($fname.charAt(i) + ' g6');
-                            if((i != 0) && ($code_fname[$code_fname.length - 1] != '6')){
-                                $code_fname.push('6')
-                            }else{
-                                $code_fname.push('6')
-                            }
-                        }
-                    }
+        if($lname != ''){
+
+            $lname_b = $lname.split("แซ่")
+            if($lname_b.length > 1){
+                $lname = $lname_b[1];
+            }
+
+            $b = [];
+            for (var i = 0; i < $lname.length; i++) {
+                if($arr_thchar.includes($lname.charAt(i))){
+                    $b.push($lname.charAt(i))
                 }
             }
 
-            if($code_fname.length < 2){
-                for (let index = $code_fname.length; index < 2; index++) {
-                    $code_fname.push('0')
+            $lname = $b.join('');
+            
+
+            for (var i = 0; i < $lname.length; i++) {
+                if($prefix_found == false){
+                    if($arr_thchar.includes($lname.charAt(i))){
+                        $code_prefix = ($lname.charAt(i) + '.')
+                        $prefix_found = true;
+                    }
+                }
+                if($arr1.includes($lname.charAt(i))){
+                    if($arr_thchar.includes($lname.charAt(i))){
+                        $code_lname.push('1')
+                    }
+                }
+                if($arr2.includes($lname.charAt(i))){
+                    if($arr_thchar.includes($lname.charAt(i))){
+                        $code_lname.push('2')
+                    }
+                }
+    
+                if($arr3.includes($lname.charAt(i))){
+                    if($arr_thchar.includes($lname.charAt(i))){
+                        $code_lname.push('3')
+                    }
+                }
+    
+                if($arr4.includes($lname.charAt(i))){
+                    if($arr_thchar.includes($lname.charAt(i))){
+                        $code_lname.push('4')
+                    }
+                }
+    
+                if($arr5.includes($lname.charAt(i))){
+                    if($arr_thchar.includes($lname.charAt(i))){
+                        $code_lname.push('5')
+                    }
+                }
+    
+                if($arr6.includes($lname.charAt(i))){
+                    if($arr_thchar.includes($lname.charAt(i))){
+                        $code_lname.push('6')
+                    }
                 }
             }
-
-            if($code_lname.length < 2){
-                for (let index = $code_lname.length; index < 2; index++) {
-                    $code_lname.push('0')
-                }
-            }
-
-            $('#txtHn').val($code_prefix +  $code_lname.join('') + '.' + $code_fname.join(''))
+        }else{
+            $prefix_found = false;
         }
-        // console.log($code_prefix +  $code_lname.join('') + '.' + $code_fname.join(''));   
+
+        $buff_lname = [];
+        for (let index = 0; index < $code_lname.length; index++) {
+            if(index == 0){
+                $buff_lname.push($code_lname[index])
+            }else{
+                if(($buff_lname[index - 1] != $code_lname[index])  && ($code_lname.length < 3)){
+                    $buff_lname.push($code_lname[index])
+                }
+            }
+        }
+
+        $fname = $('#txtFname').val()
+            
+        if($fname != ''){
+
+            $b = [];
+            for (var i = 0; i < $fname.length; i++) {
+                if($arr_thchar.includes($fname.charAt(i))){
+                    $b.push($fname.charAt(i))
+                }
+            }
+
+            $fname = $b.join('');
+
+            for (var i = 0; i < $fname.length; i++) {
+                if($arr1.includes($fname.charAt(i))){
+                    if($arr_thchar.includes($fname.charAt(i))){
+                        $code_fname.push('1')
+                    }
+                }
+
+                if($arr2.includes($fname.charAt(i))){
+                    if($arr_thchar.includes($fname.charAt(i))){
+                        $code_fname.push('2')
+                    }
+                }
+
+                if($arr3.includes($fname.charAt(i))){
+                    if($arr_thchar.includes($fname.charAt(i))){
+                        $code_fname.push('3')
+                    }
+                }
+
+                if($arr4.includes($fname.charAt(i))){
+                    if($arr_thchar.includes($fname.charAt(i))){
+                        $code_fname.push('4')
+                    }
+                }
+
+                if($arr5.includes($fname.charAt(i))){
+                    if($arr_thchar.includes($fname.charAt(i))){
+                        $code_fname.push('5')
+                    }
+                }
+
+                if($arr6.includes($fname.charAt(i))){
+                    if($arr_thchar.includes($fname.charAt(i))){
+                        $code_fname.push('6')
+                    }
+                }
+            }
+        }
+
+        console.log($code_fname);
+        $buff_fname = [];
+        for (let index = 0; index < $code_fname.length; index++) {
+            if(index == 0){
+                $buff_fname.push($code_fname[index])
+            }else{
+                if(($buff_fname[index - 1] != $code_fname[index]) && ($buff_fname.length < 2)) {
+                    $buff_fname.push($code_fname[index])
+                }
+            }
+        }
+
+        console.log($buff_fname);
+
+        if($buff_fname.length < 2){
+            for (let index = $buff_fname.length; index < 2; index++) {
+                $buff_fname.push('0')
+            }
+        }
+
+        if($buff_lname.length < 3){
+            for (let index = $buff_lname.length; index < 3; index++) {
+                $buff_lname.push('0')
+            }
+        } 
+
+        $('#txtHn').val($code_prefix +  $buff_lname.join('') + '.' + $buff_fname.join(''))
         
     })
 
