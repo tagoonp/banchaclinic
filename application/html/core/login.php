@@ -2,7 +2,7 @@
 require('../../configuration/local.inc.php');
 require('../../configuration/configuration.php');
 require('../../configuration/database.php'); 
-die();
+// die();
 $db = new Database();
 $conn = $db->conn();
 ?>
