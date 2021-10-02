@@ -398,7 +398,7 @@ if($searchkey != ''){
 
                                     //    echo $strSQL;
                                     $resWaiting = $db->fetch($strSQL, true, true);
-                                        if($resWaiting['status']){
+                                        if(($resWaiting) && ($resWaiting['status'])){
                                             foreach($resWaiting['data'] as $row2){
                                                 ?>
                                                 <tr>
