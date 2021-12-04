@@ -8,7 +8,7 @@ var invoice = {
     search(id){
         $('#txtInvid').val(id)
         preload.show()
-        var jst = $.post(authen_api + 'invoice.php?stage=info', {inv_id: id}, function(){}, 'json')
+        var jst = $.post(inv_authen_api + 'invoice.php?stage=info', {inv_id: id}, function(){}, 'json')
                    .always(function(snap){
                        console.log(snap);
                        preload.hide()
@@ -35,7 +35,7 @@ var invoice = {
     search2(id){
         
         preload.show()
-        var jst = $.post(authen_api + 'invoice.php?stage=info', {inv_id: id}, function(){}, 'json')
+        var jst = $.post(inv_authen_api + 'invoice.php?stage=info', {inv_id: id}, function(){}, 'json')
                    .always(function(snap){
                        console.log(snap);
                        preload.hide()
@@ -82,7 +82,7 @@ var invoice = {
                     uid: $('#txtUid').val(),
                     inv_id: id
                 }
-                var jst = $.post(authen_api + 'invoice.php?stage=delete', param, function(){}, 'json')
+                var jst = $.post(inv_authen_api + 'invoice.php?stage=delete', param, function(){}, 'json')
                        .always(function(snap){
                            preload.hide()
                            if(snap.status == 'Success'){
@@ -161,7 +161,7 @@ var invoice = {
         }).then(function (result) {
             if (result.value) {
                 preload.show()
-                var jst = $.post(authen_api + 'invoice.php?stage=update', param, function(){}, 'json')
+                var jst = $.post(inv_authen_api + 'invoice.php?stage=update', param, function(){}, 'json')
                        .always(function(snap){
                             preload.hide()
                             if(snap.status == 'Success'){
@@ -241,7 +241,7 @@ var invoice = {
         }).then(function (result) {
             if (result.value) {
                 preload.show()
-                var jst = $.post(authen_api + 'invoice.php?stage=update2', param, function(){}, 'json')
+                var jst = $.post(inv_authen_api + 'invoice.php?stage=update2', param, function(){}, 'json')
                        .always(function(snap){
                             preload.hide()
                             if(snap.status == 'Success'){
@@ -315,7 +315,7 @@ var invoice = {
         }).then(function (result) {
             if (result.value) {
                 preload.show()
-                var jst = $.post(authen_api + 'invoice.php?stage=add', param, function(){}, 'json')
+                var jst = $.post(inv_authen_api + 'invoice.php?stage=add', param, function(){}, 'json')
                        .always(function(snap){
                             preload.hide()
                             if(snap.status == 'Success'){
