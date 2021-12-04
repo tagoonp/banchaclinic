@@ -359,8 +359,6 @@ if($searchkey != ''){
                                                 <td style="vertical-align: top;" class="text-right">
                                                         <button class="btn btn-icon rounded-circle btn-success" onclick="window.location='app-viewrecord.php?patient_id=<?php echo $row['patient_id']; ?>'" style="height: 40px; width: 40px; padding-top: 1px; margin-bottom: 3px;"><i class="bx bx-search" style="font-size: 1.3em;"></i></button>
                                                         <button class="btn btn-icon rounded-circle btn-success" onclick="service.create('<?php echo $row['patient_id']; ?>')" style="height: 40px; width: 40px; padding-top: 1px; margin-bottom: 3px;"><i class="bx bx-dollar" style="font-size: 1.3em;"></i></button>
-                                                        <!-- <button class="btn btn-icon rounded-circle btn-success" onclick="window.location='../../../controller/create_service.php?patient_id=<?php //echo $row['patient_id']; ?>'" style="height: 40px; width: 40px; padding-top: 1px; margin-bottom: 3px;"><i class="bx bx-dollar" style="font-size: 1.3em;"></i></button> -->
-                                                        <!-- <button class="btn btn-icon rounded-circle btn-outline-success"><i class="bx bx-calendar" style="font-size: 1.6em;"></i></button> -->
                                                 </td>
                                             </tr>
                                             <?php

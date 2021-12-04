@@ -11,15 +11,19 @@ $db = new Database();
 $conn = $db->conn();
 
 $stage = '';
+
 if(!isset($_GET['patient_id'])){ $db->close(); header('Location: ../404.php'); die(); }
 $patient_id = mysqli_real_escape_string($conn, $_GET['patient_id']);
 
-$strSQL = "SELECT * FROM bnc_service WHERE service_patient_id = '$patient_id' AND service_date = '$date' AND service_status IN ('admit', 'wait')";
+$strSQL = "SELECT * FROM bnc_service WHERE service_patient_id = '$patient_id' AND service_date = '$date' AND service_delete = '0'";
 $res = $db->fetch($strSQL, false);
+
 if($res){
+
     $db->close();
-    header('Location: ../html/core/system/app-healthrecord.php?patient_id='.$patient_id);
+    header('Location: ../html/core/system/app-viewrecord.php?patient_id='.$patient_id.'&service_id='.$res['service_id']);
     die();
+
 }else{
 
     $strSQL = "SELECT MAX(service_seq) MX FROM bnc_service WHERE 1";

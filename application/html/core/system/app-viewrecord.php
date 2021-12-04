@@ -701,7 +701,26 @@ if(!$lasted_adm){
             <div class="content-body row">
                 
                 <div class="col-6">
-                <div class="card">
+
+                    <div class="card">
+                        <div class="card-body">
+                             <div class="row">
+                                 <div class="col-12"><h4 class="">ข้อมูลผู้ป่วย</h4></div>
+                                <div class="col-4"><strong>รหัสผู้ป่วย :</strong></div>
+                                <div class="col-8"><?php echo $searchResponse[0]['patient_hn'];  ?></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-4"><strong>ชื่อ - นามสกุล :</strong></div>
+                                <div class="col-8"><?php echo $searchResponse[0]['patient_fname']. " " .$searchResponse[0]['patient_lname'];  ?></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-4"><strong>เลขบัตรประจำตัว :</strong></div>
+                                <div class="col-8"><?php echo $searchResponse[0]['patient_pid'];  ?> <a href="Javascript:showModalEditPatient()" class="float-right"><i class="bx bx-pencil"></i></a></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
                         <div class="card-header text-dark">
                             <h4 class="">ประวัติการรักษา/ใช้บริการ</h4>
                         </div>
@@ -865,6 +884,7 @@ if(!$lasted_adm){
                         <div class="card">
                             <div class="card-body">
                                 <h4>บันทึกการรักษา</h4>
+                                <h5>ประจำวันที่ : <span class="text-danger"><?php echo $service_data['service_date'];?></span></h5>
                                 <div class="row">
                                     <div class="col-sm-12">
                                         <div id="snow-wrapper">
@@ -977,24 +997,26 @@ if(!$lasted_adm){
                                     </div>
                                 </div>
                                 <div>
-                                    <table class="table mt-0 teble-striped">
-                                        <thead>
-                                            <tr>
-                                                <th>รหัส</th>
-                                                <th>ชื่อยา</th>
-                                                <th>ราคาขายต่อหน่วย</th>
-                                                <th>จำนวน</th>
-                                                <th>ทุนรวม</th>
-                                                <th>รวม</th>
-                                                <th></th>
-                                            </tr>
-                                        </thead>
-                                        <tbody id="drugList">
-                                            <tr>
-                                                <td colspan="6" class="text-center">ไม่มีรายการยาสำหรับบริการครั้งนี้</td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
+                                    <div class="table-responsive">
+                                        <table class="table mt-0 teble-striped">
+                                            <thead>
+                                                <tr>
+                                                    <th>รหัส</th>
+                                                    <th>ชื่อยา</th>
+                                                    <th>ราคาขายต่อหน่วย</th>
+                                                    <th>จำนวน</th>
+                                                    <th>ทุนรวม</th>
+                                                    <th>รวม</th>
+                                                    <th></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="drugList">
+                                                <tr>
+                                                    <td colspan="6" class="text-center">ไม่มีรายการยาสำหรับบริการครั้งนี้</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
                                     
                                 </div>
                             </div>
@@ -1032,6 +1054,62 @@ if(!$lasted_adm){
         </div>
     </div>
     <!-- END: Content-->
+
+    <div class="modal fade text-left" id="modalNewPatient" tabindex="-1" role="dialog" aria-labelledby="myModalLabel110" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header bg-success">
+                    <h5 class="modal-title white" id="myModalLabel110"><i class="bx bxs-user-plus"></i> ลงทะเบียนผู้ป่วยใหม่</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"  onclick="resetNewform();">
+                        <i class="bx bx-x"></i>
+                    </button>
+                </div>
+                <form id="updatePatientForm" onsubmit="return false;">
+                    <div class="modal-body">
+
+
+                        <div class="form-group dn">
+                            <label for="" style="font-size: 18px !important;">รหัสประจำตัวผู้ป่วย : <span class="text-danger">*</span>  </label>
+                            <input type="text" class="form-control" id="txtRid" name="txtRid" value="<?php echo $patient_id;?>">
+                        </div>
+                        <div class="form-group">
+                            <label for="" style="font-size: 18px !important;">รหัสประจำตัวผู้ป่วย : <span class="text-danger">*</span>  </label>
+                            <input type="text" class="form-control" id="txtHn" name="txtHn" value="<?php echo $searchResponse[0]['patient_hn'];?>">
+                        </div>
+
+                        <div class="row">
+                            <div class="form-group col-6">
+                                <label for="" style="font-size: 18px !important;">ชื่อ : <span class="text-danger">*</span> </label>
+                                <input type="text" class="form-control" id="txtFname" name="txtFname" value="<?php echo $searchResponse[0]['patient_fname'];?>">
+                            </div>
+
+                            <div class="form-group col-6">
+                                <label for="" style="font-size: 18px !important;">นามสกุล : </label>
+                                <input type="text" class="form-control" id="txtLname" name="txtLname" value="<?php echo $searchResponse[0]['patient_lname'];?>">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                                <label for="" style="font-size: 18px !important;">เลขบัตรประจำตัวประชาชน / เลขประจำตัวบุคคลแรงงานต่างด้าว : </label>
+                                <input type="text" class="form-control" id="txtPid_u" name="txtPid_u" value="<?php echo $searchResponse[0]['patient_pid'];?>">
+                        </div>
+                        
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-light-secondary" data-dismiss="modal">
+                            <i class="bx bx-x d-block d-sm-none"></i>
+                            <span class="d-none d-sm-block">ยกเลิก</span>
+                        </button>
+
+                        <button type="submit" class="btn btn-success ml-1" onclick="updatePatient();">
+                            <i class="bx bx-check d-block d-sm-none"></i>
+                            <span class="d-none d-sm-block">บันทึก</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 
     <!-- demo chat-->
     <div class="sidenav-overlay"></div>
@@ -1151,6 +1229,39 @@ if(!$lasted_adm){
                 window.location = './app-cashing.php?searchkey=' + $('#txtSearchkey').val()
             })
         })
+
+        function showModalEditPatient(){
+            $('#modalNewPatient').modal()
+        }
+
+        function updatePatient(){
+            var param = {
+                rid: $('#txtRid').val(),
+                hn: $('#txtHn').val(),
+                fname: $('#txtFname').val(),
+                lname: $('#txtLname').val(),
+                pid: $('#txtPid_u').val()
+        }
+    
+        preload.show()
+
+        var jst = $.post(authen_api + 'patient.php?stage=updatepatient', param, function(){}, 'json')
+                   .always(function(snap){
+                       console.log(snap);
+                      preload.hide()
+                       if(snap.status == 'Success'){
+                            window.location.reload()
+                       }else{
+                            Swal.fire({
+                                icon: "error",
+                                title: 'เกิดข้อผิดพลาด',
+                                text: 'ไม่สามารถขึ้นทะเบียนผู้ป่วยใหม่ได้',
+                                confirmButtonText: 'ลองใหม่',
+                                confirmButtonClass: 'btn btn-danger',
+                            })
+                       }
+                    })
+        }
     </script>
 
 </body>

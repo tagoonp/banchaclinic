@@ -562,7 +562,13 @@ if($stage == 'updatestock'){
     $did = mysqli_real_escape_string($conn, $_REQUEST['did']);
     $newq = mysqli_real_escape_string($conn, $_REQUEST['newq']);
 
-    $strSQL = "UPDATE bnc_drug_tmp SET dstock = '$newq' WHERE ID = '$did'";
+    $tname = mysqli_real_escape_string($conn, $_REQUEST['tname']);
+    $gname = mysqli_real_escape_string($conn, $_REQUEST['gname']);
+    $dose = mysqli_real_escape_string($conn, $_REQUEST['dose']);
+    $cost = mysqli_real_escape_string($conn, $_REQUEST['cost']);
+    $price = mysqli_real_escape_string($conn, $_REQUEST['price']);
+
+    $strSQL = "UPDATE bnc_drug_tmp SET dstock = '$newq', dcname = '$gname', dname = '$tname', ddose = '$dose', dcost = '$cost', dprice = '$price' WHERE ID = '$did'";
     $res = $db->execute($strSQL);
 
     $strSQL = "INSERT INTO bnc_stock_stagement (`ss_drug_id`, `ss_stage`, `ss_qty`, `ss_datetime`) VALUES ('$did', 'update', '$newq', '$datetime')";

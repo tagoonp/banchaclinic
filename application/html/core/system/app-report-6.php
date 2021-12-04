@@ -9,21 +9,57 @@ $conn = $db->conn();
 
 require('../../../configuration/user.inc.php'); 
 
-$page_id = 3;
+$page_id = 12;
 
-$searchkey = '';
+$billstatus = '';
+$billsearch = '';
+$start = date('Y-')."01-01";
+$end = $date;
+$filter = 0;
 
 $searchResponse = null;
 $searchResponse_count = 0;
-$strSQL = "SELECT * FROM bcn_patient a LEFT JOIN bnc_patient_log b ON a.patient_id = b.pl_patient_id
-WHERE 
-a.patient_delete = '0'
-AND a.patient_record_status = '1'
-";
-$res = $db->fetch($strSQL, true, true);
-if(($res) && ($res['status'])){
-    $searchResponse = $res['data'];
+
+if((isset($_GET['filter'])) && ($_GET['filter'] == '1')){
+
+    $filter = 1;
+    $start = mysqli_real_escape_string($conn, $_REQUEST['start']);
+    $end = mysqli_real_escape_string($conn, $_REQUEST['end']);
+    
+    $billstatus = mysqli_real_escape_string($conn, $_REQUEST['status']);
+    if($billstatus == 'all'){
+        $billsearch = '';
+    }else{
+        $billsearch = " AND service_paytype = '$billstatus' ";
+    }
+
+    $strSQL = "SELECT COUNT(*), servic FROM bnc_service a LEFT JOIN bcn_patient b ON a.service_patient_id = b.patient_id 
+               WHERE 
+               a.service_delete = '0' 
+               AND a.service_date BETWEEN '$start' AND '$end' 
+               GROYP
+               ORDER BY a.service_cdatetime";
+    $strSQL_1 = $strSQL;
+    $res = $db->fetch($strSQL, true, true);
+    if(($res) && ($res['status'])){
+        $searchResponse = $res['data'];
+    }
+
+
+}else{
+    $strSQL = "SELECT * FROM bnc_service a LEFT JOIN bcn_patient b ON a.service_patient_id = b.patient_id WHERE a.service_delete = '0' AND a.service_date = '$date' ORDER BY a.service_cdatetime ";
+    $res = $db->fetch($strSQL, true, true);
+    if(($res) && ($res['status'])){
+        $searchResponse = $res['data'];
+    }
 }
+
+
+
+
+
+
+
 
 ?>
 <!DOCTYPE html>
@@ -34,7 +70,7 @@ if(($res) && ($res['status'])){
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?php echo $config['app_title']; ?></title>
+    <title>รายงานสรุปยอดผู้ป่วย</title>
     <link rel="apple-touch-icon" href="../../../app-assets/images/ico/apple-icon-120.png">
     <link rel="shortcut icon" type="image/x-icon" href="../../../app-assets/images/ico/favicon.ico">
     <link href="https://fonts.googleapis.com/css?family=Rubik:300,400,500,600%7CIBM+Plex+Sans:300,400,500,600,700" rel="stylesheet">
@@ -49,6 +85,7 @@ if(($res) && ($res['status'])){
     <link rel="stylesheet" type="text/css" href="../../../app-assets/vendors/css/animate/animate.css">
     <link rel="stylesheet" type="text/css" href="../../../app-assets/vendors/css/extensions/sweetalert2.min.css">
     <link rel="stylesheet" type="text/css" href="../../../node_modules/preload.js/dist/css/preload.css">
+    <link rel="stylesheet" type="text/css" href="../../../app-assets/vendors/css/pickers/pickadate/pickadate.css">
     <!-- END: Vendor CSS-->
 
     <!-- BEGIN: Theme CSS-->
@@ -74,6 +111,14 @@ if(($res) && ($res['status'])){
     <!-- END: Custom CSS-->
 
 </head>
+
+<style>
+    #datatable{
+        td, th {
+            vertical-align: top;
+        }
+    }
+</style>
 <!-- END: Head-->
 
 <!-- BEGIN: Body-->
@@ -180,109 +225,80 @@ if(($res) && ($res['status'])){
             <div class="content-header row">
                 <div class="content-header-left col-8 mb-2 mt-1">
                     <div class="breadcrumbs-top">
-                        <h5 class="content-header-title float-left pr-1 mb-0 text-dark" style="font-size: 28px;">รายชื่อผู้ป่วย</h5>
+                        <h5 class="content-header-title float-left pr-1 mb-0 text-dark" style="font-size: 28px;">รายงานสรุปยอดผู้ป่วย</h5>
                         <div class="breadcrumb-wrapper d-none d-sm-block" style="padding-top: 10px;">
                             <ol class="breadcrumb p-0 mb-0 pl-1">
-                                <li class="breadcrumb-item"><a href="./"><i class="bx bx-home-alt"></i></a>
-                                </li>
-                                <li class="breadcrumb-item active">รายชื่อผู้ป่วย</li>
+                                <li class="breadcrumb-item"><a href="./"><i class="bx bx-home-alt"></i></a></li>
+                                <li class="breadcrumb-item">รายงาน</li>
+                                <li class="breadcrumb-item active">รายงานสรุปยอดผู้ป่วย</li>
                             </ol>
                         </div>
                     </div>
                 </div>
                 <div class="col-4 text-right pt-1">
-                <button class="btn btn-danger pl-1" onclick="openNewPatient()"><i class="bx bxs-user-plus"></i> เพิ่มผู้ป่วยใหม่</button>
+                    <button class="btn btn-secondary pl-1"  data-toggle="modal" data-target="#modalInvoiceFilter"><i class="bx bx-filter"></i> เลือกช่วงเวลา</button>
                 </div>
             </div>
 
             <!--Success theme Modal -->
-            <div class="modal fade text-left" id="modalNewPatient" tabindex="-1" role="dialog" aria-labelledby="myModalLabel110" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
+
+            <div class="modal fade text-left" id="modalInvoiceFilter" tabindex="-1" role="dialog" aria-labelledby="myModalLabel110" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
                     <div class="modal-content">
                         <div class="modal-header bg-success">
-                            <h5 class="modal-title white" id="myModalLabel110"><i class="bx bxs-user-plus"></i> ลงทะเบียนผู้ป่วยใหม่</h5>
+                            <h5 class="modal-title white th" id="myModalLabel110"><i class="bx bx-filter"></i> กรองข้อมูล</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close"  onclick="resetNewform();">
                                 <i class="bx bx-x"></i>
                             </button>
                         </div>
-                        <form id="newpatientForm" onsubmit="return false;" autocomplete="off">
+                        <form id="newfilterForm" onsubmit="return false;" autocomplete="off">
                             <div class="modal-body">
-                                <div class="form-group">
-                                    <label for="" style="font-size: 18px !important;">รหัสประจำตัวผู้ป่วย : <span class="text-danger">*</span>  </label>
-                                    <input type="text" class="form-control" id="txtHn" name="txtHn" readonly>
-                                </div>
-
+                                
                                 <div class="row">
-                                    <div class="form-group col-6">
-                                        <label for="" style="font-size: 18px !important;">ชื่อ : <span class="text-danger">*</span> </label>
-                                        <input type="text" class="form-control" id="txtFname" name="txtFname">
+                                    <div class="col-12 col-sm-6">
+                                        <div class="form-group">
+                                            <label for="" style="font-size: 18px !important;">จากวันที่ : </label>
+                                            <!-- <input type="text" class="form-control" id="txtInvoice" name="txtInvoice"> -->
+                                            <fieldset class="form-group position-relative has-icon-left">
+                                                <input type="text" class="form-control pickadate2" placeholder="เลือกวันที่เริ่ม" id="txtFilterStart" value="<?php if($filter == 1){ if($start != ''){ echo $start; }} ?>">
+                                                <div class="form-control-position" style="padding-top: 8px;">
+                                                    <i class='bx bx-calendar'></i>
+                                                </div>
+                                            </fieldset>
+                                        </div>
                                     </div>
-
-                                    <div class="form-group col-6">
-                                        <label for="" style="font-size: 18px !important;">นามสกุล :  <span class="text-danger">*</span></label>
-                                        <input type="text" class="form-control" id="txtLname" name="txtLname">
+                                    <div class="col-12 col-sm-6">
+                                        <div class="form-group">
+                                            <label for="" style="font-size: 18px !important;">ถึงวันที่ : </label>
+                                            <!-- <input type="text" class="form-control" id="txtInvoice" name="txtInvoice"> -->
+                                            <fieldset class="form-group position-relative has-icon-left">
+                                                <input type="text" class="form-control pickadate2" placeholder="เลือกวันสิ้นสุด" id="txtFilterEnd" value="<?php if($filter == 1){ if($end != ''){ echo $end; }} ?>">
+                                                <div class="form-control-position" style="padding-top: 8px;">
+                                                    <i class='bx bx-calendar'></i>
+                                                </div>
+                                            </fieldset>
+                                        </div>
                                     </div>
                                 </div>
-
                                 <div class="form-group">
-                                        <label for="" style="font-size: 18px !important;">เลขบัตรประจำตัวประชาชน / เลขประจำตัวบุคคลแรงงานต่างด้าว : </label>
-                                        <input type="text" class="form-control" id="txtPid" name="txtPid">
-                                    </div>
-
-                                <div class="row">
-                                    <div class="col-12"><label for="" style="font-size: 18px !important;">วัน / เดือน / ปีเกิด : </label></div>
-                                    <div class="form-group col-4 mb-0">
-                                        <select name="txtDD" id="txtDD" class="form-control">
-                                            <option value="">-- วัน --</option>
-                                            <?php 
-                                            for($i = 1; $i <= 31; $i++){
-                                                ?>
-                                                <option value="<?php echo $i;?>"><?php echo $i;?></option>
-                                                <?php
-                                            }
-                                            ?>
-                                        </select>
-                                    </div>
-                                    <div class="form-group col-4 mb-0">
-                                        <select name="txtMM" id="txtMM" class="form-control">
-                                            <option value="">-- เดือน --</option>
-                                            <?php 
-                                            
-                                            for($i = 1; $i <= 12; $i++){
-                                                ?>
-                                                <option value="<?php if($i < 10){ echo '0'.$i; }else{ echo $i; }?>"><?php echo $month_sh_th[$i];?></option>
-                                                <?php
-                                            }
-                                            ?>
-                                        </select>
-                                    </div>
-                                    <div class="form-group col-4 mb-0">
-                                        <select name="txtYY" id="txtYY" class="form-control">
-                                            <option value="">-- ปี --</option>
-                                            <?php 
-                                            for($i = $year; $i >= ($year - 110); $i--){
-                                                ?>
-                                                <option value="<?php echo $i;?>"><?php echo $i + 543;?></option>
-                                                <?php
-                                            }
-                                            ?>
-                                        </select>
-                                    </div>
-                                    <div class="col-12">
-                                        <div class="text-muted pb-1" style="font-size: 0.8em; padding-top: 2px;">* หากไม่ทราบให้เลือกวันที่ 1 เดือนมกราคม ของปีเกิด</div>
-                                    </div>
+                                    <label for="" style="font-size: 18px !important;">ประเภทการชำระเงิน : </label>
+                                    <select name="txtStatus" id="txtStatus" class="form-control">
+                                        <option value="all">ทั้งหมด</option>
+                                        <option value="0" <?php if($filter == 1){ if($billstatus == '0'){ echo "selected"; }} ?>>เงินสด</option>
+                                        <option value="1" <?php if($filter == 1){ if($billstatus == '1'){ echo "selected"; }} ?>>โอนเงิน</option>
+                                    </select>
                                 </div>
                                 
                             </div>
-                            <div class="modal-footer">
+                            <div class="modal-footer pb-0">
                                 <button type="button" class="btn btn-light-secondary" data-dismiss="modal" onclick="resetNewform();">
                                     <i class="bx bx-x d-block d-sm-none"></i>
                                     <span class="d-none d-sm-block">ยกเลิก</span>
                                 </button>
 
-                                <button type="submit" class="btn btn-success ml-1">
+                                <button type="button" class="btn btn-success ml-1" onclick="filterReport()">
                                     <i class="bx bx-check d-block d-sm-none"></i>
-                                    <span class="d-none d-sm-block">บันทึก</span>
+                                    <span class="d-none d-sm-block">แสดงผล</span>
                                 </button>
                             </div>
                         </form>
@@ -292,49 +308,97 @@ if(($res) && ($res['status'])){
             
             <div class="content-body row">
                 <div class="col-12">
+                    <?php //echo $strSQL_1; ?>
+                    <h5>หากไม่เลือกช่วงเวลา ค่าตั้งต้น คือ เดือนปัจจุบัน</h5>
                     <div class="card">
                         <div class="card-body">
-
-                            <table class="table table-striped th  zero-configuration" style="margin-top: 40px;">
+                            <?php 
+                            $summ = 0;
+                            $summ_cache = 0;
+                            $summ_transfer = 0;
+                            $summ_df = 0;
+                            ?>
+                            <table class="table table-striped th zero-configuration-2" style="margin-top: 40px;">
                                 <thead>
-                                    <tr>
-                                        <th style="width: 100px;"></th>
-                                        <th style="width: 100px;">รหัสผู้ป่วย</th>
-                                        <th>ชื่อ - นามสกุล</th>
-                                        <th>ใช้บริการล่าสุด</th>
+                                    <tr class="bg-secondary">
+                                        <!-- <th class="th text-white">วัน - เวลา</th>
+                                        <th class="th text-white">รหัส</th> -->
+                                        <th class="th text-white">วันที่</th>
+                                        <th class="th text-white">ผู้ป่วยตรวจ</th>
+                                        <th class="th text-white">ผู้ป่วยทั้งหมด</th>
+                                        <th class="th text-white">DF</th>
+                                        <th class="th text-white">ยอดเงิน</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <?php 
-                                    if($searchResponse != null){
-                                        foreach($searchResponse as $row){
+                                    $strSQL = "SELECT COUNT(*) cn, service_date FROM bnc_service WHERE service_date BETWEEN '$start' AND '$end' AND service_status = 'discharge' AND service_delete = '0'  GROUP BY service_date ORDER BY service_date";
+                                    $resServ = $db->fetch($strSQL, true, false);
+
+                                    if(($resServ) && ($resServ['status'])){
+                                        foreach($resServ['data'] as $row){
                                             ?>
-                                            <tr>
-                                                <td style="vertical-align: top;" class="text-left pl-1">
-                                                        <button class="btn btn-icon rounded-circle btn-success" style="height: 40px; width: 40px; padding-top: 3px;" onclick="window.location='../../../controller/create_service.php?patient_id=<?php echo $row['patient_id']; ?>'"><i class="bx bx-search" style="font-size: 1.3em;"></i></button>
-                                                        <button class="btn btn-icon rounded-circle btn-danger" style="height: 40px; width: 40px; padding-top: 3px;" onclick="patient.delete('<?php echo $row['patient_id']; ?>')"><i class="bx bx-trash" style="font-size: 1.3em;"></i></button>
-                                                        <!-- <button class="btn btn-icon rounded-circle btn-outline-success"><i class="bx bx-calendar" style="font-size: 1.6em;"></i></button> -->
-                                                </td>
-                                                <td style="vertical-align: top;"><?php echo $row['patient_hn']; ?></td>
+                                            <tr>    
                                                 <td style="vertical-align: top;">
-                                                    <a href="app-patient-info.php?pid=<?php echo $row['patient_id'];?>"><?php echo $row['patient_fname']." ".$row['patient_lname']; ?></a>
-                                                    <div style="font-size: 0.9em;">
-                                                        เลขปบัตรประจำตัว ปปช / ต่างด้าว : <?php 
-                                                        if(($row['patient_pid'] != null) && ($row['patient_pid'] != '')){
-                                                            echo $row['patient_pid'];
-                                                        }else{
-                                                            echo "-";
-                                                        }
-                                                        ?>
-                                                    </div>
+                                                    <?php  echo $row['service_date']; ?>
                                                 </td>
-                                                <td style="vertical-align: top;"><?php echo $row['pl_datetime']; ?></td>
+                                                <td style="vertical-align: top;"><?php 
+                                                $strSQL = "SELECT COUNT(*) cnx FROM bnc_service WHERE service_date = '".$row['service_date']."' AND service_type = 'ตรวจ' AND service_status = 'discharge' AND service_delete = '0'";
+                                                $resDf = $db->fetch($strSQL, false);
+                                                if($resDf){
+                                                    echo number_format($resDf['cnx'], 0, '', ',');
+                                                }else{
+                                                    echo "0";
+                                                }
+                                                ?></td>
+                                                <td style="vertical-align: top;"><?php echo $row['cn']; ?></td>
+                                                <td style="vertical-align: top;"><?php 
+                                                $strSQL = "SELECT SUM(service_df) sdf FROM bnc_service WHERE service_date = '".$row['service_date']."' AND service_status = 'discharge' AND service_delete = '0'";
+                                                $resDf = $db->fetch($strSQL, false);
+                                                if($resDf){
+                                                    echo number_format($resDf['sdf'], 2, '.', ',');
+                                                }else{
+                                                    echo "0";
+                                                }
+                                                ?>
+                                                </td>
+                                                <td style="vertical-align: top;" class="text-left">
+                                                <?php 
+                                                $strSQL = "SELECT SUM(service_finalprice) sdf FROM bnc_service WHERE service_date = '".$row['service_date']."' AND service_status = 'discharge' AND service_delete = '0'";
+                                                $resDf = $db->fetch($strSQL, false);
+                                                if($resDf){
+                                                    echo number_format($resDf['sdf'], 2, '.', ',');
+                                                }else{
+                                                    echo "0";
+                                                }
+                                                ?>
+                                                </td>
                                             </tr>
                                             <?php
                                         }
+                                    }else{
+                                        ?>
+                                        <tr>
+                                            <td colspan="5" class="text-center">ไม่พบข้อมูล<?php echo $strSQL;?></td>
+                                        </tr>
+                                        <?php
                                     }
                                     ?>
                                 </tbody>
+                                <tfooter>
+                                    <tr>
+                                        <td class="text-dark" colspan="3">รวมทั้งสิ้น</td>
+                                        <td class="text-dark" colspan="3">
+                                            <strong><?php echo number_format($summ, 2, '.', ',');  ?> (DF : <?php echo number_format($summ_df, 2, '.', ','); ?>)</strong>
+                                            <div class="text-muted">
+                                                เงินสด : <?php echo  number_format($summ_cache, 2, '.', ','); ?>
+                                            </div>
+                                            <div class="text-muted">
+                                                เงินโอน/พร้อมเพย์ : <?php echo  number_format($summ_transfer, 2, '.', ','); ?>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tfooter>
                             </table>
                         </div>
                     </div>
@@ -348,14 +412,6 @@ if(($res) && ($res['status'])){
     <!-- demo chat-->
     <div class="sidenav-overlay"></div>
     <div class="drag-target"></div>
-
-    <!-- BEGIN: Footer-->
-    <footer class="footer footer-static footer-light">
-        <p class="clearfix mb-0"><span class="float-left d-inline-block">2021 &copy; PIXINVENT</span><span class="float-right d-sm-inline-block d-none">Crafted with<i class="bx bxs-heart pink mx-50 font-small-3"></i>by<a class="text-uppercase" href="https://1.envato.market/pixinvent_portfolio" target="_blank">Pixinvent</a></span>
-            <button class="btn btn-primary btn-icon scroll-top" type="button"><i class="bx bx-up-arrow-alt"></i></button>
-        </p>
-    </footer>
-    <!-- END: Footer-->
 
 
     <!-- BEGIN: Vendor JS-->
@@ -378,6 +434,12 @@ if(($res) && ($res['status'])){
     <script src="../../../app-assets/vendors/js/extensions/sweetalert2.all.min.js"></script>
     <script src="../../../app-assets/vendors/js/extensions/polyfill.min.js"></script>
     <script src="../../../node_modules/preload.js/dist/js/preload.js"></script>
+    <script src="../../../app-assets/vendors/js/pickers/pickadate/picker.js"></script>
+    <script src="../../../app-assets/vendors/js/pickers/pickadate/picker.date.js"></script>
+    <script src="../../../app-assets/vendors/js/pickers/pickadate/picker.time.js"></script>
+    <script src="../../../app-assets/vendors/js/pickers/pickadate/legacy.js"></script>
+    <script src="../../../app-assets/vendors/js/extensions/moment.min.js"></script>
+    <script src="../../../app-assets/vendors/js/pickers/daterange/daterangepicker.js"></script>
     <!-- END: Page Vendor JS-->
 
     <!-- BEGIN: Theme JS-->
@@ -391,14 +453,57 @@ if(($res) && ($res['status'])){
     <!-- BEGIN: Page JS-->
     <script src="../../../assets/js/banchaclinic/core.js?v=<?php echo filemtime('../../../assets/js/banchaclinic/core.js'); ?>"></script>
     <script src="../../../assets/js/banchaclinic/app.js?v=<?php echo filemtime('../../../assets/js/banchaclinic/app.js'); ?>"></script>
-    <script src="../../../assets/js/banchaclinic/patient.js?v=<?php echo filemtime('../../../assets/js/banchaclinic/patient.js'); ?>"></script>
-    <script src="../../../assets/js/banchaclinic/drug.js?v=<?php echo filemtime('../../../assets/js/banchaclinic/drug.js'); ?>"></script>
+    <script src="../../../assets/js/banchaclinic/invoice.js?v=<?php echo filemtime('../../../assets/js/banchaclinic/invoice.js'); ?>"></script>
     <!-- END: Page JS-->
 
     <script>
 
         $(document).ready(function(){
             preload.hide()
+
+            $('.zero-configuration-2').DataTable({
+                columnDefs: [
+                    { targets: 0, visible: true, className: 'vertical-align-top entry-nr' },
+                    { targets: 1, visible: true, className: 'vertical-align-top entry-name'},
+                    { targets: 2, visible: true, className: 'vertical-align-top entry-sex' },
+                    { targets: 3, visible: true, className: 'vertical-align-top entry-yob'},
+                    // { targets: 4, visible: true, className: 'p-5 text-center entry' },
+                    // { targets: 5, visible: true, className: 'p-5 text-center entry-status' },
+                    // { targets: '_all', visible: false, searchable: false, orderable: false }
+                ],
+                "ordering": false,
+                dom: 'Bfrtip',
+                buttons: [
+                    // {
+                    //     extend: 'pdfHtml5',\
+                    //     exportOptions: {
+                    //         columns: ':visible'
+                    //     }
+                    // },
+                    {
+                        extend: 'print',
+                        exportOptions: {
+                            columns: ':visible',
+                            stripHtml: false
+                        },
+                        customize: function( win ) {
+                            $( win.document.body ).find( 'td' ).css( 'vertical-align', 'top' );
+                        },
+                        messageBottom: '<div style="padding-top: 20px; font-size: 20px;" >รวมทั้งสิ้น : <?php echo number_format($summ, 2, '.', ','); ?> บาท (DF : <?php echo number_format($summ_df, 2, '.', ','); ?>)<br>(เงินสด <?php echo number_format($summ_cache, 2, '.', ','); ?> บาท / เงินโอน <?php echo number_format($summ_transfer, 2, '.', ','); ?> บาท)</div>',
+                        <?php
+                        if($filter == '1'){
+                            ?>
+                            messageTop: '<div style="padding-top: 20px; font-size: 20px;" >' + "ประจำวันที่ <?php echo $start; ?> ถึงวันที่ <?php echo $end; ?></div>"
+                            <?php
+                        }else{
+                            ?>
+                            messageTop:'<div style="padding-top: 20px; font-size: 20px;" >' + "ของวันที่ <?php echo $date; ?></div>"
+                            <?php
+                        }
+                        ?>
+                    }
+                ]
+            });
         })
 
         $(function(){
@@ -413,14 +518,24 @@ if(($res) && ($res['status'])){
                 }
             })
 
-            $('#searchForm').submit(function(){
-                if($('#txtSearchkey').val() == ''){
-                    $('#txtSearchkey').addClass('is-invalid')
-                    return ;
-                }
-                window.location = './app-cashing.php?searchkey=' + $('#txtSearchkey').val()
-            })
         })
+
+        function filterReport(){
+            $check = 0;
+            $('.form-control').removeClass('is-invalid')
+
+            if($('#txtFilterStart').val() == ''){
+                $check++; $('#txtFilterStart').addClass('is-invalid')
+            }
+
+            if($('#txtFilterEnd').val() == ''){
+                $check++; $('#txtFilterEnd').addClass('is-invalid')
+            }
+
+            if($check != 0){ return ;}
+
+            window.location = 'app-report-5.php?filter=1&start=' + $('#txtFilterStart').val() + '&end=' + $('#txtFilterEnd').val() + '&status=' + $('#txtStatus').val()
+        }
     </script>
 
 </body>

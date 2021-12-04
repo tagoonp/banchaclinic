@@ -10,7 +10,18 @@
             </ul>
         </li>
         <li class="nav-item <?php if($page_id == 5){ echo "active"; } ?>" data-menu="dropdown"><a class="dropdown-toggle nav-link" href="app-stock.php"><i class="menu-livicon" data-icon="box"></i><span data-i18n="UI">คลังยา</span></a></li>
+        <li class="dropdown nav-item" data-menu="dropdown"><a class="dropdown-toggle nav-link" href="#" data-toggle="dropdown"><i class="menu-livicon" data-icon="file-import"></i><span data-i18n="Apps">รายงาน</span></a>
+            <ul class="dropdown-menu">
+                <li data-menu="" class="<?php if($page_id == 10){ echo "active"; } ?>"><a class="dropdown-item align-items-center" href="app-report-2.php" data-toggle="dropdown"><i class="bx bx-right-arrow-alt"></i><span data-i18n="Email">รายงานชื่อการค้า</span></a></li>
+                <li data-menu="" class="<?php if($page_id == 11){ echo "active"; } ?>"><a class="dropdown-item align-items-center" href="app-report-3.php" data-toggle="dropdown"><i class="bx bx-right-arrow-alt"></i><span data-i18n="Email">รายงานราคายา</span></a></li>
+                <li data-menu="" class="<?php if($page_id == 12){ echo "active"; } ?>"><a class="dropdown-item align-items-center" href="app-report-4.php" data-toggle="dropdown"><i class="bx bx-right-arrow-alt"></i><span data-i18n="Email">รายงานการใช้ยา</span></a></li>
+                <!-- <li data-menu="" class="<?php //if($page_id == 13){ echo "active"; } ?>"><a class="dropdown-item align-items-center" href="app-report-5.php" data-toggle="dropdown"><i class="bx bx-right-arrow-alt"></i><span data-i18n="Email">รายงานบัญชี</span></a></li> -->
+                <li data-menu="" class="<?php if($page_id == 14){ echo "active"; } ?>"><a class="dropdown-item align-items-center" href="app-report-6.php" data-toggle="dropdown"><i class="bx bx-right-arrow-alt"></i><span data-i18n="Email">รายงานสรุปยอด</span></a></li>
+                <li data-menu="" class="<?php if($page_id == 6){ echo "active"; } ?>"><a class="dropdown-item align-items-center" href="app-report-1.php" data-toggle="dropdown"><i class="bx bx-right-arrow-alt"></i><span data-i18n="Email">รายงานประจำวัน</span></a></li>
+                <li data-menu="" class="<?php if($page_id == 15){ echo "active"; } ?>"><a class="dropdown-item align-items-center" href="app-report-7.php" data-toggle="dropdown"><i class="bx bx-right-arrow-alt"></i><span data-i18n="Email">รายงานงบดุล</span></a></li>
 
+            </ul>
+        </li>
         <li class="nav-item <?php if($page_id == 9){ echo "active"; } ?>" data-menu="dropdown"><a class="dropdown-toggle nav-link" href="app-bill-list.php"><i class="menu-livicon" data-icon="us-dollar"></i><span data-i18n="UI">บิล/Check</span></a></li>
         <li class="nav-item <?php if($page_id == 7){ echo "active"; } ?>" data-menu="dropdown"><a class="dropdown-toggle nav-link" href="app-calendar.php"><i class="menu-livicon" data-icon="calendar"></i><span data-i18n="UI">การนัดหมาย</span></a></li>
 

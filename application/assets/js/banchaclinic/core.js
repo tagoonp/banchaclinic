@@ -1,8 +1,8 @@
-// let authen_api = 'http://localhost/banchaclinic/application/api/'
-// let authen_controller = 'http://localhost/banchaclinic/application/controller/'
+let authen_api = 'http://localhost/banchaclinic/application/api/'
+let authen_controller = 'http://localhost/banchaclinic/application/controller/'
 
-let authen_api = 'https://banchaclinic.wisnior.com/application/api/'
-let authen_controller = 'https://banchaclinic.wisnior.com/application/controller/'
+// let authen_api = 'https://banchaclinic.wisnior.com/application/api/'
+// let authen_controller = 'https://banchaclinic.wisnior.com/application/controller/'
 
 
 function toggleFullscreen(elem) {

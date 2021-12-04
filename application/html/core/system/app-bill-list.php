@@ -18,8 +18,14 @@ $end = $date;
 $filter = 0;
 if((isset($_GET['filter'])) && ($_GET['filter'] == '1')){
     $filter = 1;
-    $start = mysqli_real_escape_string($conn, $_REQUEST['start']);
-    $end = mysqli_real_escape_string($conn, $_REQUEST['end']);
+    if($_REQUEST['start'] != ''){
+        $start = mysqli_real_escape_string($conn, $_REQUEST['start']);
+    }
+    if($_REQUEST['end'] != ''){
+        $end = mysqli_real_escape_string($conn, $_REQUEST['end']);
+    }
+    
+    
     $billstatus = mysqli_real_escape_string($conn, $_REQUEST['status']);
     if($billstatus == 'all'){
         $billsearch = '';
@@ -43,6 +49,8 @@ if($filter == 1){
 $res = $db->fetch($strSQL, true, true);
 if(($res) && ($res['status'])){
     $searchResponse = $res['data'];
+}else{
+    echo $strSQL;
 }
 
 

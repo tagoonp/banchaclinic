@@ -92,7 +92,7 @@ $(document).ready(function() {
     ***************************************************************/
 
     $('.dataex-html5-selectors').DataTable( {
-        "order": [[ 1, "asc" ]],
+        // "order": [[ 1, "asc" ]],
         dom: 'Bfrtip',
         buttons: [
             {
@@ -105,8 +105,51 @@ $(document).ready(function() {
                 extend: 'print',
                 exportOptions: {
                     columns: ':visible'
-                }
+                },
+                messageTop: '<div style="padding-top: 20px; font-size: 20px;" >รายการยา ราคาทุนและราคาขาย</div>'
             }
+        ]
+    });
+
+    $('.dataex-html5-selectors-2').DataTable( {
+        // "order": [[ 1, "asc" ]],
+        dom: 'Bfrtip',
+        buttons: [
+            {
+                extend: 'pdfHtml5',
+                exportOptions: {
+                    columns: ':visible'
+                }
+            },
+            {
+                extend: 'print',
+                exportOptions: {
+                    columns: ':visible'
+                },
+                messageTop: '<div style="padding-top: 20px; font-size: 20px;" >รายการยาเรียงตามชื่อการค้า</div>'
+            },
+            
+        ]
+    });
+
+    $('.dataex-html5-selectors-report-4').DataTable( {
+        // "order": [[ 1, "asc" ]],
+        dom: 'Bfrtip',
+        buttons: [
+            {
+                extend: 'pdfHtml5',
+                exportOptions: {
+                    columns: ':visible'
+                }
+            },
+            {
+                extend: 'print',
+                exportOptions: {
+                    columns: ':visible'
+                },
+                messageTop: '<div style="padding-top: 20px; font-size: 20px;" >รายการยาที่ใช้ตั้ังแต่วันที่ ' + $('.textStartdate').text() + ' ถึงวันนที่ ' + $('.textEnddate').text() + '  </div>'
+            },
+            
         ]
     });
 
@@ -169,10 +212,20 @@ $(function(){
 
     $('#txtfDf').keyup(function(){
         if($('#txtfDf').val() == ''){
-            $('#txtfTotal').val($('#txtfPrice').val())
+            // $('#txtfTotal').val($('#txtfPrice').val() + parseFloat($('#txtfPrice').val()))
+
+            $vatprize = (parseFloat($('#txtFinalPrice').val()) * 0.07) + parseFloat($('#txtFinalPrice').val())
+            $('#txtfTotal').val($vatprize.toFixed(2))
+
         }else{
-            $x = parseFloat($('#txtfPrice').val()) + parseFloat($('#txtfDf').val())
-            $('#txtfTotal').val($x)
+            // $x = ((parseFloat($('#txtfPrice').val()) + parseFloat($('#txtfDf').val()) * 0.07) + parseFloat($('#txtfPrice').val()) + parseFloat($('#txtfDf').val())).toFixed(2)
+            // $x = parseFloat($('#txtfPrice').val()) + parseFloat($('#txtfDf').val())
+            // $('#txtfTotal').val($x)
+
+            $baseprize = parseFloat($('#txtfPrice').val()) + parseFloat($('#txtfDf').val())
+            $baseprize_vat = $baseprize * 0.07
+            $vatprize = $baseprize + $baseprize_vat
+            $('#txtfTotal').val($vatprize.toFixed(2))
         }
     })
 
@@ -193,13 +246,13 @@ $(function(){
     $('#txtDrugUnit').keyup(function(){
         $unit = $('#txtDrugUnit').val()
         $price = $('#txtDrugPrice').val()
-        $('#txtSumprice').val($unit * $price)
+        $('#txtSumprice').val(($unit * $price).toFixed(2))
     })
 
     $('#txtqDrugUnit').keyup(function(){
         $unit = $('#txtqDrugUnit').val()
         $price = $('#txtqDrugPrice').val()
-        $('#txtqSumprice').val($unit * $price)
+        $('#txtqSumprice').val(($unit * $price).toFixed(2))
     })
 
     $('#newdruflistForm').submit(function(){
@@ -229,7 +282,8 @@ $(function(){
     $('#txtuDrugUnit').keyup(function(){
         $unit = $('#txtuDrugUnit').val()
         $price = $('#txtuDrugPrice').val()
-        $('#txtuSumprice').val($unit * $price)
+        console.log('a');
+        $('#txtuSumprice').val(($unit * $price).toFixed(2))
     })
 
     $('#txtqDrugId').keyup(function(){
@@ -247,6 +301,7 @@ $(function(){
                         $('#txtqDrugDose').val(snap.data.ddose)
                         $('#txtqDrugCost').val(snap.data.dcost)
                         $('#txtqDrugPrice').val(snap.data.dprice)
+                        $('#txtqDrugUnit').focus()
                    }else{
                     preload.hide()
                     Swal.fire(
@@ -767,9 +822,9 @@ function getDruglist(){
                         snap.data.forEach(i => {
                             
                             $("#drugList").append('<tr><td>' + i.dlist_did + '</td>' + 
-                                    '<td>' + i.dlist_drugname + '</td>' + 
-                                    '<td>' + i.dlist_price + '</td>' + 
+                                    '<td>' + i.dlist_drugname + '</td>' +
                                     '<td>' + i.dlist_qty + '</td>' + 
+                                    '<td>' + i.dlist_price + '</td>' + 
                                     '<td>' + i.dlist_sumcost + '</td>' + 
                                     '<td>' + i.dlist_sumprice + '</td>' + 
                                     '<td class="pl-0 pr-0">' + 
@@ -780,8 +835,8 @@ function getDruglist(){
                             $summcost += parseFloat(i.dlist_sumcost);
                             $summ += parseFloat(i.dlist_sumprice)
                         });
-                        $('#txtFinalPrice').val($summ)
-                        $('#txtFinalCost').val($summcost)
+                        $('#txtFinalPrice').val($summ.toFixed(2))
+                        $('#txtFinalCost').val($summcost.toFixed(2))
                    }
                })
 }
@@ -845,7 +900,9 @@ function updateMEDLIST(id, qty){
 
                         $unit = $('#txtuDrugUnit').val()
                         $price = $('#txtuDrugPrice').val()
-                        $('#txtuSumprice').val($unit * $price)
+
+                        console.log('b');
+                        $('#txtuSumprice').val(($unit * $price).toFixed(2))
                         
                         setTimeout(() => {
                             
@@ -947,11 +1004,13 @@ function finallizeService(){
     $('#modalFinallize').modal()
     $('#txtfCose').val($('#txtFinalCost').val())
     $('#txtfPrice').val($('#txtFinalPrice').val())
-    $('#txtfTotal').val($('#txtFinalPrice').val())
+
+    $vatprize = (parseFloat($('#txtFinalPrice').val()) * 0.07) + parseFloat($('#txtFinalPrice').val())
+    $('#txtfTotal').val($vatprize.toFixed(2))
 
     if($('#txtfDf').val() != ''){
-        $x = parseFloat($('#txtfPrice').val()) + parseFloat($('#txtfDf').val())
-        $('#txtfTotal').val($x)
+        $x = ((parseFloat($('#txtfPrice').val()) + parseFloat($('#txtfDf').val())) * 0.07) + (parseFloat($('#txtfPrice').val()) + parseFloat($('#txtfDf').val()))
+        $('#txtfTotal').val($x.toFixed(2))
     }
     
 
@@ -969,7 +1028,7 @@ function updateDrugStock(id, dname, recent_q){
     var param = {
         did: id
     }
-
+    console.log(param);
     var jst = $.post(authen_api + 'drug.php?stage=checkstock', param, function(){}, 'json')
                         .always(function(snap){
                             preload.hide()
@@ -979,6 +1038,10 @@ function updateDrugStock(id, dname, recent_q){
                                 $('#txtDrugId').val(id)
                                 $('#txtDrugTrade').val(dname)
                                 $('#txtDrugQ').val(snap.data.dstock)
+
+                                // $('#txtDrugId').val(snap.data.did)
+                                
+
                                 $('#txtNewTotal').val($('#dstock_' + id).text().trim())
                                 setTimeout(()=>{
                                     $('#txtNewQ').focus()
@@ -1007,10 +1070,36 @@ function updateDrugStock(id, dname, recent_q){
 }
 
 function editDrugStock(id, dname, recent_q){
+
+
+    // updateDrugStock(id)
+
+    var param = {
+        did: id
+    }
+    var jst = $.post(authen_api + 'drug.php?stage=checkstock', param, function(){}, 'json')
+                        .always(function(snap){
+                            console.log(snap);
+                            if(snap.status == 'Success'){
+                                // $('#txtDrugGeneric').val(snap.data.dcname)
+                                // $('#txtDrugDose').val(snap.data.ddose)
+                                // $('#txtDrugCost').val(snap.data.dcost)
+                                // $('#txtDrugPrice').val(snap.data.dprice)
+                                $('#txtDrugTradeu').val($('#dname_' + id).text())
+                                $('#txtDrugGeneric').val($('#dcname_' + id).text())
+                                $('#txtDrugDose').val($('#ddose_' + id).text())
+                                $('#txtDrugCost').val(snap.data.dcost)
+                                $('#txtDrugPrice').val(snap.data.dprice)
+
+                            }
+                        })
+
+
     $('#modaleditStock').modal()
     $('#txtDrugIdu').val(id)
     $('#txtDrugTradeu').val(dname)
     $('#txtNewTotalu').val($('#dstock_' + id).text().trim())
+
     setTimeout(()=>{
         $('#txtNewTotalu').focus()
     }, 1000)
@@ -1040,13 +1129,24 @@ function editStock(){
             $('#modaleditStock').modal('hide')
             var param = {
                 did: $('#txtDrugIdu').val(),
-                newq: $('#txtNewTotalu').val()
+                newq: $('#txtNewTotalu').val(),
+                tname: $('#txtDrugTradeu').val(),
+                gname: $('#txtDrugGeneric').val(),
+                dose: $('#txtDrugDose').val(),
+                cost: $('#txtDrugCost').val(),
+                price: $('#txtDrugPrice').val()
             }
             var jst = $.post(authen_api + 'drug.php?stage=updatestock', param, function(){}, 'json')
                         .always(function(snap){
                             preload.hide()
                             if(snap.status == 'Success'){
                                 $('#dstock_' + $('#txtDrugIdu').val()).text($('#txtNewTotalu').val())
+
+                                $('#dname_' + $('#txtDrugIdu').val()).text($('#txtDrugTradeu').val())
+                                $('#dcname_' + $('#txtDrugIdu').val()).text($('#txtDrugGeneric').val())
+                                $('#ddose_' + $('#txtDrugIdu').val()).text($('#txtDrugDose').val())
+
+
                                 $('#txtNewTotalu').val('')
                                 Swal.fire(
                                     {

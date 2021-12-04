@@ -15,7 +15,8 @@ $patient_id = '';
 if(isset($_GET['patient_id'])){
     $patient_id = mysqli_real_escape_string($conn, $_REQUEST['patient_id']);
 }else{
-
+    header('Location: ./');
+    die();
 }
 
 $searchResponse = null;
@@ -31,6 +32,7 @@ if($patient_id != ''){
     $res = $db->fetch($strSQL, true, true);
     if(($res) && ($res['status'])){
         $searchResponse = $res['data'];
+        // print_r($searchResponse);
         if($res['count'] != 0){
             $searchResponse_count = $res['count'];
         }
@@ -500,8 +502,8 @@ if(!$lasted_adm){
                                     </div>
                                     <div class="col-12 col-sm-6">
                                         <div class="form-group">
-                                            <label for="" style="font-size: 18px !important;">รวมทั้งสิ้น : <span class="text-danger">*</span>  </label>
-                                            <input type="number" class="form-control" id="txtfTotal" name="txtfTotal" min="0" placeholder="DF." step="any">
+                                            <label for="" style="font-size: 18px !important;">รวมทั้งสิ้น : <span class="text-danger">* Include VAT 7%</span>  </label>
+                                            <input type="number" class="form-control" id="txtfTotal" name="txtfTotal" min="0" placeholder="Total invlude vat" step="any">
                                         </div>
                                     </div>
                                     <div class="col-12 col-sm-6">
@@ -517,7 +519,7 @@ if(!$lasted_adm){
                                         <label for="" style="font-size: 18px !important;">ประเภทบริการ : <span class="text-danger">*</span></label>
                                         <select name="txtSertype" id="txtSertype" class="form-control">
                                             <option value="">-- เลือก --</option>
-                                            <option value="ตรวจ" <?php if($lasted_adm['service_type'] == 'ตรวจ'){ echo "selected"; } ?>>ตรวจรักษา</option>
+                                            <option value="ตรวจ" selected>ตรวจรักษา</option>
                                             <option value="ซื้อยา" <?php if($lasted_adm['service_type'] == 'ซื้อยา'){ echo "selected"; } ?>>ซื้อยา</option>
                                         </select>
                                     </div>
@@ -525,8 +527,8 @@ if(!$lasted_adm){
                                         <label for="" style="font-size: 18px !important;">จ่ายด้วย : <span class="text-danger">*</span></label>
                                         <select name="txtPtype" id="txtPtype" class="form-control">
                                             <option value="">-- เลือก --</option>
-                                            <option value="0"  <?php if($lasted_adm['service_paytype'] == '0'){ echo "selected"; } ?>>เงินสด</option>
-                                            <option value="1"  <?php if($lasted_adm['service_paytype'] == '1'){ echo "selected"; } ?>>โอนเงินผ่านธนาคาร / พร้อมเพย์</option>
+                                            <option value="0" selected>เงินสด</option>
+                                            <option value="1" <?php if($lasted_adm['service_paytype'] == '1'){ echo "selected"; } ?>>โอนเงินผ่านธนาคาร / พร้อมเพย์</option>
                                         </select>
                                     </div>
                                 </div>
@@ -602,7 +604,7 @@ if(!$lasted_adm){
                                 <label for="">สถานที่นัด : <span class="text-danger">*</span></label>
                                 <select name="txtAppPlace" id="txtAppPlace" class="form-control">
                                     <option value="">-- เลือกสถานที่นัด --</option>
-                                    <option value="clinic">(1) คลินิก</option>
+                                    <option value="clinic" selected>(1) คลินิก</option>
                                     <option value="hospital">(2) โรงพยาบาลสงขลานครินทร์</option>
                                 </select>
                             </div>
@@ -629,6 +631,24 @@ if(!$lasted_adm){
             <div class="content-body row">
                 
                 <div class="col-5">
+
+                    <div class="card">
+                        <div class="card-body">
+                             <div class="row">
+                                 <div class="col-12"><h4 class="">ข้อมูลผู้ป่วย</h4></div>
+                                <div class="col-4"><strong>รหัสผู้ป่วย :</strong></div>
+                                <div class="col-8"><?php echo $searchResponse[0]['patient_hn'];  ?></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-4"><strong>ชื่อ - นามสกุล :</strong></div>
+                                <div class="col-8"><?php echo $searchResponse[0]['patient_fname']. " " .$searchResponse[0]['patient_lname'];  ?></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-4"><strong>เลขบัตรประจำตัว :</strong></div>
+                                <div class="col-8"><?php echo $searchResponse[0]['patient_pid'];  ?> <a href="Javascript:showModalEditPatient()" class="float-right"><i class="bx bx-pencil"></i></a></div>
+                            </div>
+                        </div>
+                    </div>
                     <!-- <h4>การนัดหมาย</h4> -->
                     <div class="card">
                         <div class="card-body p-0">
@@ -812,8 +832,8 @@ if(!$lasted_adm){
                                         <tr>
                                             <th>รหัส</th>
                                             <th>ชื่อยา</th>
-                                            <th>ราคาขายต่อหน่วย</th>
                                             <th>จำนวน</th>
+                                            <th>ราคาขายต่อหน่วย</th>
                                             <th>ทุนรวม</th>
                                             <th>รวม</th>
                                             <th></th>
@@ -914,7 +934,7 @@ if(!$lasted_adm){
                                                 <td style="vertical-align: top;"><?php echo $row['service_total']; ?></td>
                                                 <td style="vertical-align: top;"><?php echo $row['service_finalprice']; ?></td>
                                                 <td style="vertical-align: top;" class="text-right pl-1">
-                                                        <button class="btn btn-icon rounded-circle btn-success" style="height: 40px; width: 40px; padding-top: 1px; margin-bottom: 3px;" onclick="window.location='app-viewrecord.php?patient_id=<?php echo $patient_id?>&service_id=<?php echo $row['service_id']; ?>'"><i class="bx bx-search" style="font-size: 1.3em;"></i></button>
+                                                        <button class="btn btn-icon rounded-circle btn-success" style="height: 40px; width: 40px; padding-top: 1px; margin-bottom: 3px;" onclick="window.location='app-viewrecord.php?patient_id=<?php echo $patient_id;?>&service_id=<?php echo $row['service_id']; ?>'"><i class="bx bx-search" style="font-size: 1.3em;"></i></button>
                                                         <button class="btn btn-icon rounded-circle btn-danger" style="height: 40px; width: 40px; padding-top: 1px;" onclick="service.delete('<?php echo $row['service_id']; ?>')"><i class="bx bx-trash" style="font-size: 1.3em;"></i></button>    
                                                 </td>
                                             </tr>
@@ -943,9 +963,66 @@ if(!$lasted_adm){
     </div>
     <!-- END: Content-->
 
+    <div class="modal fade text-left" id="modalNewPatient" tabindex="-1" role="dialog" aria-labelledby="myModalLabel110" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header bg-success">
+                    <h5 class="modal-title white" id="myModalLabel110"><i class="bx bxs-user-plus"></i> ลงทะเบียนผู้ป่วยใหม่</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"  onclick="resetNewform();">
+                        <i class="bx bx-x"></i>
+                    </button>
+                </div>
+                <form id="updatePatientForm" onsubmit="return false;">
+                    <div class="modal-body">
+
+
+                        <div class="form-group dn">
+                            <label for="" style="font-size: 18px !important;">รหัสประจำตัวผู้ป่วย : <span class="text-danger">*</span>  </label>
+                            <input type="text" class="form-control" id="txtRid" name="txtRid" value="<?php echo $patient_id;?>">
+                        </div>
+                        <div class="form-group">
+                            <label for="" style="font-size: 18px !important;">รหัสประจำตัวผู้ป่วย : <span class="text-danger">*</span>  </label>
+                            <input type="text" class="form-control" id="txtHn" name="txtHn" value="<?php echo $searchResponse[0]['patient_hn'];?>">
+                        </div>
+
+                        <div class="row">
+                            <div class="form-group col-6">
+                                <label for="" style="font-size: 18px !important;">ชื่อ : <span class="text-danger">*</span> </label>
+                                <input type="text" class="form-control" id="txtFname" name="txtFname" value="<?php echo $searchResponse[0]['patient_fname'];?>">
+                            </div>
+
+                            <div class="form-group col-6">
+                                <label for="" style="font-size: 18px !important;">นามสกุล : </label>
+                                <input type="text" class="form-control" id="txtLname" name="txtLname" value="<?php echo $searchResponse[0]['patient_lname'];?>">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                                <label for="" style="font-size: 18px !important;">เลขบัตรประจำตัวประชาชน / เลขประจำตัวบุคคลแรงงานต่างด้าว : </label>
+                                <input type="text" class="form-control" id="txtPid_u" name="txtPid_u" value="<?php echo $searchResponse[0]['patient_pid'];?>">
+                        </div>
+                        
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-light-secondary" data-dismiss="modal">
+                            <i class="bx bx-x d-block d-sm-none"></i>
+                            <span class="d-none d-sm-block">ยกเลิก</span>
+                        </button>
+
+                        <button type="submit" class="btn btn-success ml-1" onclick="updatePatient();">
+                            <i class="bx bx-check d-block d-sm-none"></i>
+                            <span class="d-none d-sm-block">บันทึก</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
     <!-- demo chat-->
     <div class="sidenav-overlay"></div>
     <div class="drag-target"></div>
+
 
 
 
@@ -1056,6 +1133,39 @@ if(!$lasted_adm){
                 window.location = './app-cashing.php?searchkey=' + $('#txtSearchkey').val()
             })
         })
+
+        function showModalEditPatient(){
+            $('#modalNewPatient').modal()
+        }
+
+        function updatePatient(){
+            var param = {
+                rid: $('#txtRid').val(),
+                hn: $('#txtHn').val(),
+                fname: $('#txtFname').val(),
+                lname: $('#txtLname').val(),
+                pid: $('#txtPid_u').val()
+        }
+    
+        preload.show()
+
+        var jst = $.post(authen_api + 'patient.php?stage=updatepatient', param, function(){}, 'json')
+                   .always(function(snap){
+                       console.log(snap);
+                      preload.hide()
+                       if(snap.status == 'Success'){
+                            window.location.reload()
+                       }else{
+                            Swal.fire({
+                                icon: "error",
+                                title: 'เกิดข้อผิดพลาด',
+                                text: 'ไม่สามารถขึ้นทะเบียนผู้ป่วยใหม่ได้',
+                                confirmButtonText: 'ลองใหม่',
+                                confirmButtonClass: 'btn btn-danger',
+                            })
+                       }
+                    })
+        }
     </script>
 
 </body>

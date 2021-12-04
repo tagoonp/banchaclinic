@@ -6,7 +6,7 @@ $('.zero-configuration').DataTable({
 
 var invoice = {
     search(id){
-        
+        $('#txtInvid').val(id)
         preload.show()
         var jst = $.post(authen_api + 'invoice.php?stage=info', {inv_id: id}, function(){}, 'json')
                    .always(function(snap){
@@ -19,7 +19,7 @@ var invoice = {
                             $('#txtMoneyu').val(snap.data.inv_cost)
                             $('#txtDiscount').val(snap.data.inv_discount)
                             $('#txtInvDue').val(snap.data.inv_due_date)
-                            $('#txtInvid').val(id)
+                            $('#txtCheck').val(snap.data.inv_check)
                        }else{
                             Swal.fire(
                                 {
@@ -142,6 +142,9 @@ var invoice = {
             inv_disc: $('#txtDiscount').val(),
             inv_chkno: $('#txtCheck').val()
         }
+
+        // console.log(param);
+        // return ;
 
         Swal.fire({
             title: 'ยืนยันดำเนินการ',
@@ -381,20 +384,20 @@ $(function(){
         holder: 'เลือกวันที่ต้องการนัด',
         selectMonths: true,
         selectYears: 2,
-        min: -30,
-        max: 0
+        // min: -30,
+        // max: 0
     });
 
     $('.pickadate2').pickadate({
         format: 'yyyy-mm-dd',
         selectMonths: true,
-        max: 0
+        // max: 0
     });
 
     $('.pickadate3').pickadate({
         format: 'yyyy-mm-dd',
         selectMonths: true,
-        min: 0
+        // min: 0
     });
 })
 

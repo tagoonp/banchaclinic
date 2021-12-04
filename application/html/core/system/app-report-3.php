@@ -9,22 +9,7 @@ $conn = $db->conn();
 
 require('../../../configuration/user.inc.php'); 
 
-$page_id = 3;
-
-$searchkey = '';
-
-$searchResponse = null;
-$searchResponse_count = 0;
-$strSQL = "SELECT * FROM bcn_patient a LEFT JOIN bnc_patient_log b ON a.patient_id = b.pl_patient_id
-WHERE 
-a.patient_delete = '0'
-AND a.patient_record_status = '1'
-";
-$res = $db->fetch($strSQL, true, true);
-if(($res) && ($res['status'])){
-    $searchResponse = $res['data'];
-}
-
+$page_id = 11;
 ?>
 <!DOCTYPE html>
 <html class="loading" lang="en" data-textdirection="ltr">
@@ -178,168 +163,66 @@ if(($res) && ($res['status'])){
         <div class="content-overlay"></div>
         <div class="content-wrapper">
             <div class="content-header row">
-                <div class="content-header-left col-8 mb-2 mt-1">
+                <div class="content-header-left col-12 mb-2 mt-1">
                     <div class="breadcrumbs-top">
-                        <h5 class="content-header-title float-left pr-1 mb-0 text-dark" style="font-size: 28px;">รายชื่อผู้ป่วย</h5>
+                        <h5 class="content-header-title float-left pr-1 mb-0 text-dark" style="font-size: 28px;">รายการยา</h5>
                         <div class="breadcrumb-wrapper d-none d-sm-block" style="padding-top: 10px;">
                             <ol class="breadcrumb p-0 mb-0 pl-1">
-                                <li class="breadcrumb-item"><a href="./"><i class="bx bx-home-alt"></i></a>
-                                </li>
-                                <li class="breadcrumb-item active">รายชื่อผู้ป่วย</li>
+                                <li class="breadcrumb-item"><a href="./"><i class="bx bx-home-alt"></i></a></li>
+                                <li class="breadcrumb-item">รายงาน</li>
+                                <li class="breadcrumb-item active">รายการยา ราคาทุนและราคาขาย</li>
                             </ol>
                         </div>
                     </div>
                 </div>
-                <div class="col-4 text-right pt-1">
-                <button class="btn btn-danger pl-1" onclick="openNewPatient()"><i class="bx bxs-user-plus"></i> เพิ่มผู้ป่วยใหม่</button>
-                </div>
             </div>
 
-            <!--Success theme Modal -->
-            <div class="modal fade text-left" id="modalNewPatient" tabindex="-1" role="dialog" aria-labelledby="myModalLabel110" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
-                    <div class="modal-content">
-                        <div class="modal-header bg-success">
-                            <h5 class="modal-title white" id="myModalLabel110"><i class="bx bxs-user-plus"></i> ลงทะเบียนผู้ป่วยใหม่</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"  onclick="resetNewform();">
-                                <i class="bx bx-x"></i>
-                            </button>
-                        </div>
-                        <form id="newpatientForm" onsubmit="return false;" autocomplete="off">
-                            <div class="modal-body">
-                                <div class="form-group">
-                                    <label for="" style="font-size: 18px !important;">รหัสประจำตัวผู้ป่วย : <span class="text-danger">*</span>  </label>
-                                    <input type="text" class="form-control" id="txtHn" name="txtHn" readonly>
-                                </div>
-
-                                <div class="row">
-                                    <div class="form-group col-6">
-                                        <label for="" style="font-size: 18px !important;">ชื่อ : <span class="text-danger">*</span> </label>
-                                        <input type="text" class="form-control" id="txtFname" name="txtFname">
-                                    </div>
-
-                                    <div class="form-group col-6">
-                                        <label for="" style="font-size: 18px !important;">นามสกุล :  <span class="text-danger">*</span></label>
-                                        <input type="text" class="form-control" id="txtLname" name="txtLname">
-                                    </div>
-                                </div>
-
-                                <div class="form-group">
-                                        <label for="" style="font-size: 18px !important;">เลขบัตรประจำตัวประชาชน / เลขประจำตัวบุคคลแรงงานต่างด้าว : </label>
-                                        <input type="text" class="form-control" id="txtPid" name="txtPid">
-                                    </div>
-
-                                <div class="row">
-                                    <div class="col-12"><label for="" style="font-size: 18px !important;">วัน / เดือน / ปีเกิด : </label></div>
-                                    <div class="form-group col-4 mb-0">
-                                        <select name="txtDD" id="txtDD" class="form-control">
-                                            <option value="">-- วัน --</option>
-                                            <?php 
-                                            for($i = 1; $i <= 31; $i++){
-                                                ?>
-                                                <option value="<?php echo $i;?>"><?php echo $i;?></option>
-                                                <?php
-                                            }
-                                            ?>
-                                        </select>
-                                    </div>
-                                    <div class="form-group col-4 mb-0">
-                                        <select name="txtMM" id="txtMM" class="form-control">
-                                            <option value="">-- เดือน --</option>
-                                            <?php 
-                                            
-                                            for($i = 1; $i <= 12; $i++){
-                                                ?>
-                                                <option value="<?php if($i < 10){ echo '0'.$i; }else{ echo $i; }?>"><?php echo $month_sh_th[$i];?></option>
-                                                <?php
-                                            }
-                                            ?>
-                                        </select>
-                                    </div>
-                                    <div class="form-group col-4 mb-0">
-                                        <select name="txtYY" id="txtYY" class="form-control">
-                                            <option value="">-- ปี --</option>
-                                            <?php 
-                                            for($i = $year; $i >= ($year - 110); $i--){
-                                                ?>
-                                                <option value="<?php echo $i;?>"><?php echo $i + 543;?></option>
-                                                <?php
-                                            }
-                                            ?>
-                                        </select>
-                                    </div>
-                                    <div class="col-12">
-                                        <div class="text-muted pb-1" style="font-size: 0.8em; padding-top: 2px;">* หากไม่ทราบให้เลือกวันที่ 1 เดือนมกราคม ของปีเกิด</div>
-                                    </div>
-                                </div>
-                                
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-light-secondary" data-dismiss="modal" onclick="resetNewform();">
-                                    <i class="bx bx-x d-block d-sm-none"></i>
-                                    <span class="d-none d-sm-block">ยกเลิก</span>
-                                </button>
-
-                                <button type="submit" class="btn btn-success ml-1">
-                                    <i class="bx bx-check d-block d-sm-none"></i>
-                                    <span class="d-none d-sm-block">บันทึก</span>
-                                </button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
             
             <div class="content-body row">
                 <div class="col-12">
                     <div class="card">
                         <div class="card-body">
-
-                            <table class="table table-striped th  zero-configuration" style="margin-top: 40px;">
-                                <thead>
-                                    <tr>
-                                        <th style="width: 100px;"></th>
-                                        <th style="width: 100px;">รหัสผู้ป่วย</th>
-                                        <th>ชื่อ - นามสกุล</th>
-                                        <th>ใช้บริการล่าสุด</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
+                            <div class="table-responsive">
+                                <table class="table table-striped dataex-html5-selectors">
+                                    <thead>
+                                        <tr style="background: #4a5751; font-weight: 400; color: #fff;">
+                                            <td>Trade name</td>
+                                            <td>Generic name</td>
+                                            <td>Dose</td>
+                                            <td style="width: 80px;">ราคาทุน</td>
+                                            <td style="width: 80px;">ราคาขาย</td>
+                                            
+                                        </tr>
+                                    </thead>
+                                    <tbody>
                                     <?php 
-                                    if($searchResponse != null){
-                                        foreach($searchResponse as $row){
+                                    $strSQL = "SELECT * FROM bnc_drug_tmp WHERE ddelete = '0'";
+                                    $result = $db->fetch($strSQL, true);
+                                    if($result['status']){
+                                        $c = 1;
+                                        foreach ($result['data'] as $row) {
                                             ?>
                                             <tr>
-                                                <td style="vertical-align: top;" class="text-left pl-1">
-                                                        <button class="btn btn-icon rounded-circle btn-success" style="height: 40px; width: 40px; padding-top: 3px;" onclick="window.location='../../../controller/create_service.php?patient_id=<?php echo $row['patient_id']; ?>'"><i class="bx bx-search" style="font-size: 1.3em;"></i></button>
-                                                        <button class="btn btn-icon rounded-circle btn-danger" style="height: 40px; width: 40px; padding-top: 3px;" onclick="patient.delete('<?php echo $row['patient_id']; ?>')"><i class="bx bx-trash" style="font-size: 1.3em;"></i></button>
-                                                        <!-- <button class="btn btn-icon rounded-circle btn-outline-success"><i class="bx bx-calendar" style="font-size: 1.6em;"></i></button> -->
-                                                </td>
-                                                <td style="vertical-align: top;"><?php echo $row['patient_hn']; ?></td>
-                                                <td style="vertical-align: top;">
-                                                    <a href="app-patient-info.php?pid=<?php echo $row['patient_id'];?>"><?php echo $row['patient_fname']." ".$row['patient_lname']; ?></a>
-                                                    <div style="font-size: 0.9em;">
-                                                        เลขปบัตรประจำตัว ปปช / ต่างด้าว : <?php 
-                                                        if(($row['patient_pid'] != null) && ($row['patient_pid'] != '')){
-                                                            echo $row['patient_pid'];
-                                                        }else{
-                                                            echo "-";
-                                                        }
-                                                        ?>
-                                                    </div>
-                                                </td>
-                                                <td style="vertical-align: top;"><?php echo $row['pl_datetime']; ?></td>
+                                                <td id="dname_<?php echo $row['ID']; ?>"><?php echo $row['dname'];?></td>
+                                                <td id="dcname_<?php echo $row['ID']; ?>"><?php echo $row['dcname'];?></td>
+                                                <td id="ddose_<?php echo $row['ID']; ?>"><?php echo $row['ddose'];?></td>
+                                                <td id="dcost_<?php echo $row['ID']; ?>"><?php echo $row['dcost'];?></td>
+                                                <td id="dprince_<?php echo $row['ID']; ?>"><?php echo $row['dprice'];?></td>
+                                                <!-- <td class="text-right" style="width: 120px;">
+                                                    <button class="btn btn-sm pl-1 pr-1" id="btnUpdateDrug_<?php //echo $row['ID']; ?>" onclick="updateDrug('<?php //echo $row['ID']; ?>', '<?php //echo $row['did'];?>', '<?php //echo $row['dname'];?>', '<?php //echo $row['dcname'];?>', '<?php //echo $row['ddose'];?>', '<?php //echo $row['dcost'];?>' , '<?php //echo $row['dprice'];?>')" ><i class="bx bxs-pencil"></i> <span class="text-muted"></span></button>
+                                                    <button class="btn btn-sm pl-1 pr-1 text-danger" onclick="deleteDrug('<?php //echo $row['ID']; ?>')"><i class="bx bx-trash-alt"></i></button>
+                                                </td> -->
                                             </tr>
                                             <?php
                                         }
                                     }
                                     ?>
-                                </tbody>
-                            </table>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
-                
             </div>
         </div>
     </div>
@@ -391,7 +274,6 @@ if(($res) && ($res['status'])){
     <!-- BEGIN: Page JS-->
     <script src="../../../assets/js/banchaclinic/core.js?v=<?php echo filemtime('../../../assets/js/banchaclinic/core.js'); ?>"></script>
     <script src="../../../assets/js/banchaclinic/app.js?v=<?php echo filemtime('../../../assets/js/banchaclinic/app.js'); ?>"></script>
-    <script src="../../../assets/js/banchaclinic/patient.js?v=<?php echo filemtime('../../../assets/js/banchaclinic/patient.js'); ?>"></script>
     <script src="../../../assets/js/banchaclinic/drug.js?v=<?php echo filemtime('../../../assets/js/banchaclinic/drug.js'); ?>"></script>
     <!-- END: Page JS-->
 
@@ -404,21 +286,6 @@ if(($res) && ($res['status'])){
         $(function(){
             $('.form-control').focus(function(){
                 $(this).removeClass('is-invalid')
-            })
-
-            $('#searchForm').keyup(function(){
-                if($('#txtSearchkey').val() != ''){
-                    $('#txtSearchkey').removeClass('is-invalid')
-                    return ;
-                }
-            })
-
-            $('#searchForm').submit(function(){
-                if($('#txtSearchkey').val() == ''){
-                    $('#txtSearchkey').addClass('is-invalid')
-                    return ;
-                }
-                window.location = './app-cashing.php?searchkey=' + $('#txtSearchkey').val()
             })
         })
     </script>

@@ -248,12 +248,33 @@ $page_id = 5;
                                 <div class="form-group dn">
                                     <label for="" style="font-size: 18px !important;">รหัสยา : <span class="text-danger">*</span>  </label>
                                     <input type="text" class="form-control" id="txtDrugIdu" name="txtDrugIdu">
-                                    <!-- <div class="text-muted" style="font-size: 0.8em; padding-top: 1px;">* หากเว้นว่าง จะเป็นการให้ระบบออกรหัสให้อัตโนมัติ</div> -->
                                 </div>
 
                                 <div class="form-group">
                                     <label for="" style="font-size: 18px !important;">Trade name : <span class="text-danger">*</span> </label>
-                                    <input type="text" class="form-control" id="txtDrugTradeu" name="txtDrugTradeu" readonly>
+                                    <input type="text" class="form-control" id="txtDrugTradeu" name="txtDrugTradeu">
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="" style="font-size: 18px !important;">GENERIC NAME : <span class="text-danger">*</span>  </label>
+                                    <input type="text" class="form-control" id="txtDrugGeneric" name="txtDrugGeneric">
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="" style="font-size: 18px !important;">DOSE : <span class="text-danger">*</span>  </label>
+                                    <input type="text" class="form-control" id="txtDrugDose" name="txtDrugDose">
+                                </div>
+
+                                <div class="row">
+                                    <div class="form-group col-12 col-sm-6">
+                                        <label for="" style="font-size: 18px !important;">ราคาทุน : <span class="text-danger">*</span> </label>
+                                        <input type="number" class="form-control" id="txtDrugCost" name="txtDrugCost" step="0.01">
+                                    </div>
+
+                                    <div class="form-group col-12 col-sm-6">
+                                        <label for="" style="font-size: 18px !important;">ราคาขาย : <span class="text-danger">*</span> </label>
+                                        <input type="number" class="form-control" id="txtDrugPrice" name="txtDrugPrice" step="0.01">
+                                    </div>
                                 </div>
 
                                 <div class="form-group">

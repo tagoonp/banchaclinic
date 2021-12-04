@@ -1,22 +1,33 @@
+$(function(){
+    $('#txtfDf').on('keypress',function(e) {
+        $('#txtfDf').removeClass('is-invalid')
+        if(e.which == 13) {
+            $('#txtfTotal_real').focus()
+        }
+    });
+})
+
 var service = {
     create(pid){
-        Swal.fire({
-            title: 'ยืนยันดำเนินการ',
-            text: "ท่านยืนยันการสร้างรายการบริการครั้งใหม่หรือไม่",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'ยืนยัน',
-            cancelButtonText: 'ยกเลิก',
-            confirmButtonClass: 'btn btn-danger mr-1',
-            cancelButtonClass: 'btn btn-secondary',
-            buttonsStyling: false,
-        }).then(function (result) {
-            if (result.value) {
-                window.location = '../../../controller/create_service.php?patient_id=' + pid
-            }
-        })
+        // Swal.fire({
+        //     title: 'ยืนยันดำเนินการ',
+        //     text: "ท่านยืนยันการสร้างรายการบริการครั้งใหม่หรือไม่",
+        //     icon: 'warning',
+        //     showCancelButton: true,
+        //     confirmButtonColor: '#3085d6',
+        //     cancelButtonColor: '#d33',
+        //     confirmButtonText: 'ยืนยัน',
+        //     cancelButtonText: 'ยกเลิก',
+        //     confirmButtonClass: 'btn btn-danger mr-1',
+        //     cancelButtonClass: 'btn btn-secondary',
+        //     buttonsStyling: false,
+        // }).then(function (result) {
+        //     if (result.value) {
+        //         window.location = '../../../controller/create_service.php?patient_id=' + pid
+        //     }
+        // })
+
+        window.location = '../../../controller/create_service.php?patient_id=' + pid
     },
     delete(sid){
         Swal.fire({
