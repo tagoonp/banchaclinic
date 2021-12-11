@@ -298,7 +298,7 @@ if((isset($_GET['filter'])) && ($_GET['filter'] == '1')){
                                     <?php 
                                     $strSQL = "SELECT * FROM bnc_invoice WHERE inv_delete = 'N' AND inv_due_date BETWEEN '$start' AND '$end' ORDER BY inv_check";
                                     $result = $db->fetch($strSQL, true);
-                                    if($result['status']){
+                                    if(($result) && ($result['status'])){
                                         $c = 1;
                                         $summ_paid = 0;
                                         foreach ($result['data'] as $row) {
