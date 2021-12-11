@@ -153,6 +153,8 @@ $(document).ready(function() {
         ]
     });
 
+    
+
     $('.dataex-html5-selectors2').DataTable( {
         "order": [[ 1, "asc" ]],
         "pageLength": 5

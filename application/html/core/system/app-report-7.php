@@ -9,50 +9,26 @@ $conn = $db->conn();
 
 require('../../../configuration/user.inc.php'); 
 
-$page_id = 6;
+$page_id = 15;
 
 $billstatus = '';
 $billsearch = '';
-$start = date('Y-')."01-01";
-$end = $date;
+$selected_month = date('Y-m');
+$month = date('m');
+$year = date('Y');
+
 $filter = 0;
 
 $searchResponse = null;
 $searchResponse_count = 0;
 
-if((isset($_GET['filter'])) && ($_GET['filter'] == '1')){
+$selected_month = date('Y-m');
 
-    $filter = 1;
-    $start = mysqli_real_escape_string($conn, $_REQUEST['start']);
-    $end = mysqli_real_escape_string($conn, $_REQUEST['end']);
-    
-    $billstatus = mysqli_real_escape_string($conn, $_REQUEST['status']);
-    if($billstatus == 'all'){
-        $billsearch = '';
-    }else{
-        $billsearch = " AND service_paytype = '$billstatus' ";
-    }
-
-    $strSQL = "SELECT * FROM bnc_service a LEFT JOIN bcn_patient b ON a.service_patient_id = b.patient_id WHERE a.service_delete = '0' AND service_status = 'discharge' AND a.service_date BETWEEN '$start' AND '$end' ORDER BY b.patient_fname";
-    $strSQL_1 = $strSQL;
-    $res = $db->fetch($strSQL, true, true);
-    if(($res) && ($res['status'])){
-        $searchResponse = $res['data'];
-    }
-}else{
-    $strSQL = "SELECT * FROM bnc_service a LEFT JOIN bcn_patient b ON a.service_patient_id = b.patient_id WHERE a.service_delete = '0' AND service_status = 'discharge' AND a.service_date = '$date' ORDER BY b.patient_fname";
-    $res = $db->fetch($strSQL, true, true);
-    if(($res) && ($res['status'])){
-        $searchResponse = $res['data'];
-    }
+if((isset($_REQUEST['month'])) && (isset($_REQUEST['year']))){
+    $month = mysqli_real_escape_string($conn, $_REQUEST['month']);
+    $year = mysqli_real_escape_string($conn, $_REQUEST['year']);
+    $selected_month = $_REQUEST['year']."-".$_REQUEST['month'];
 }
-
-
-
-
-
-
-
 
 ?>
 <!DOCTYPE html>
@@ -63,7 +39,7 @@ if((isset($_GET['filter'])) && ($_GET['filter'] == '1')){
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>การใช้บริการตามช่วงเวลา</title>
+    <title>รายงานงบดุล</title>
     <link rel="apple-touch-icon" href="../../../app-assets/images/ico/apple-icon-120.png">
     <link rel="shortcut icon" type="image/x-icon" href="../../../app-assets/images/ico/favicon.ico">
     <link href="https://fonts.googleapis.com/css?family=Rubik:300,400,500,600%7CIBM+Plex+Sans:300,400,500,600,700" rel="stylesheet">
@@ -216,177 +192,179 @@ if((isset($_GET['filter'])) && ($_GET['filter'] == '1')){
         <div class="content-overlay"></div>
         <div class="content-wrapper">
             <div class="content-header row">
-                <div class="content-header-left col-8 mb-2 mt-1">
+                <div class="content-header-left col-12 mb-2 mt-1">
                     <div class="breadcrumbs-top">
-                        <h5 class="content-header-title float-left pr-1 mb-0 text-dark" style="font-size: 28px;">การใช้บริการตามช่วงเวลา</h5>
+                        <h5 class="content-header-title float-left pr-1 mb-0 text-dark" style="font-size: 28px;">รายงานงบดุล</h5>
                         <div class="breadcrumb-wrapper d-none d-sm-block" style="padding-top: 10px;">
                             <ol class="breadcrumb p-0 mb-0 pl-1">
                                 <li class="breadcrumb-item"><a href="./"><i class="bx bx-home-alt"></i></a></li>
                                 <li class="breadcrumb-item">รายงาน</li>
-                                <li class="breadcrumb-item active">รายการบิล/check</li>
+                                <li class="breadcrumb-item active">รายงานงบดุล</li>
                             </ol>
                         </div>
                     </div>
                 </div>
-                <div class="col-4 text-right pt-1">
-                    <button class="btn btn-secondary pl-1"  data-toggle="modal" data-target="#modalInvoiceFilter"><i class="bx bx-filter"></i> เลือกช่วงเวลา</button>
+                <div class="col-12">
+                    <div class="row">
+                        <div class="col-12 pb-3" id="textTop">
+                            พิมพ์เมื่อ <?php echo $date; ?>  |  ข้อมูลประจำเดือน : <?php echo $selected_month; ?>
+                        </div>
+                    </div>
                 </div>
             </div>
 
             <!--Success theme Modal -->
 
-            <div class="modal fade text-left" id="modalInvoiceFilter" tabindex="-1" role="dialog" aria-labelledby="myModalLabel110" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered">
-                    <div class="modal-content">
-                        <div class="modal-header bg-success">
-                            <h5 class="modal-title white th" id="myModalLabel110"><i class="bx bx-filter"></i> กรองข้อมูล</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"  onclick="resetNewform();">
-                                <i class="bx bx-x"></i>
-                            </button>
-                        </div>
-                        <form id="newfilterForm" onsubmit="return false;" autocomplete="off">
-                            <div class="modal-body">
-                                
-                                <div class="row">
-                                    <div class="col-12 col-sm-6">
-                                        <div class="form-group">
-                                            <label for="" style="font-size: 18px !important;">จากวันที่ : </label>
-                                            <!-- <input type="text" class="form-control" id="txtInvoice" name="txtInvoice"> -->
-                                            <fieldset class="form-group position-relative has-icon-left">
-                                                <input type="text" class="form-control pickadate2" placeholder="เลือกวันที่เริ่ม" id="txtFilterStart" value="<?php if($filter == 1){ if($start != ''){ echo $start; }} ?>">
-                                                <div class="form-control-position" style="padding-top: 8px;">
-                                                    <i class='bx bx-calendar'></i>
-                                                </div>
-                                            </fieldset>
-                                        </div>
-                                    </div>
-                                    <div class="col-12 col-sm-6">
-                                        <div class="form-group">
-                                            <label for="" style="font-size: 18px !important;">ถึงวันที่ : </label>
-                                            <!-- <input type="text" class="form-control" id="txtInvoice" name="txtInvoice"> -->
-                                            <fieldset class="form-group position-relative has-icon-left">
-                                                <input type="text" class="form-control pickadate2" placeholder="เลือกวันสิ้นสุด" id="txtFilterEnd" value="<?php if($filter == 1){ if($end != ''){ echo $end; }} ?>">
-                                                <div class="form-control-position" style="padding-top: 8px;">
-                                                    <i class='bx bx-calendar'></i>
-                                                </div>
-                                            </fieldset>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="" style="font-size: 18px !important;">ประเภทการชำระเงิน : </label>
-                                    <select name="txtStatus" id="txtStatus" class="form-control">
-                                        <option value="all">ทั้งหมด</option>
-                                        <option value="0" <?php if($filter == 1){ if($billstatus == '0'){ echo "selected"; }} ?>>เงินสด</option>
-                                        <option value="1" <?php if($filter == 1){ if($billstatus == '1'){ echo "selected"; }} ?>>โอนเงิน</option>
-                                    </select>
-                                </div>
-                                
-                            </div>
-                            <div class="modal-footer pb-0">
-                                <button type="button" class="btn btn-light-secondary" data-dismiss="modal" onclick="resetNewform();">
-                                    <i class="bx bx-x d-block d-sm-none"></i>
-                                    <span class="d-none d-sm-block">ยกเลิก</span>
-                                </button>
-
-                                <button type="button" class="btn btn-success ml-1" onclick="filterReport()">
-                                    <i class="bx bx-check d-block d-sm-none"></i>
-                                    <span class="d-none d-sm-block">แสดงผล</span>
-                                </button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
+            
             
             <div class="content-body row">
                 <div class="col-12">
-                    <?php //echo $strSQL_1; ?>
-                    <h5>หากไม่เลือกช่วงเวลา ค่าตั้งต้น คือ วันที่ปัจจุบัน</h5>
                     <div class="card">
                         <div class="card-body">
-                            <?php 
-                            $summ = 0;
-                            $summ_cache = 0;
-                            $summ_transfer = 0;
-                            $summ_df = 0;
-                            ?>
-                            <table class="table table-striped th zero-configuration-2" style="margin-top: 40px;">
-                                <thead>
-                                    <tr class="bg-secondary">
-                                        <!-- <th class="th text-white">วัน - เวลา</th>
-                                        <th class="th text-white">รหัส</th> -->
-                                        <th class="th text-white">ชื่อ - นามสกุล</th>
-                                        <th class="th text-white">ยาที่จ่าย</th>
-                                        <th class="th text-white">จำนวนเงิน</th>
-                                        <th class="th text-white">ประเภทบริการ</th>
-                                        <th class="th text-white">การชำระเงิน</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <?php 
-                                    if($searchResponse != null){
-                                        foreach($searchResponse as $row){
+                            <div class="row">
+                                <div class="col-5">
+                                    <select name="txtMonth" id="txtMonth" class="form-control">
+                                        <option value="">-- เลือกเดือน --</option>
+                                        <option value="01" <?php if($month == '01'){ echo "selected"; } ?>>ม.ค.</option>
+                                        <option value="02" <?php if($month == '02'){ echo "selected"; } ?>>ก.พ.</option>
+                                        <option value="03" <?php if($month == '03'){ echo "selected"; } ?>>มึ.ค.</option>
+                                        <option value="04" <?php if($month == '04'){ echo "selected"; } ?>>เม.ย.</option>
+                                        <option value="05" <?php if($month == '05'){ echo "selected"; } ?>>พ.ค.</option>
+                                        <option value="06" <?php if($month == '06'){ echo "selected"; } ?>>มิ.ย.</option>
+                                        <option value="07" <?php if($month == '07'){ echo "selected"; } ?>>ก.ค.</option>
+                                        <option value="08" <?php if($month == '08'){ echo "selected"; } ?>>ส.ค.</option>
+                                        <option value="09" <?php if($month == '09'){ echo "selected"; } ?>>ก.ย.</option>
+                                        <option value="10" <?php if($month == '10'){ echo "selected"; } ?>>ต.ค.</option>
+                                        <option value="11" <?php if($month == '11'){ echo "selected"; } ?>>พ.ย.</option>
+                                        <option value="12" <?php if($month == '12'){ echo "selected"; } ?>>ธ.ค.</option>
+                                    </select>
+                                </div>
+                                <div class="col-5">
+                                    <select name="txtYear" id="txtYear" class="form-control">
+                                        <option value="">-- เลือกปี --</option>
+                                        <?php 
+                                        for ($i=date('Y'); $i >= (date('Y') - 10) ; $i--) { 
                                             ?>
-                                            <tr>    
-                                                <!-- <td style="vertical-align: top;"><?php //echo $row['service_cdatetime']; ?></td>
-                                                <td style="vertical-align: top;"><?php //echo $row['patient_hn']; ?></td> -->
-                                                
-                                                <td style="vertical-align: top;">
-                                                    <a href="app-viewrecord.php?patient_id=<?php echo $row['patient_id'];?>&service_id=<?php echo $row['service_id']; ?>"><?php  echo $row['patient_fname']." ".$row['patient_lname']; ?></a>
-                                                </td>
-                                                <td style="vertical-align: top;"><?php 
-                                                $strSQL = "SELECT * FROM bnc_druglist WHERE dlist_seq = '".$row['service_seq']."' ";
-                                                $resd = $db->fetch($strSQL, true, false);
-                                                if(($resd) && ($resd['status'])){
-                                                    foreach ($resd['data'] as $rowd) {
-                                                        echo $rowd['dlist_drugname']. " (".$rowd['dlist_qty'].")<br>";
-                                                    }
-                                                }else{
-                                                    echo "-";
-                                                }
-                                                ?></td>
-                                                <td style="vertical-align: top;"><?php echo number_format($row['service_finalprice'], 2, '.', ','); $summ += $row['service_finalprice']; ?><br>(<?php echo "DF : ". number_format($row['service_df'], 2, '.', ','); $summ_df += $row['service_df']; ?>)</td>
-                                                <td style="vertical-align: top;"><?php 
-                                                if($row['service_type'] == 'NA'){ 
-                                                    echo "ไม่ทราบ";
-                                                }else{
-                                                    echo $row['service_type'];
-                                                }
-                                                ?>
-                                                </td>
-                                                <td style="vertical-align: top;" class="text-left">
-                                                    <?php 
-                                                    if($row['service_paytype'] == '0'){  
-                                                        echo "เงินสด"; 
-                                                        $summ_cache += $row['service_finalprice'];
-                                                    } else{ 
-                                                        $summ_transfer += $row['service_finalprice'];
-                                                        echo "โอน/พร้อมเพย์"; 
-                                                    }
-                                                    ?>
-                                                </td>
-                                            </tr>
+                                            <option value="<?php echo $i; ?>" <?php if($year == $i){ echo "selected"; } ?>><?php echo $i; ?></option>
                                             <?php
                                         }
-                                    }   
-                                    ?>
-                                </tbody>
-                                <tfooter>
-                                    <tr>
-                                        <td class="text-dark" colspan="3">รวมทั้งสิ้น</td>
-                                        <td class="text-dark" colspan="3">
-                                            <strong><?php echo number_format($summ, 2, '.', ',');  ?> (DF : <?php echo number_format($summ_df, 2, '.', ','); ?>)</strong>
-                                            <div class="text-muted">
-                                                เงินสด : <?php echo  number_format($summ_cache, 2, '.', ','); ?>
-                                            </div>
-                                            <div class="text-muted">
-                                                เงินโอน/พร้อมเพย์ : <?php echo  number_format($summ_transfer, 2, '.', ','); ?>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </tfooter>
-                            </table>
+                                        ?>
+                                    </select>
+                                </div>
+                                <div class="col-2">
+                                    <button class="btn btn-success btn-block" onclick="sr()">แสดงรายงาน</button>
+                                </div>
+                            </div>
+                            <div class="table-responsive mt-2">
+                                <table class="table table-striped dataex-html5-selectors-report-7" data-ordering="false">
+                                    <thead>
+                                        <tr style="background: #4a5751; font-weight: 400; color: #fff;">
+                                            <th class="text-white">
+                                                <div class="row">
+                                                    <div class="col-8" style="font-size: 1.3em;"><strong>รายการ</strong><br></div>
+                                                    <div class="col-4 text-right" style="font-size: 1.3em;"><strong>จำนวนเงิน</strong></div>
+                                                </div>
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <div class="row">
+                                                    <div class="col-8">ยอดเงินรายได้ทั้งหมด<br></div>
+                                                    <div class="col-4 text-right">
+                                                        <?php 
+                                                        $a = 0; $b = 0;
+                                                        $strSQL = "SELECT SUM(service_finalprice) sm FROM bnc_service WHERE service_date LIKE '$selected_month%' AND service_status = 'discharge' AND service_delete = '0'";
+                                                        $res = $db->fetch($strSQL, false);
+                                                        if($res){
+                                                            $a = $res['sm'];
+                                                            echo number_format($res['sm'], 2, '.', ',');
+                                                        }else{
+                                                            echo number_format(0, 2, '.', ',');
+                                                        }
+                                                        ?>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-8">เงินทุนค่ายาที่จ่ายทั้งหมด</div>
+                                                    <div class="col-4 text-right">
+                                                    <?php 
+                                                        $strSQL = "SELECT SUM(service_cost) sm FROM bnc_service WHERE service_date LIKE '$selected_month%' AND service_status = 'discharge' AND service_delete = '0'";
+                                                        $res = $db->fetch($strSQL, false);
+                                                        if($res){
+                                                            $b = $res['sm'];
+                                                            echo number_format($res['sm'], 2, '.', ',');
+                                                        }else{
+                                                            echo number_format(0, 2, '.', ',');
+                                                        }
+                                                        ?>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <div class="row">
+                                                    <div class="col-8"><strong>กำไรก่อนหักค่าใช้จ่าย</strong></div>
+                                                    <div class="col-4 text-right"><?php 
+                                                    echo number_format($a - $b, 2, '.', ',');
+                                                    ?></div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <?php 
+                                            $c1 = 0; $c2 = 0; $c3 = 0; $c4 = 0;
+                                            $strSQL = "SELECT * FROM bnc_othercost WHERE oc_date LIKE '$selected_month%' AND oc_delete = 'N'";
+                                            $resC = $db->fetch($strSQL, false);
+                                            if($resC){
+                                                $c1 = $resC['oc_electrticity'];
+                                                $c2 = $resC['oc_cellphone'];
+                                                $c3 = $resC['oc_salary'];
+                                                $c4 = $resC['oc_other'];
+                                            }
+
+                                            ?>
+                                            <td>
+                                                <div class="row">
+                                                    <div class="col-8">ค่าไฟฟ้า</div>
+                                                    <div class="col-4 text-right"><?php echo number_format($c1, 2, '.', ','); ?></div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-8">ค่าโทรศัพท์</div>
+                                                    <div class="col-4 text-right"><?php echo number_format($c2, 2, '.', ','); ?></div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-8">เงินเดือนพนักงาน</div>
+                                                    <div class="col-4 text-right"><?php echo number_format($c3, 2, '.', ','); ?></div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-8">ค่าใช้จ่ายเบ็ดเตล็ด</div>
+                                                    <div class="col-4 text-right"><?php echo number_format($c4, 2, '.', ','); ?></div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <div class="row">
+                                                    <div class="col-8"><strong>เงินค่าใช้จ่ายทั้งหมด</strong></div>
+                                                    <div class="col-4 text-right"><?php echo number_format($c1 + $c2 + $c3 + $c4, 2, '.', ','); ?></div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <div class="row">
+                                                    <div class="col-8"><strong>เงินกำไรสุทธิ</strong></div>
+                                                    <div class="col-4 text-right"><?php echo number_format(($a - $b) - ($c1 + $c2 + $c3 + $c4), 2, '.', ','); ?></div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -397,8 +375,8 @@ if((isset($_GET['filter'])) && ($_GET['filter'] == '1')){
     <!-- END: Content-->
 
     <!-- demo chat-->
-    <div class="sidenav-overlay"></div>
-    <div class="drag-target"></div>
+    <!-- <div class="sidenav-overlay"></div> -->
+    <!-- <div class="drag-target"></div> -->
 
 
     <!-- BEGIN: Vendor JS-->
@@ -440,30 +418,22 @@ if((isset($_GET['filter'])) && ($_GET['filter'] == '1')){
     <!-- BEGIN: Page JS-->
     <script src="../../../assets/js/banchaclinic/core.js?v=<?php echo filemtime('../../../assets/js/banchaclinic/core.js'); ?>"></script>
     <script src="../../../assets/js/banchaclinic/app.js?v=<?php echo filemtime('../../../assets/js/banchaclinic/app.js'); ?>"></script>
-    <script src="../../../assets/js/banchaclinic/invoice.js?v=<?php echo filemtime('../../../assets/js/banchaclinic/invoice.js'); ?>"></script>
-    <script src="../../../assets/js/banchaclinic/patient.js?v=<?php echo filemtime('../../../assets/js/banchaclinic/patient.js'); ?>"></script>
+    <script src="../../../assets/js/banchaclinic/drug.js?v=<?php echo filemtime('../../../assets/js/banchaclinic/drug.js'); ?>"></script>
     <!-- END: Page JS-->
 
     <script>
 
         $(document).ready(function(){
             preload.hide()
+        })
 
-            $('.zero-configuration-2').DataTable({
-                columnDefs: [
-                    { targets: 0, visible: true, className: 'vertical-align-top entry-nr' },
-                    { targets: 1, visible: true, className: 'vertical-align-top entry-name'},
-                    { targets: 2, visible: true, className: 'vertical-align-top entry-sex' },
-                    { targets: 3, visible: true, className: 'vertical-align-top entry-yob'},
-                    // { targets: 4, visible: true, className: 'p-5 text-center entry' },
-                    // { targets: 5, visible: true, className: 'p-5 text-center entry-status' },
-                    // { targets: '_all', visible: false, searchable: false, orderable: false }
-                ],
-                "ordering": false,
+        $(function(){
+            $('.dataex-html5-selectors-report-7').DataTable( {
+                "aaSorting": [],
                 dom: 'Bfrtip',
                 buttons: [
                     // {
-                    //     extend: 'pdfHtml5',\
+                    //     extend: 'pdfHtml5',
                     //     exportOptions: {
                     //         columns: ':visible'
                     //     }
@@ -474,55 +444,20 @@ if((isset($_GET['filter'])) && ($_GET['filter'] == '1')){
                             columns: ':visible',
                             stripHtml: false
                         },
-                        customize: function( win ) {
-                            $( win.document.body ).find( 'td' ).css( 'vertical-align', 'top' );
-                        },
-                        messageBottom: '<div style="padding-top: 20px; font-size: 20px;" >รวมทั้งสิ้น : <?php echo number_format($summ, 2, '.', ','); ?> บาท (DF : <?php echo number_format($summ_df, 2, '.', ','); ?>)<br>(เงินสด <?php echo number_format($summ_cache, 2, '.', ','); ?> บาท / เงินโอน <?php echo number_format($summ_transfer, 2, '.', ','); ?> บาท)</div>',
-                        <?php
-                        if($filter == '1'){
-                            ?>
-                            messageTop: '<div style="padding-top: 20px; font-size: 20px;" >' + "ประจำวันที่ <?php echo $start; ?> ถึงวันที่ <?php echo $end; ?></div>"
-                            <?php
-                        }else{
-                            ?>
-                            messageTop:'<div style="padding-top: 20px; font-size: 20px;" >' + "ของวันที่ <?php echo $date; ?></div>"
-                            <?php
-                        }
-                        ?>
-                    }
+                        messageTop: $('#textTop').text()
+                    },
+                    
                 ]
             });
         })
 
-        $(function(){
-            $('.form-control').focus(function(){
-                $(this).removeClass('is-invalid')
-            })
-
-            $('#searchForm').keyup(function(){
-                if($('#txtSearchkey').val() != ''){
-                    $('#txtSearchkey').removeClass('is-invalid')
-                    return ;
-                }
-            })
-
-        })
-
-        function filterReport(){
+        function sr(){
             $check = 0;
             $('.form-control').removeClass('is-invalid')
-
-            if($('#txtFilterStart').val() == ''){
-                $check++; $('#txtFilterStart').addClass('is-invalid')
-            }
-
-            if($('#txtFilterEnd').val() == ''){
-                $check++; $('#txtFilterEnd').addClass('is-invalid')
-            }
-
+            if($('#txtMonth').val() == ''){ $check++; $('#txtMonth').addClass('is-invalid')}
+            if($('#txtYear').val() == ''){ $check++; $('#txtYear').addClass('is-invalid')}
             if($check != 0){ return ;}
-
-            window.location = 'app-report-1.php?filter=1&start=' + $('#txtFilterStart').val() + '&end=' + $('#txtFilterEnd').val() + '&status=' + $('#txtStatus').val()
+            window.location = 'app-report-7.php?month=' + $('#txtMonth').val() + '&year=' + $('#txtYear').val()
         }
     </script>
 

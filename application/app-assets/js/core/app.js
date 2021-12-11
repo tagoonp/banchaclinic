@@ -28,7 +28,7 @@
     }
   }
   $(window).on('scroll', function () {
-    scrollTopFn();
+    // scrollTopFn();
   });
 
   $(window).on("load", function () {

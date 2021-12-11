@@ -13,7 +13,7 @@ $page_id = 12;
 
 $billstatus = '';
 $billsearch = '';
-$start = date('Y-')."01-01";
+$start = date('Y-m')."-01";
 $end = $date;
 $filter = 0;
 
@@ -25,14 +25,6 @@ if((isset($_GET['filter'])) && ($_GET['filter'] == '1')){
     $filter = 1;
     $start = mysqli_real_escape_string($conn, $_REQUEST['start']);
     $end = mysqli_real_escape_string($conn, $_REQUEST['end']);
-    
-    $billstatus = mysqli_real_escape_string($conn, $_REQUEST['status']);
-    if($billstatus == 'all'){
-        $billsearch = '';
-    }else{
-        $billsearch = " AND service_paytype = '$billstatus' ";
-    }
-
 
 }
 
@@ -204,7 +196,7 @@ if((isset($_GET['filter'])) && ($_GET['filter'] == '1')){
         <div class="content-overlay"></div>
         <div class="content-wrapper">
             <div class="content-header row">
-                <div class="content-header-left col-12 mb-2 mt-1">
+                <div class="content-header-left col-8 mb-2 mt-1">
                     <div class="breadcrumbs-top">
                         <h5 class="content-header-title float-left pr-1 mb-0 text-dark" style="font-size: 28px;">รายงานยาที่ใช้</h5>
                         <div class="breadcrumb-wrapper d-none d-sm-block" style="padding-top: 10px;">
@@ -215,6 +207,12 @@ if((isset($_GET['filter'])) && ($_GET['filter'] == '1')){
                             </ol>
                         </div>
                     </div>
+
+                    
+                    
+                </div>
+                <div class="col-4 text-right pt-1">
+                    <button class="btn btn-secondary pl-1"  data-toggle="modal" data-target="#modalInvoiceFilter"><i class="bx bx-filter"></i> เลือกช่วงเวลา</button>
                 </div>
                 <div class="col-12">
                     <div class="row">
@@ -226,7 +224,60 @@ if((isset($_GET['filter'])) && ($_GET['filter'] == '1')){
             </div>
 
             <!--Success theme Modal -->
+            <div class="modal fade text-left" id="modalInvoiceFilter" tabindex="-1" role="dialog" aria-labelledby="myModalLabel110" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header bg-success">
+                            <h5 class="modal-title white th" id="myModalLabel110"><i class="bx bx-filter"></i> กรองข้อมูล</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"  onclick="resetNewform();">
+                                <i class="bx bx-x"></i>
+                            </button>
+                        </div>
+                        <form id="newfilterForm" onsubmit="return false;" autocomplete="off">
+                            <div class="modal-body">
+                                
+                                <div class="row">
+                                    <div class="col-12 col-sm-6">
+                                        <div class="form-group">
+                                            <label for="" style="font-size: 18px !important;">จากวันที่ : </label>
+                                            <!-- <input type="text" class="form-control" id="txtInvoice" name="txtInvoice"> -->
+                                            <fieldset class="form-group position-relative has-icon-left">
+                                                <input type="text" class="form-control pickadate2" placeholder="เลือกวันที่เริ่ม" id="txtFilterStart" value="<?php if($filter == 1){ if($start != ''){ echo $start; }} ?>">
+                                                <div class="form-control-position" style="padding-top: 8px;">
+                                                    <i class='bx bx-calendar'></i>
+                                                </div>
+                                            </fieldset>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-sm-6">
+                                        <div class="form-group">
+                                            <label for="" style="font-size: 18px !important;">ถึงวันที่ : </label>
+                                            <!-- <input type="text" class="form-control" id="txtInvoice" name="txtInvoice"> -->
+                                            <fieldset class="form-group position-relative has-icon-left">
+                                                <input type="text" class="form-control pickadate2" placeholder="เลือกวันสิ้นสุด" id="txtFilterEnd" value="<?php if($filter == 1){ if($end != ''){ echo $end; }} ?>">
+                                                <div class="form-control-position" style="padding-top: 8px;">
+                                                    <i class='bx bx-calendar'></i>
+                                                </div>
+                                            </fieldset>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer pb-0">
+                                <button type="button" class="btn btn-light-secondary" data-dismiss="modal" onclick="resetNewform();">
+                                    <i class="bx bx-x d-block d-sm-none"></i>
+                                    <span class="d-none d-sm-block">ยกเลิก</span>
+                                </button>
 
+                                <button type="button" class="btn btn-success ml-1" onclick="filterReport()">
+                                    <i class="bx bx-check d-block d-sm-none"></i>
+                                    <span class="d-none d-sm-block">แสดงผล</span>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
             
             
             <div class="content-body row">
@@ -338,6 +389,7 @@ if((isset($_GET['filter'])) && ($_GET['filter'] == '1')){
     <script src="../../../assets/js/banchaclinic/core.js?v=<?php echo filemtime('../../../assets/js/banchaclinic/core.js'); ?>"></script>
     <script src="../../../assets/js/banchaclinic/app.js?v=<?php echo filemtime('../../../assets/js/banchaclinic/app.js'); ?>"></script>
     <script src="../../../assets/js/banchaclinic/drug.js?v=<?php echo filemtime('../../../assets/js/banchaclinic/drug.js'); ?>"></script>
+    <script src="../../../assets/js/banchaclinic/invoice.js?v=<?php echo filemtime('../../../assets/js/banchaclinic/invoice.js'); ?>"></script>
     <!-- END: Page JS-->
 
     <script>
@@ -349,6 +401,23 @@ if((isset($_GET['filter'])) && ($_GET['filter'] == '1')){
         $(function(){
 
         })
+
+        function filterReport(){
+            $check = 0;
+            $('.form-control').removeClass('is-invalid')
+
+            if($('#txtFilterStart').val() == ''){
+                $check++; $('#txtFilterStart').addClass('is-invalid')
+            }
+
+            if($('#txtFilterEnd').val() == ''){
+                $check++; $('#txtFilterEnd').addClass('is-invalid')
+            }
+
+            if($check != 0){ return ;}
+
+            window.location = 'app-report-4.php?filter=1&start=' + $('#txtFilterStart').val() + '&end=' + $('#txtFilterEnd').val() 
+        }
     </script>
 
 </body>

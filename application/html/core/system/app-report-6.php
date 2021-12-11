@@ -9,11 +9,11 @@ $conn = $db->conn();
 
 require('../../../configuration/user.inc.php'); 
 
-$page_id = 12;
+$page_id = 14;
 
 $billstatus = '';
 $billsearch = '';
-$start = date('Y-')."01-01";
+$start = date('Y-m')."-01";
 $end = $date;
 $filter = 0;
 
@@ -25,13 +25,7 @@ if((isset($_GET['filter'])) && ($_GET['filter'] == '1')){
     $filter = 1;
     $start = mysqli_real_escape_string($conn, $_REQUEST['start']);
     $end = mysqli_real_escape_string($conn, $_REQUEST['end']);
-    
-    $billstatus = mysqli_real_escape_string($conn, $_REQUEST['status']);
-    if($billstatus == 'all'){
-        $billsearch = '';
-    }else{
-        $billsearch = " AND service_paytype = '$billstatus' ";
-    }
+
 
     $strSQL = "SELECT COUNT(*), servic FROM bnc_service a LEFT JOIN bcn_patient b ON a.service_patient_id = b.patient_id 
                WHERE 
@@ -280,14 +274,6 @@ if((isset($_GET['filter'])) && ($_GET['filter'] == '1')){
                                         </div>
                                     </div>
                                 </div>
-                                <div class="form-group">
-                                    <label for="" style="font-size: 18px !important;">ประเภทการชำระเงิน : </label>
-                                    <select name="txtStatus" id="txtStatus" class="form-control">
-                                        <option value="all">ทั้งหมด</option>
-                                        <option value="0" <?php if($filter == 1){ if($billstatus == '0'){ echo "selected"; }} ?>>เงินสด</option>
-                                        <option value="1" <?php if($filter == 1){ if($billstatus == '1'){ echo "selected"; }} ?>>โอนเงิน</option>
-                                    </select>
-                                </div>
                                 
                             </div>
                             <div class="modal-footer pb-0">
@@ -309,14 +295,25 @@ if((isset($_GET['filter'])) && ($_GET['filter'] == '1')){
             <div class="content-body row">
                 <div class="col-12">
                     <?php //echo $strSQL_1; ?>
-                    <h5>หากไม่เลือกช่วงเวลา ค่าตั้งต้น คือ เดือนปัจจุบัน</h5>
+                    <?php 
+                    if($filter == '1'){
+                        ?>
+                        <span id="textPeriod"><h5>ตั้งแต่วันที่ <?php echo $start; ?> ถึงวันที่ <?php echo $end; ?> </h5></span>
+                        <?php
+                    }else{
+                        echo "<h5>หากไม่เลือกช่วงเวลา ค่าตั้งต้น คือ เดือนปัจจุบัน</h5>";
+                    }
+                    ?>
+                    
                     <div class="card">
                         <div class="card-body">
                             <?php 
                             $summ = 0;
-                            $summ_cache = 0;
-                            $summ_transfer = 0;
+                            $summ_med = 0;
+                            $summ_buy = 0;
+                            $summ_all = 0;
                             $summ_df = 0;
+                            $c = 0;
                             ?>
                             <table class="table table-striped th zero-configuration-2" style="margin-top: 40px;">
                                 <thead>
@@ -325,6 +322,7 @@ if((isset($_GET['filter'])) && ($_GET['filter'] == '1')){
                                         <th class="th text-white">รหัส</th> -->
                                         <th class="th text-white">วันที่</th>
                                         <th class="th text-white">ผู้ป่วยตรวจ</th>
+                                        <th class="th text-white">ผู้ป่วยซื้อยา</th>
                                         <th class="th text-white">ผู้ป่วยทั้งหมด</th>
                                         <th class="th text-white">DF</th>
                                         <th class="th text-white">ยอดเงิน</th>
@@ -337,6 +335,7 @@ if((isset($_GET['filter'])) && ($_GET['filter'] == '1')){
 
                                     if(($resServ) && ($resServ['status'])){
                                         foreach($resServ['data'] as $row){
+                                            $c += 1;
                                             ?>
                                             <tr>    
                                                 <td style="vertical-align: top;">
@@ -346,17 +345,29 @@ if((isset($_GET['filter'])) && ($_GET['filter'] == '1')){
                                                 $strSQL = "SELECT COUNT(*) cnx FROM bnc_service WHERE service_date = '".$row['service_date']."' AND service_type = 'ตรวจ' AND service_status = 'discharge' AND service_delete = '0'";
                                                 $resDf = $db->fetch($strSQL, false);
                                                 if($resDf){
+                                                    $summ_med += $resDf['cnx'];
                                                     echo number_format($resDf['cnx'], 0, '', ',');
                                                 }else{
                                                     echo "0";
                                                 }
                                                 ?></td>
-                                                <td style="vertical-align: top;"><?php echo $row['cn']; ?></td>
+                                                <td style="vertical-align: top;"><?php 
+                                                $strSQL = "SELECT COUNT(*) cnx FROM bnc_service WHERE service_date = '".$row['service_date']."' AND service_type = 'ซื้อยา' AND service_status = 'discharge' AND service_delete = '0'";
+                                                $resDf = $db->fetch($strSQL, false);
+                                                if($resDf){
+                                                    $summ_buy += $resDf['cnx'];
+                                                    echo number_format($resDf['cnx'], 0, '', ',');
+                                                }else{
+                                                    echo "0";
+                                                }
+                                                ?></td>
+                                                <td style="vertical-align: top;"><?php echo $row['cn']; $summ_all += $row['cn']; ?></td>
                                                 <td style="vertical-align: top;"><?php 
                                                 $strSQL = "SELECT SUM(service_df) sdf FROM bnc_service WHERE service_date = '".$row['service_date']."' AND service_status = 'discharge' AND service_delete = '0'";
                                                 $resDf = $db->fetch($strSQL, false);
                                                 if($resDf){
                                                     echo number_format($resDf['sdf'], 2, '.', ',');
+                                                    $summ_df += $resDf['sdf'];
                                                 }else{
                                                     echo "0";
                                                 }
@@ -367,6 +378,7 @@ if((isset($_GET['filter'])) && ($_GET['filter'] == '1')){
                                                 $strSQL = "SELECT SUM(service_finalprice) sdf FROM bnc_service WHERE service_date = '".$row['service_date']."' AND service_status = 'discharge' AND service_delete = '0'";
                                                 $resDf = $db->fetch($strSQL, false);
                                                 if($resDf){
+                                                    $summ += $resDf['sdf'];
                                                     echo number_format($resDf['sdf'], 2, '.', ',');
                                                 }else{
                                                     echo "0";
@@ -387,14 +399,33 @@ if((isset($_GET['filter'])) && ($_GET['filter'] == '1')){
                                 </tbody>
                                 <tfooter>
                                     <tr>
-                                        <td class="text-dark" colspan="3">รวมทั้งสิ้น</td>
-                                        <td class="text-dark" colspan="3">
-                                            <strong><?php echo number_format($summ, 2, '.', ',');  ?> (DF : <?php echo number_format($summ_df, 2, '.', ','); ?>)</strong>
-                                            <div class="text-muted">
-                                                เงินสด : <?php echo  number_format($summ_cache, 2, '.', ','); ?>
-                                            </div>
-                                            <div class="text-muted">
-                                                เงินโอน/พร้อมเพย์ : <?php echo  number_format($summ_transfer, 2, '.', ','); ?>
+                                        <td class="text-dark" colspan="6">
+                                            <div id="textInfo">
+                                                
+                                                <div class="row">
+                                                    <div class="col-sm-3">ค่า DF ทั้งหมด</div>
+                                                    <div class="col-sm-3"><?php echo number_format($summ_df, 2, '.', ','); ?> บาท</div>
+                                                    <div class="col-sm-3">ยอดเงินทั้งหมด</div>
+                                                    <div class="col-sm-3"><?php echo number_format($summ, 2, '.', ','); ?> บาท</div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-sm-3">จำนวนครั้งการเข้ารับบริการ</div>
+                                                    <div class="col-sm-3"><?php echo number_format($summ_all, 0, '.', ','); ?> ครั้ง</div>
+                                                    <div class="col-sm-3">เฉลี่ยวันละ (ครั้ง)</div>
+                                                    <div class="col-sm-3"><?php echo number_format($summ_all/$c, 0, '.', ','); ?> ครั้ง</div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-sm-3">จำนวนครั้งการเข้ารับบริการ (ตรวจ)</div>
+                                                    <div class="col-sm-3"><?php echo number_format($summ_med, 0, '.', ','); ?> ครั้ง</div>
+                                                    <div class="col-sm-3">เฉลี่ยวันละ (ครั้ง)</div>
+                                                    <div class="col-sm-3"><?php echo number_format($summ_med/$c, 0, '.', ','); ?> ครั้ง</div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-sm-3">จำนวนครั้งการเข้ารับบริการ (ซื้อยา)</div>
+                                                    <div class="col-sm-3"><?php echo number_format($summ_buy, 0, '.', ','); ?> ครั้ง</div>
+                                                    <div class="col-sm-3">เฉลี่ยวันละ (ครั้ง)</div>
+                                                    <div class="col-sm-3"><?php echo number_format($summ_buy/$c, 0, '.', ','); ?> ครั้ง</div>
+                                                </div>
                                             </div>
                                         </td>
                                     </tr>
@@ -467,19 +498,10 @@ if((isset($_GET['filter'])) && ($_GET['filter'] == '1')){
                     { targets: 1, visible: true, className: 'vertical-align-top entry-name'},
                     { targets: 2, visible: true, className: 'vertical-align-top entry-sex' },
                     { targets: 3, visible: true, className: 'vertical-align-top entry-yob'},
-                    // { targets: 4, visible: true, className: 'p-5 text-center entry' },
-                    // { targets: 5, visible: true, className: 'p-5 text-center entry-status' },
-                    // { targets: '_all', visible: false, searchable: false, orderable: false }
                 ],
                 "ordering": false,
                 dom: 'Bfrtip',
                 buttons: [
-                    // {
-                    //     extend: 'pdfHtml5',\
-                    //     exportOptions: {
-                    //         columns: ':visible'
-                    //     }
-                    // },
                     {
                         extend: 'print',
                         exportOptions: {
@@ -489,15 +511,15 @@ if((isset($_GET['filter'])) && ($_GET['filter'] == '1')){
                         customize: function( win ) {
                             $( win.document.body ).find( 'td' ).css( 'vertical-align', 'top' );
                         },
-                        messageBottom: '<div style="padding-top: 20px; font-size: 20px;" >รวมทั้งสิ้น : <?php echo number_format($summ, 2, '.', ','); ?> บาท (DF : <?php echo number_format($summ_df, 2, '.', ','); ?>)<br>(เงินสด <?php echo number_format($summ_cache, 2, '.', ','); ?> บาท / เงินโอน <?php echo number_format($summ_transfer, 2, '.', ','); ?> บาท)</div>',
+                        messageBottom: '<div class="row"><div class="col-12"><hr></div></div>' + $('#textInfo').html(),
                         <?php
                         if($filter == '1'){
                             ?>
-                            messageTop: '<div style="padding-top: 20px; font-size: 20px;" >' + "ประจำวันที่ <?php echo $start; ?> ถึงวันที่ <?php echo $end; ?></div>"
+                            messageTop: $('#textPeriod').text()
                             <?php
                         }else{
                             ?>
-                            messageTop:'<div style="padding-top: 20px; font-size: 20px;" >' + "ของวันที่ <?php echo $date; ?></div>"
+                            messageTop: $('#textPeriod').text()
                             <?php
                         }
                         ?>
@@ -534,7 +556,7 @@ if((isset($_GET['filter'])) && ($_GET['filter'] == '1')){
 
             if($check != 0){ return ;}
 
-            window.location = 'app-report-5.php?filter=1&start=' + $('#txtFilterStart').val() + '&end=' + $('#txtFilterEnd').val() + '&status=' + $('#txtStatus').val()
+            window.location = 'app-report-6.php?filter=1&start=' + $('#txtFilterStart').val() + '&end=' + $('#txtFilterEnd').val()
         }
     </script>
 
