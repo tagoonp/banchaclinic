@@ -220,10 +220,7 @@ if($searchkey != ''){
                         </div>
                         <form id="newpatientForm" onsubmit="return false;">
                             <div class="modal-body">
-                                <div class="form-group">
-                                    <label for="" style="font-size: 18px !important;">รหัสประจำตัวผู้ป่วย : <span class="text-danger">*</span>  </label>
-                                    <input type="text" class="form-control" id="txtHn" name="txtHn">
-                                </div>
+                                
 
                                 <div class="row">
                                     <div class="form-group col-6">
@@ -235,6 +232,11 @@ if($searchkey != ''){
                                         <label for="" style="font-size: 18px !important;">นามสกุล : </label>
                                         <input type="text" class="form-control" id="txtLname" name="txtLname">
                                     </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="" style="font-size: 18px !important;">รหัสประจำตัวผู้ป่วย : <span class="text-danger">*</span>  </label>
+                                    <input type="text" class="form-control" id="txtHn" name="txtHn">
                                 </div>
 
                                 <div class="form-group">
