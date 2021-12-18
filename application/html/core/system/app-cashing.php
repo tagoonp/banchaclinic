@@ -504,7 +504,44 @@ if($searchkey != ''){
                     $('#txtSearchkey').addClass('is-invalid')
                     return ;
                 }
-                window.location = './app-cashing.php?searchkey=' + $('#txtSearchkey').val()
+
+                // Check fname
+                var param = {
+                    fname: $('#txtSearchkey').val()
+                }
+                var jst = $.post(authen_api + 'patient.php?stage=search', param, function(){}, 'json')
+                       .always(function(snap){
+                        // console.log(snap);
+                        // return ;
+                            if(snap.status == 'Success'){
+                                window.location = './app-cashing.php?searchkey=' + $('#txtSearchkey').val()
+                            }else{
+                                preload.hide()
+                                Swal.fire({
+                                    title: 'ไม่พบข้อมูลผู้ป่วยนี้ในฐานข้อมูล',
+                                    text: "ท่านต้องการเพิ่มผู้ป่วยใหม่หรือไม่",
+                                    icon: 'success',
+                                    showCancelButton: true,
+                                    confirmButtonColor: '#3085d6',
+                                    confirmButtonText: 'เพิ่มผู้ป่วย',
+                                    cancelButtonText: 'ไม่ต้องการ',
+                                    confirmButtonClass: 'btn btn-danger mr-1',
+                                    cancelButtonClass: 'btn btn-secondary',
+                                    buttonsStyling: false,
+                                }).then(function (result2) {
+                                    if (result2.value) {
+                                        $('#modalNewPatient').modal()
+                                        $('#txtFname').val($('#txtSearchkey').val())
+                                        $('#txtFname').trigger('keyup')
+                                        setTimeout(() => {
+                                            $('#txtLname').focus()
+                                        }, 500);
+                                    }
+                                })
+                            }
+                       })
+
+                // window.location = './app-cashing.php?searchkey=' + $('#txtSearchkey').val()
             })
         })
     </script>

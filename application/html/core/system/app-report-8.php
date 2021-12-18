@@ -1,6 +1,6 @@
 <?php 
 
-require('../../../configuration/local.inc.php');
+require('../../../configuration/server.inc.php');
 require('../../../configuration/configuration.php');
 require('../../../configuration/database.php'); 
 
@@ -399,6 +399,7 @@ if((isset($_GET['filter'])) && ($_GET['filter'] == '1')){
 
         $(document).ready(function(){
             preload.hide()
+            getInvlistgetInvlist()
         })
 
         $(function(){
@@ -419,6 +420,10 @@ if((isset($_GET['filter'])) && ($_GET['filter'] == '1')){
                 ]
             });
         })
+
+        function getInvlistgetInvlist(){
+
+        }
 
         function filterReport(){
             $check = 0;

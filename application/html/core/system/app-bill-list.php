@@ -1,6 +1,7 @@
 <?php 
 
-require('../../../configuration/local.inc.php');
+// require('../../../configuration/local.inc.php');
+require('../../../configuration/server.inc.php');
 require('../../../configuration/configuration.php');
 require('../../../configuration/database.php'); 
 
@@ -35,14 +36,23 @@ if((isset($_GET['filter'])) && ($_GET['filter'] == '1')){
 }
 
 $searchkey = '';
+
+if(isset($_REQUEST['searchkey'])){
+    $searchkey = mysqli_real_escape_string($conn, $_REQUEST['searchkey']);
+    $searchkey = " AND inv_number = '$searchkey'";
+}
+
 $searchResponse = null;
 $searchResponse_count = 0;
-$strSQL = "SELECT * FROM bnc_invoice WHERE inv_delete = 'N' AND inv_date BETWEEN '$start' AND '$end' ORDER BY inv_date DESC";
+$strSQL = "SELECT * FROM bnc_invoice WHERE inv_delete = 'N' $searchkey AND inv_date BETWEEN '$start' AND '$end' ORDER BY inv_date DESC";
+
+
 if($filter == 1){
     $strSQL = "SELECT * FROM bnc_invoice 
                WHERE 
                inv_delete = 'N' 
                $billsearch 
+               $searchkey
                AND inv_date BETWEEN '$start' AND '$end'
                ORDER BY inv_date DESC";
 }
@@ -50,8 +60,11 @@ $res = $db->fetch($strSQL, true, true);
 if(($res) && ($res['status'])){
     $searchResponse = $res['data'];
 }else{
-    echo $strSQL;
+    // echo $strSQL;
+    // die();
 }
+
+
 
 
 ?>
@@ -220,7 +233,8 @@ if(($res) && ($res['status'])){
                     </div>
                 </div>
                 <div class="col-4 text-right pt-1">
-                    <button class="btn btn-danger pl-1"  data-toggle="modal" data-target="#modalNewInvoice" onclick="setInvoiceFocuus()"><i class="bx bx-plus"></i> เข้าบิลใหม่</button>
+                    <button class="btn btn-danger pl-1"  data-toggle="modal" data-target="#modalCheckInvoice" onclick="setInvoiceFocuus()"><i class="bx bx-plus"></i> เข้าบิลใหม่</button>
+                    <button class="btn btn-secondary pl-1"  onclick="window.location='app-bill-list.php'"><i class="bx bx-menu"></i> รายการทั้งหมด</button>
                     <button class="btn btn-secondary pl-1"  data-toggle="modal" data-target="#modalInvoiceFilter"><i class="bx bx-filter"></i> Filter</button>
                 </div>
             </div>
@@ -284,6 +298,44 @@ if(($res) && ($res['status'])){
                                 <button type="button" class="btn btn-success ml-1" onclick="invoice.filter()">
                                     <i class="bx bx-check d-block d-sm-none"></i>
                                     <span class="d-none d-sm-block">แสดงผล</span>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal fade text-left" id="modalCheckInvoice" tabindex="-1" role="dialog" aria-labelledby="myModalLabel110" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header bg-success">
+                            <h5 class="modal-title white" id="myModalLabel110"><i class="bx bx-plus"></i> ตรวจสอบบิล</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"  onclick="resetNewform();">
+                                <i class="bx bx-x"></i>
+                            </button>
+                        </div>
+                        <form id="newinvoiceForm" onsubmit="return false;" autocomplete="off">
+                            <div class="modal-body">
+                                <p class="text-danger">
+                                    ** กรุณาพิมพ์หมายเลขบิลเพื่อตรวจสอบข้อมูลเดิมก่อน
+                                </p>
+                                <div class="row">
+                                    <div class="form-group col-12">
+                                        <label for="" style="font-size: 18px !important;">หมายเลขใบส่งสินค้า : <span class="text-danger">*</span> </label>
+                                        <input type="text" class="form-control" id="txtInvoiceCheck" name="txtInvoiceCheck">
+                                    </div>
+                                </div>
+                                
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-light-secondary" data-dismiss="modal" onclick="resetNewform();">
+                                    <i class="bx bx-x d-block d-sm-none"></i>
+                                    <span class="d-none d-sm-block">ยกเลิก</span>
+                                </button>
+
+                                <button type="button" class="btn btn-success ml-1" onclick="invoice.check()">
+                                    <i class="bx bx-check d-block d-sm-none"></i>
+                                    <span class="d-none d-sm-block">ตรวจสอบ</span>
                                 </button>
                             </div>
                         </form>
@@ -505,6 +557,7 @@ if(($res) && ($res['status'])){
                                         <th class="th">หมายเลขบิล</th>
                                         <th class="th">จำนวนเงิน</th>
                                         <th class="th">กำหนดจ่าย</th>
+                                        <th class="th">หมายเลขเช็ค</th>
                                         <th class="th">สถานะปัจจุบัน</th>
                                         <th class="th" style="width: 150px;"></th>
                                     </tr>
@@ -517,13 +570,14 @@ if(($res) && ($res['status'])){
                                             <tr>
                                                 <td style="vertical-align: top;"><?php echo $row['inv_date']; ?></td>
                                                 <td style="vertical-align: top;">
-                                                    <a href="app-patient-info.php?pid=<?php echo $row['inv_id'];?>"><?php echo $row['inv_number']; ?></a>
+                                                    <?php echo $row['inv_number']; ?>
                                                     <div style="font-size: 0.9em;">
                                                         บริษัท/ห้างร้าน : <?php  echo $row['inv_company']; ?>
                                                     </div>
                                                 </td>
                                                 <td style="vertical-align: top;"><?php echo number_format($row['inv_cost'], 2, '.', ','); ?></td>
                                                 <td style="vertical-align: top;"><?php echo $row['inv_due_date']; ?></td>
+                                                <td style="vertical-align: top;"><?php echo $row['inv_check']; ?></td>
                                                 <td style="vertical-align: top;"><?php 
                                                 if($row['inv_paystage'] == 'N'){
                                                     echo "ยังไม่จ่าย";

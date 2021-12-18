@@ -233,6 +233,34 @@ if($stage == 'force_new'){
     die(); 
 }
 
+if($stage == 'search'){
+    if(
+        (!isset($_REQUEST['fname']))
+    ){
+        $return['status'] = 'Fail';
+        $return['error_stage'] = '1';
+        echo json_encode($return);
+        $db->close(); 
+        die(); 
+    }
+
+    $fname = mysqli_real_escape_string($conn, $_REQUEST['fname']);
+
+    $strSQL = "SELECT * FROM bcn_patient WHERE patient_fname = '$fname' AND patient_delete = '0'";
+    $res = $db->fetch($strSQL, true, true);
+    if(($res) && ($res['count'] > 0)){
+        $return['status'] = 'Success';
+        echo json_encode($return);
+        $db->close(); 
+        die(); 
+    }else{
+        $return['status'] = 'Fail';
+        echo json_encode($return);
+        $db->close(); 
+        die(); 
+    }
+}
+
 if($stage == 'addApp'){
     if(
         (!isset($_REQUEST['puid'])) ||

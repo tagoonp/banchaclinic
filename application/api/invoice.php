@@ -211,3 +211,33 @@ if($stage == 'delete'){
     $db->close(); 
     die(); 
 }
+
+if($stage == 'report_8'){
+
+}
+
+if($stage == 'check'){
+    if(
+        (!isset($_REQUEST['inv_id']))
+    ){
+        $return['status'] = 'Fail';
+        $return['error_stage'] = '1';
+        echo json_encode($return);
+        $db->close(); 
+        die(); 
+    }
+
+    $inv_id = mysqli_real_escape_string($conn, $_REQUEST['inv_id']);
+
+    $strSQL = "SELECT * FROM bnc_invoice WHERE inv_number = '$inv_id' AND inv_delete = 'N'";
+    $res = $db->fetch($strSQL, true, true);
+    if(($res) && ($res['count'] > 0)){
+        $return['status'] = 'Success';
+    }else{
+        $return['status'] = 'Fail';
+    }
+    
+    echo json_encode($return);
+    $db->close(); 
+    die(); 
+}

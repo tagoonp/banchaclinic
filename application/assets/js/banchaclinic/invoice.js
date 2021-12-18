@@ -356,6 +356,63 @@ var invoice = {
                         })
             }
         })
+    },
+    check(){
+        $('.form-control').removeClass('is-invalid')
+        if($('#txtInvoiceCheck').val() == ''){
+            $('#txtInvoiceCheck').addClass('is-invalid')
+            return ;
+        }
+        var param = {
+            inv_id: $('#txtInvoiceCheck').val()
+        }
+        preload.show()
+        var jxr =  $.post(inv_authen_api + 'invoice.php?stage=check', param, function(){}, 'json')
+                    .always(function(snap){
+                        preload.hide()
+                        console.log(snap);
+                        if(snap.status == 'Success'){ // Found
+                            Swal.fire({
+                                title: 'พบข้อมูลเดิม',
+                                text: "บิลหมายเลข " + $('#txtInvoiceCheck').val() + " ได้เคยถูกบันทึกในระบบเรียบร้อยแล้ว",
+                                icon: 'success',
+                                showCancelButton: true,
+                                confirmButtonColor: '#3085d6',
+                                confirmButtonText: 'แสดงรายการ',
+                                cancelButtonText: 'ตรวจสอบหมายเลขอื่น',
+                                confirmButtonClass: 'btn btn-danger mr-1',
+                                cancelButtonClass: 'btn btn-secondary',
+                                buttonsStyling: false,
+                            }).then(function (result2) {
+                                if (result2.value) {
+                                    window.location = 'app-bill-list.php?searchkey=' + $('#txtInvoiceCheck').val()
+                                }else{
+                                    $('#txtInvoiceCheck').val('')
+                                    setTimeout(function(){
+                                        $('#txtInvoiceCheck').focus()
+                                    }, 500)
+                                }
+                            })
+                        }else{ // Not found
+                            Swal.fire({
+                                title: 'ไม่พบข้อมูลเดิมในระบบ',
+                                text: "ต้องการเพิ่มข้อมูลบิลหมายเลข " + $('#txtInvoiceCheck').val() + " หรือไม่",
+                                icon: 'success',
+                                showCancelButton: true,
+                                confirmButtonColor: '#3085d6',
+                                confirmButtonText: 'เพิ่ม',
+                                cancelButtonText: 'ยกเลิก',
+                                confirmButtonClass: 'btn btn-danger mr-1',
+                                cancelButtonClass: 'btn btn-secondary',
+                                buttonsStyling: false,
+                            }).then(function (result2) {
+                                if (result2.value) {
+                                    $('#modalCheckInvoice').modal('hide')
+                                    setInvoiceNew($('#txtInvoiceCheck').val())
+                                }
+                            })
+                        }
+                    })
     }
 }
 
@@ -402,6 +459,14 @@ $(function(){
 })
 
 function setInvoiceFocuus(){
+    setTimeout(() => {
+        $('#txtInvoiceCheck').focus()
+    }, 500)
+}
+
+function setInvoiceNew(new_id){
+    $('#modalNewInvoice').modal()
+    $('#txtInvoice').val(new_id)
     setTimeout(() => {
         $('#txtInvDate').focus()
     }, 500)
