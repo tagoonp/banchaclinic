@@ -357,12 +357,27 @@ if(($res) && ($res['status'])){
                                 <div class="form-group">
                                     <label for="" style="font-size: 18px !important;">วันที่ของ Invoice : <span class="text-danger">*</span>  </label>
                                     <!-- <input type="text" class="form-control" id="txtInvoice" name="txtInvoice"> -->
-                                    <fieldset class="form-group position-relative has-icon-left">
+                                    <!-- <fieldset class="form-group position-relative has-icon-left">
                                         <input type="text" class="form-control pickadate" placeholder="Select Date" id="txtInvDate">
                                         <div class="form-control-position" style="padding-top: 8px;">
                                             <i class='bx bx-calendar'></i>
                                         </div>
-                                    </fieldset>
+                                    </fieldset> -->
+
+                                    <div class="row mb-1">
+                                        <div class="col-4">
+                                            <label for="">วันที่</label>
+                                            <input type="number" id="txtInvDate" class="form-control" min="1" max="31" placeholder="1-31">
+                                        </div>
+                                        <div class="col-4">
+                                            <label for="">เดือน</label>
+                                            <input type="number" id="txtInvMonth" class="form-control" min="1" max="12" placeholder="1-12">
+                                        </div>
+                                        <div class="col-4">
+                                            <label for="">ปี ค.ศ.</label>
+                                            <input type="number" id="txtInvYear" class="form-control" min="<?php echo $year;?>" placeholder="ปี ค.ศ. ตั้งแต่ <?php echo $year;?>">
+                                        </div>
+                                    </div>
                                 </div>
 
                                 <div class="form-group">
@@ -440,14 +455,44 @@ if(($res) && ($res['status'])){
                                     </div>
                                 </div>
 
+                                <div class="form-group dn">
+                                    <label for="" style="font-size: 18px !important;">วันที่เข้าบิล : <span class="text-danger">*</span>  </label>
+                                    <div class="row mb-1">
+                                        <div class="col-4">
+                                            <input type="number" id="txtInvAddDate" class="form-control" min="1" max="31" placeholder="1-31">
+                                        </div>
+                                        <div class="col-4">
+                                            <input type="number" id="txtInvAddMonth" class="form-control" min="1" max="12" placeholder="1-12">
+                                        </div>
+                                        <div class="col-4">
+                                            <input type="number" id="txtInvAddYear" class="form-control" min="<?php echo $year;?>" placeholder="ปี ค.ศ. ตั้งแต่ <?php echo $year;?>">
+                                        </div>
+                                    </div>
+                                </div>
+
                                 <div class="form-group">
                                     <label for="" style="font-size: 18px !important;">กำหนดจ่าย : <span class="text-danger">*</span>  </label>
-                                    <fieldset class="form-group position-relative has-icon-left">
+                                    <!-- <fieldset class="form-group position-relative has-icon-left">
                                         <input type="text" class="form-control pickadate3" placeholder="Select Date" id="txtInvDue">
                                         <div class="form-control-position" style="padding-top: 8px;">
                                             <i class='bx bx-calendar'></i>
                                         </div>
-                                    </fieldset>
+                                    </fieldset> -->
+
+                                    <div class="row mb-1">
+                                        <div class="col-4">
+                                        <label for="">วันที่</label>
+                                            <input type="number" id="txtInvDueDate" class="form-control" min="1" max="31" placeholder="1-31">
+                                        </div>
+                                        <div class="col-4">
+                                            <label for="">เดือน</label>
+                                            <input type="number" id="txtInvDueMonth" class="form-control" min="1" max="12" placeholder="1-12">
+                                        </div>
+                                        <div class="col-4">
+                                            <label for="">ปี ค.ศ.</label>
+                                            <input type="number" id="txtInvDueYear" class="form-control" min="<?php echo $year;?>" placeholder="ปี ค.ศ. ตั้งแต่ <?php echo $year;?>">
+                                        </div>
+                                    </div>
                                 </div>
 
                                 <div class="form-group">
@@ -515,12 +560,28 @@ if(($res) && ($res['status'])){
 
                                 <div class="form-group">
                                     <label for="" style="font-size: 18px !important;">กำหนดจ่าย : <span class="text-danger">*</span>  </label>
-                                    <fieldset class="form-group position-relative has-icon-left">
+                                    <!-- <fieldset class="form-group position-relative has-icon-left">
                                         <input type="text" class="form-control pickadate3" placeholder="Select Date" id="txtInvDue2">
                                         <div class="form-control-position" style="padding-top: 8px;">
                                             <i class='bx bx-calendar'></i>
                                         </div>
-                                    </fieldset>
+                                    </fieldset> -->
+
+                                    <div class="row mb-1">
+                                        <div class="col-4">
+                                            <label for="">วันที่</label>
+                                            <input type="number" id="txtInvDueDate2" class="form-control" min="1" max="31" placeholder="1-31">
+                                        </div>
+                                        <div class="col-4">
+                                            <label for="">เดือน</label>
+                                            <input type="number" id="txtInvDueMonth2" class="form-control" min="1" max="12" placeholder="1-12">
+                                        </div>
+                                        <div class="col-4">
+                                        <label for="">ปี ค.ศ.</label>
+                                            <input type="number" id="txtInvDueYear2" class="form-control" min="<?php echo $year;?>" placeholder="ปี ค.ศ. ตั้งแต่ <?php echo $year;?>">
+                                        </div>
+                                    </div>
+
                                 </div>
 
                                 <div class="form-group">

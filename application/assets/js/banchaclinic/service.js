@@ -5,7 +5,26 @@ $(function(){
             $('#txtfTotal_real').focus()
         }
     });
+
+    $('#txtAppDate').on('keyup',function(e) {
+        if($('#txtAppDate').val().length == 2){
+            $('#txtAppMonth').focus()
+        }
+    });
+
+    $('#txtAppMonth').on('keyup',function(e) {
+        if($('#txtAppMonth').val().length == 2){
+            $('#txtAppYear').focus()
+        }
+    });
 })
+
+function focusApp(){
+    console.log('asd');
+    setTimeout(function(){
+        $('#txtAppDate').focus()
+    }, 600)
+}
 
 var service = {
     create(pid){
@@ -96,8 +115,12 @@ var service = {
         
         console.log(date.getFullYear());
 
-        $newdate = date.getFullYear() + '-' + $m + '-' + $d;
-        $('#txtAppDate').val($newdate)
+        // $newdate = date.getFullYear() + '-' + $m + '-' + $d;
+        // $('#txtAppDate').val($newdate)
+
+        $('#txtAppDate').val($d)
+        $('#txtAppMonth').val($m)
+        $('#txtAppYear').val(date.getFullYear())
     },
     calculateAppWeek(){
 
@@ -131,7 +154,11 @@ var service = {
         console.log(date.getFullYear());
 
         $newdate = date.getFullYear() + '-' + $m + '-' + $d;
-        $('#txtAppDate').val($newdate)
+        // $('#txtAppDate').val($newdate)
+
+        $('#txtAppDate').val($d)
+        $('#txtAppMonth').val($m)
+        $('#txtAppYear').val(date.getFullYear())
         
     },
     deleteApp(aid){

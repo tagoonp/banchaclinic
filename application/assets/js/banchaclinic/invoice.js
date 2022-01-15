@@ -4,6 +4,44 @@ $('.zero-configuration').DataTable({
     "ordering": false
 });
 
+$(function(){
+    $('#txtInvDueDate').keyup(function(){
+        if($('#txtInvDueDate').val().length == 2){
+            $('#txtInvDueMonth').focus()
+        }
+    })
+
+    $('#txtInvDueMonth').keyup(function(){
+        if($('#txtInvDueMonth').val().length == 2){
+            $('#txtInvDueYear').focus()
+        }
+    })
+
+    $('#txtInvDate').keyup(function(){
+        if($('#txtInvDate').val().length == 2){
+            $('#txtInvMonth').focus()
+        }
+    })
+
+    $('#txtInvMonth').keyup(function(){
+        if($('#txtInvMonth').val().length == 2){
+            $('#txtInvYear').focus()
+        }
+    })
+
+    $('#txtInvDueDate2').keyup(function(){
+        if($('#txtInvDueDate2').val().length == 2){
+            $('#txtInvDueMonth2').focus()
+        }
+    })
+
+    $('#txtInvDueMonth2').keyup(function(){
+        if($('#txtInvDueMonth2').val().length == 2){
+            $('#txtInvDueYear2').focus()
+        }
+    })
+})
+
 var invoice = {
     search(id){
         $('#txtInvid').val(id)
@@ -19,6 +57,25 @@ var invoice = {
                             $('#txtMoneyu').val(snap.data.inv_cost)
                             $('#txtDiscount').val(snap.data.inv_discount)
                             $('#txtInvDue').val(snap.data.inv_due_date)
+                            $invdate = snap.data.inv_date
+                            $a = $invdate.split('-')
+
+                            $invduedate = snap.data.inv_due_date
+
+                            $('#txtInvAddDate').val($a[2])
+                            $('#txtInvAddMonth').val($a[1])
+                            $('#txtInvAddYear').val($a[0])
+
+                            if($invduedate != null){
+                                $b = $invduedate.split('-')
+
+                                $('#txtInvDueDate').val($b[2])
+                                $('#txtInvDueMonth').val($b[1])
+                                $('#txtInvDueYear').val($b[0])
+                            }
+
+                            // $('#txtInvDue').val(snap.data.inv_due_date)
+
                             $('#txtCheck').val(snap.data.inv_check)
                        }else{
                             Swal.fire(
@@ -45,7 +102,17 @@ var invoice = {
                             $('#txtInvoiceu2').val(snap.data.inv_number)
                             $('#txtMoneyu2').val(snap.data.inv_cost)
                             $('#txtDiscount2').val(snap.data.inv_discount)
-                            $('#txtInvDue2').val(snap.data.inv_due_date)
+                            // $('#txtInvDue2').val(snap.data.inv_due_date)
+
+                            $invduedate = snap.data.inv_due_date
+                            if($invduedate != null){
+                                $b = $invduedate.split('-')
+
+                                $('#txtInvDueDate2').val($b[2])
+                                $('#txtInvDueMonth2').val($b[1])
+                                $('#txtInvDueYear2').val($b[0])
+                            }
+
                             $('#txtInvid2').val(id)
                        }else{
                             Swal.fire(
@@ -126,9 +193,33 @@ var invoice = {
         if($('#txtMoneyu').val() == ''){
             $check++; $('#txtMoneyu').addClass('is-invalid')
         }
-        if($('#txtInvDue').val() == ''){
-            $check++; $('#txtInvDue').addClass('is-invalid')
+        // if($('#txtInvDue').val() == ''){
+        //     $check++; $('#txtInvDue').addClass('is-invalid')
+        // }
+        if($('#txtInvDueDate').val() == ''){
+            $check++; $('#txtInvDueDate').addClass('is-invalid')
         }
+
+        if($('#txtInvDueMonth').val() == ''){
+            $check++; $('#txtInvDueMonth').addClass('is-invalid')
+        }
+
+        if($('#txtInvDueYear').val() == ''){
+            $check++; $('#txtInvDueYear').addClass('is-invalid')
+        }
+
+        if($('#txtInvAddDate').val() == ''){
+            $check++; $('#txtInvAddDate').addClass('is-invalid')
+        }
+
+        if($('#txtInvAddMonth').val() == ''){
+            $check++; $('#txtInvAddMonth').addClass('is-invalid')
+        }
+
+        if($('#txtInvAddYear').val() == ''){
+            $check++; $('#txtInvAddYear').addClass('is-invalid')
+        }
+
         if($check != 0){
             return ;
         }
@@ -137,7 +228,7 @@ var invoice = {
             inv_id: $('#txtInvid').val(),
             inv_no: $('#txtInvoiceu').val(),
             inv_company: $('#txtCompany').val(),
-            inv_duedate: $('#txtInvDue').val(),
+            inv_duedate: $('#txtInvDueYear').val() + '-' + $('#txtInvDueMonth').val() + '-' + $('#txtInvDueDate').val(),
             inv_money: $('#txtMoneyu').val(),
             inv_disc: $('#txtDiscount').val(),
             inv_chkno: $('#txtCheck').val()
@@ -206,8 +297,14 @@ var invoice = {
         if($('#txtMoneyu2').val() == ''){
             $check++; $('#txtMoneyu2').addClass('is-invalid')
         }
-        if($('#txtInvDue2').val() == ''){
-            $check++; $('#txtInvDue2').addClass('is-invalid')
+        if($('#txtInvDueDate2').val() == ''){
+            $check++; $('#txtInvDueDate2').addClass('is-invalid')
+        }
+        if($('#txtInvDueMonth2').val() == ''){
+            $check++; $('#txtInvDueMonth2').addClass('is-invalid')
+        }
+        if($('#txtInvDueYear2').val() == ''){
+            $check++; $('#txtInvDueYear2').addClass('is-invalid')
         }
         if($('#txtCheck2').val() == ''){
             $check++; $('#txtCheck2').addClass('is-invalid')
@@ -220,7 +317,7 @@ var invoice = {
             inv_id: $('#txtInvid2').val(),
             inv_no: $('#txtInvoiceu2').val(),
             inv_company: $('#txtCompany2').val(),
-            inv_duedate: $('#txtInvDue2').val(),
+            inv_duedate: $('#txtInvDueYear2').val() + '-' + $('#txtInvDueMonth2').val() + '-' + $('#txtInvDueDate2').val(),
             inv_money: $('#txtMoneyu2').val(),
             inv_disc: $('#txtDiscount2').val(),
             inv_chkno: $('#txtCheck2').val()
@@ -280,9 +377,22 @@ var invoice = {
         if($('#txtInvoice').val() == ''){
             $check++; $('#txtInvoice').addClass('is-invalid')
         }
+        // if($('#txtInvDate').val() == ''){
+        //     $check++; $('#txtInvDate').addClass('is-invalid')
+        // }
+
         if($('#txtInvDate').val() == ''){
             $check++; $('#txtInvDate').addClass('is-invalid')
         }
+
+        if($('#txtInvMonth').val() == ''){
+            $check++; $('#txtInvMonth').addClass('is-invalid')
+        }
+
+        if($('#txtInvYear').val() == ''){
+            $check++; $('#txtInvYear').addClass('is-invalid')
+        }
+
         if($('#txtName').val() == ''){
             $check++; $('#txtName').addClass('is-invalid')
         }
@@ -296,7 +406,7 @@ var invoice = {
             uid: $('#txtUid').val(),
             inv_no: $('#txtInvoice').val(),
             inv_company: $('#txtName').val(),
-            inv_date: $('#txtInvDate').val(),
+            inv_date: $('#txtInvYear').val() + '-' + $('#txtInvMonth').val() + '-' +$('#txtInvDate').val(),
             inv_money: $('#txtMoney').val()
         }
 
@@ -427,9 +537,9 @@ $(function(){
             $('#txtInvoice').focus()
         }
     });
-    $('#txtInvDate').on('change',function(e) {
-        $('#txtName').focus()
-    });
+    // $('#txtInvDate').on('change',function(e) {
+    //     $('#txtName').focus()
+    // });
     $('#txtMoney').on('keypress',function(e) {
         if(e.which == 13) {
             invoice.save()

@@ -584,12 +584,18 @@ if(!$lasted_adm){
                             </div>
 
                             <label for="">วันที่นัด : <span class="text-danger">*</span></label>
-                            <fieldset class="form-group position-relative has-icon-left">
-                                <input type="text" class="form-control pickadate" placeholder="Select Date" id="txtAppDate">
-                                <div class="form-control-position" style="padding-top: 8px;">
-                                    <i class='bx bx-calendar'></i>
+
+                            <div class="row mb-1">
+                                <div class="col-4">
+                                    <input type="number" id="txtAppDate" class="form-control" min="1" max="31" placeholder="1-31">
                                 </div>
-                            </fieldset>
+                                <div class="col-4">
+                                    <input type="number" id="txtAppMonth" class="form-control" min="1" max="12" placeholder="1-12">
+                                </div>
+                                <div class="col-4">
+                                    <input type="number" id="txtAppYear" class="form-control" min="<?php echo $year;?>" placeholder="ปี ค.ศ. ตั้งแต่ <?php echo $year;?>">
+                                </div>
+                            </div>
 
 
                             <label for="">เวลา : </label>

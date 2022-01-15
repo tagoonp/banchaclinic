@@ -246,7 +246,7 @@ if($stage == 'search'){
 
     $fname = mysqli_real_escape_string($conn, $_REQUEST['fname']);
 
-    $strSQL = "SELECT * FROM bcn_patient WHERE patient_fname = '$fname' AND patient_delete = '0'";
+    $strSQL = "SELECT * FROM bcn_patient WHERE patient_fname LIKE '$fname%' OR patient_lname LIKE '$fname%'  AND patient_delete = '0'";
     $res = $db->fetch($strSQL, true, true);
     if(($res) && ($res['count'] > 0)){
         $return['status'] = 'Success';

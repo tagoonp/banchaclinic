@@ -555,6 +555,14 @@ function saveApp(){
         $check++; $('#txtAppDate').addClass('is-invalid')
     }
 
+    if($('#txtAppMonth').val() == ''){
+        $check++; $('#txtAppMonth').addClass('is-invalid')
+    }
+
+    if($('#txtAppYear').val() == ''){
+        $check++; $('#txtAppYear').addClass('is-invalid')
+    }
+
     if($('#txtAppPlace').val() == ''){
         $check++; $('#txtAppPlace').addClass('is-invalid')
     }

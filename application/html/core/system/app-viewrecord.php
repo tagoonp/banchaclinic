@@ -561,62 +561,6 @@ if(!$lasted_adm){
                     </div>
                 </div>
             </div>
-            
-
-            <!-- <div class="modal fade" id="modalAppointment" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered modal-dialog-centered">
-                    <div class="modal-content">
-                        <div class="modal-header bg-secondary">
-                            <h5 class="modal-title text-white" id="exampleModalCenterTitle">เพิ่มนัดหมาย</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <i class="bx bx-x"></i>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            <label for="">วันที่นัด : <span class="text-danger">*</span></label>
-                            <fieldset class="form-group position-relative has-icon-left">
-                                <input type="text" class="form-control pickadate" placeholder="Select Date" id="txtAppDate">
-                                <div class="form-control-position" style="padding-top: 8px;">
-                                    <i class='bx bx-calendar'></i>
-                                </div>
-                            </fieldset>
-
-
-                            <label for="">เวลา : </label>
-                            <fieldset class="form-group position-relative has-icon-left">
-                                <input type="text" id="txtAppTime" name="txtAppTime" class="form-control pickatime" placeholder="Select Time">
-                                <div class="form-control-position" style="padding-top: 8px;">
-                                    <i class='bx bx-history'></i>
-                                </div>
-                            </fieldset>
-
-                            <div class="form-group">
-                                <label for="">สถานที่นัด : <span class="text-danger">*</span></label>
-                                <select name="txtAppPlace" id="txtAppPlace" class="form-control">
-                                    <option value="">-- เลือกสถานที่นัด --</option>
-                                    <option value="clinic">(1) คลินิก</option>
-                                    <option value="hospital">(2) โรงพยาบาลสงขลานครินทร์</option>
-                                </select>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="">รายละเอียด : <span class="text-muted">(ถ้ามี)</span></label>
-                                <textarea name="txtAppInfo" id="txtAppInfo" cols="30" rows="10" style="height: 100px;" class="form-control"></textarea>
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-light-secondary" data-dismiss="modal">
-                                <i class="bx bx-x d-block d-sm-none"></i>
-                                <span class="d-none d-sm-block">ยกเลิก</span>
-                            </button>
-                            <button type="button" class="btn btn-danger ml-1" onclick="saveApp()">
-                                <i class="bx bx-check d-block d-sm-none"></i>
-                                <span class="d-none d-sm-block">บันทึกนัดหมาย</span>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div> -->
 
             <div class="modal fade" id="modalAppointment" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered modal-dialog-centered">
@@ -654,12 +598,24 @@ if(!$lasted_adm){
                             </div>
 
                             <label for="">วันที่นัด : <span class="text-danger">*</span></label>
-                            <fieldset class="form-group position-relative has-icon-left">
+                            <!-- <fieldset class="form-group position-relative has-icon-left">
                                 <input type="text" class="form-control pickadate" placeholder="Select Date" id="txtAppDate">
                                 <div class="form-control-position" style="padding-top: 8px;">
                                     <i class='bx bx-calendar'></i>
                                 </div>
-                            </fieldset>
+                            </fieldset> -->
+
+                            <div class="row mb-1">
+                                <div class="col-4">
+                                    <input type="number" id="txtAppDate" class="form-control" min="1" max="31" placeholder="1-31">
+                                </div>
+                                <div class="col-4">
+                                    <input type="number" id="txtAppMonth" class="form-control" min="1" max="12" placeholder="1-12">
+                                </div>
+                                <div class="col-4">
+                                    <input type="number" id="txtAppYear" class="form-control" min="<?php echo $year;?>" placeholder="ปี ค.ศ. ตั้งแต่ <?php echo $year;?>">
+                                </div>
+                            </div>
 
 
                             <label for="">เวลา : </label>
@@ -824,7 +780,7 @@ if(!$lasted_adm){
                                 <div class="col-7 pl-3 pr-3 pt-2"><h4 class="">รายการนัดหมายครั้งต่อไป</h4></div>
                                 <div class="col-5">
                                     <div class="pl-2 pt-2 pr-2 text-right">
-                                        <button class="btn btn-secondary round " data-toggle="modal" data-target="#modalAppointment" >เพิ่มนัดหมาย</button>
+                                        <button class="btn btn-secondary round " data-toggle="modal" data-target="#modalAppointment" onclick="focusApp()">เพิ่มนัดหมาย</button>
                                     </div>
                                 </div>
                             </div>
