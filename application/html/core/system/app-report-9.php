@@ -297,7 +297,7 @@ if((isset($_GET['filter'])) && ($_GET['filter'] == '1')){
                                     <tbody>
                                     <?php 
                                     $summ_paid = 0;
-                                    $strSQL = "SELECT a.app_date, a.app_time, a.app_patient_id, a.app_place, a.app_info 
+                                    $strSQL = "SELECT a.app_date, a.app_time, a.app_patient_id, a.app_place, a.app_info, b.patient_fname, b.patient_lname
                                                FROM 
                                                bnc_appointment a INNER JOIN bcn_patient b ON a.app_patient_id = b.patient_id 
                                                WHERE 
