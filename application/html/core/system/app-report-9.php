@@ -1,6 +1,6 @@
 <?php 
 
-require('../../../configuration/server.inc.php');
+require('../../../configuration/local.inc.php');
 require('../../../configuration/configuration.php');
 require('../../../configuration/database.php'); 
 
