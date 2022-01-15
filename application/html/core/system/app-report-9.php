@@ -301,7 +301,7 @@ if((isset($_GET['filter'])) && ($_GET['filter'] == '1')){
                                                FROM 
                                                bnc_appointment a INNER JOIN bcn_patient b ON a.app_patient_id = b.patient_id 
                                                WHERE 
-                                               b.patient_delete = 'N' 
+                                               b.patient_delete = '0' 
                                                AND a.app_delete = 'N' 
                                                AND a.app_date BETWEEN '$start' AND '$end' 
                                                ORDER BY a.app_date";
