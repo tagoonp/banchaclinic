@@ -15,7 +15,8 @@ $billstatus = '';
 $billsearch = '';
 $start = date('Y-m')."-01";
 $end = $date;
-$filter = 0;
+$filter = 'all';
+$place = '';
 
 $searchResponse = null;
 $searchResponse_count = 0;
@@ -26,6 +27,12 @@ if((isset($_GET['filter'])) && ($_GET['filter'] == '1')){
     $start = mysqli_real_escape_string($conn, $_REQUEST['start']);
     $end = mysqli_real_escape_string($conn, $_REQUEST['end']);
 
+}
+
+if((isset($_GET['filter_place']))){
+    if($_GET['filter_place'] != 'all'){
+        $place = " AND a.app_place = '".$_GET['filter_place']."' ";
+    }
 }
 
 
@@ -261,6 +268,16 @@ if((isset($_GET['filter'])) && ($_GET['filter'] == '1')){
                                             </fieldset>
                                         </div>
                                     </div>
+                                    <div class="col-12 col-sm-12">
+                                        <div class="form-group">
+                                            <label for="" style="font-size: 18px !important;">สถานที่นัด : </label>
+                                            <select name="txtFilter" id="txtFilter" class="form-control">
+                                                <option value="all">ทั้งหมด</option>
+                                                <option value="clinic">คลินิก</option>
+                                                <option value="hospital">โรงพยาบาล</option>
+                                            </select>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             <div class="modal-footer pb-0">
@@ -288,6 +305,7 @@ if((isset($_GET['filter'])) && ($_GET['filter'] == '1')){
                                 <table class="table table-striped dataex-html5-selectors-report-8">
                                     <thead>
                                         <tr style="background: #4a5751; font-weight: 400; color: #fff;">
+                                            <td>#</td>
                                             <td>วันที่</td>
                                             <td>ผู้ป่วย</td>
                                             <td>สถานที่นัด</td>
@@ -304,6 +322,7 @@ if((isset($_GET['filter'])) && ($_GET['filter'] == '1')){
                                                b.patient_delete = '0' 
                                                AND a.app_delete = 'N' 
                                                AND a.app_date BETWEEN '$start' AND '$end' 
+                                               $place 
                                                ORDER BY a.app_date";
                                     $result = $db->fetch($strSQL, true);
                                     // echo $strSQL;
@@ -313,6 +332,9 @@ if((isset($_GET['filter'])) && ($_GET['filter'] == '1')){
                                         foreach ($result['data'] as $row) {
                                             ?>
                                             <tr>
+                                                <td>
+                                                    <?php echo $c;?>
+                                                </td>
                                                 <td>
                                                     <?php echo $row['app_date'];?>
                                                 </td>
@@ -327,6 +349,7 @@ if((isset($_GET['filter'])) && ($_GET['filter'] == '1')){
                                                 </td>
                                             </tr>
                                             <?php
+                                            $c++;
                                         }
                                     }
                                     ?>
@@ -434,7 +457,7 @@ if((isset($_GET['filter'])) && ($_GET['filter'] == '1')){
 
             if($check != 0){ return ;}
 
-            window.location = 'app-report-9.php?filter=1&start=' + $('#txtFilterStart').val() + '&end=' + $('#txtFilterEnd').val() 
+            window.location = 'app-report-9.php?filter=1&start=' + $('#txtFilterStart').val() + '&end=' + $('#txtFilterEnd').val()  + '&filter_place=' + $('#txtFilter').val() 
         }
     </script>
 
