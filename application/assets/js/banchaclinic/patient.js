@@ -573,7 +573,7 @@ function saveApp(){
 
     var param = {
      puid: $('#txtuPid').val(),
-     dateapp: $('#txtAppDate').val(),
+     dateapp: $('#txtAppYear').val() + '-' + $('#txtAppMonth').val() + '-' + $('#txtAppDate').val(),
      timeapp: $('#txtAppTime').val(),
      placeapp: $('#txtAppPlace').val(),
      infoapp: $('#txtAppInfo').val()
