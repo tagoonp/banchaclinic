@@ -14,18 +14,34 @@ $page_id = 17;
 $billstatus = '';
 $billsearch = '';
 $start = date('Y-m')."-01";
-$end = $date;
+
+$dateNow = new DateTime('now');
+$dateNow->modify('last day of this month');
+$lastDate = $dateNow->format('Y-m-d');
+
+$b = explode("-", $lastDate);
+$lb = $b[2];
+$lm = $b[1];
+$ly = $b[0];
+
+$end = $lastDate;
 $filter = 0;
 
 $searchResponse = null;
 $searchResponse_count = 0;
 
 if((isset($_GET['filter'])) && ($_GET['filter'] == '1')){
-
     $filter = 1;
-    $start = mysqli_real_escape_string($conn, $_REQUEST['start']);
+    // $start = mysqli_real_escape_string($conn, $_REQUEST['start']);
     $end = mysqli_real_escape_string($conn, $_REQUEST['end']);
 
+    $b = explode("-", $end);
+    $lb = $b[2];
+
+    $start = date('Y-').$b[1]."-01";
+
+    $lm = $b[1];
+    $ly = $b[0];
 }
 
 
@@ -237,28 +253,47 @@ if((isset($_GET['filter'])) && ($_GET['filter'] == '1')){
                             <div class="modal-body">
                                 
                                 <div class="row">
-                                    <div class="col-12 col-sm-6">
+                                    <div class="col-12 col-sm-4">
                                         <div class="form-group">
-                                            <label for="" style="font-size: 18px !important;">จากวันที่ : </label>
+                                            <label for="" style="font-size: 18px !important;">ณ วันที่ : </label>
                                             <!-- <input type="text" class="form-control" id="txtInvoice" name="txtInvoice"> -->
-                                            <fieldset class="form-group position-relative has-icon-left">
-                                                <input type="text" class="form-control pickadate2" placeholder="เลือกวันที่เริ่ม" id="txtFilterStart" value="<?php if($filter == 1){ if($start != ''){ echo $start; }} ?>">
-                                                <div class="form-control-position" style="padding-top: 8px;">
-                                                    <i class='bx bx-calendar'></i>
-                                                </div>
-                                            </fieldset>
+                                            <select name="txtFilterDD" id="txtFilterDD" class="form-control">
+                                                <?php 
+                                                for ($i=1; $i <= 31; $i++) { 
+                                                    $j = $i;
+                                                    if($i < 10){
+                                                        $j = '0'.$i;
+                                                    }
+                                                    ?>
+                                                    <option value="<?php echo $j;?>" <?php if($lb == $j){ echo "selected"; } ?>><?php echo $j;?></option>
+                                                    <?php
+                                                }
+                                                ?>
+                                            </select>
                                         </div>
                                     </div>
-                                    <div class="col-12 col-sm-6">
+                                    <div class="col-12 col-sm-4">
                                         <div class="form-group">
-                                            <label for="" style="font-size: 18px !important;">ถึงวันที่ : </label>
-                                            <!-- <input type="text" class="form-control" id="txtInvoice" name="txtInvoice"> -->
-                                            <fieldset class="form-group position-relative has-icon-left">
-                                                <input type="text" class="form-control pickadate2" placeholder="เลือกวันสิ้นสุด" id="txtFilterEnd" value="<?php if($filter == 1){ if($end != ''){ echo $end; }} ?>">
-                                                <div class="form-control-position" style="padding-top: 8px;">
-                                                    <i class='bx bx-calendar'></i>
-                                                </div>
-                                            </fieldset>
+                                            <label for="" style="font-size: 18px !important;">เดือน : </label>
+                                            <select name="txtFilterMM" id="txtFilterMM" class="form-control">
+                                                <?php 
+                                                for ($i=1; $i <= 12; $i++) { 
+                                                    $j = $i;
+                                                    if($i < 10){
+                                                        $j = '0'.$i;
+                                                    }
+                                                    ?>
+                                                    <option value="<?php echo $j;?>" <?php if($lm == $j){ echo "selected"; } ?>><?php echo $j;?></option>
+                                                    <?php
+                                                }
+                                                ?>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-sm-4">
+                                        <div class="form-group">
+                                            <label for="" style="font-size: 18px !important;">ปี : </label>
+                                            <input type="number" class="form-control" id="txtFilterYY" value="<?php echo $ly; ?>">
                                         </div>
                                     </div>
                                 </div>
@@ -288,8 +323,8 @@ if((isset($_GET['filter'])) && ($_GET['filter'] == '1')){
                                 <table class="table table-striped dataex-html5-selectors-report-8">
                                     <thead>
                                         <tr style="background: #4a5751; font-weight: 400; color: #fff;">
-                                            <td>หมายเลข Check</td>
                                             <td>บริษัท</td>
+                                            <td>หมายเลข Check</td>
                                             <td>จำนวนเงิน</td>
                                             <td>วันถึงกำหนด</td>
                                         </tr>
@@ -297,25 +332,46 @@ if((isset($_GET['filter'])) && ($_GET['filter'] == '1')){
                                     <tbody>
                                     <?php 
                                     $summ_paid = 0;
-                                    $strSQL = "SELECT * FROM bnc_invoice WHERE inv_delete = 'N' AND inv_due_date BETWEEN '$start' AND '$end' ORDER BY inv_check";
+                                    // $strSQL = "SELECT inv_check, inv_company, SUM(inv_cost) sm, inv_due_date FROM bnc_invoice WHERE inv_delete = 'N' AND inv_due_date BETWEEN '$start' AND '$end' ORDER BY inv_check GROUP BY inv_company";
+                                    // SELECT inv_company FROM bnc_invoice WHERE inv_delete = 'N' AND inv_due_date BETWEEN '2022-01-01' AND '2022-01-31' GROUP BY inv_company
+
+                                    $strSQL = "SELECT inv_company,inv_check FROM bnc_invoice WHERE inv_delete = 'N' AND inv_due_date BETWEEN '$start' AND '$end' GROUP BY inv_company, inv_check ORDER BY inv_company";
                                     $result = $db->fetch($strSQL, true);
                                     if(($result) && ($result['status'])){
                                         $c = 1;
-                                        
                                         foreach ($result['data'] as $row) {
                                             ?>
                                             <tr>
                                                 <td>
-                                                    <?php echo $row['inv_check'];?>
-                                                </td>
-                                                <td>
                                                     <?php echo $row['inv_company'];?>
                                                 </td>
                                                 <td>
-                                                    <?php echo number_format($row['inv_cost'], 0, '', ','); $summ_paid += $row['inv_cost']; ?> 
+                                                    <?php echo $row['inv_check'];?>
                                                 </td>
                                                 <td>
-                                                    <?php echo $row['inv_due_date'];?> 
+                                                    <?php 
+                                                    $strSQL = "SELECT SUM(inv_cost) sm FROM bnc_invoice WHERE inv_company = '".$row['inv_company']."' AND inv_check = '".$row['inv_check']."' AND inv_delete = 'N' AND inv_due_date BETWEEN '$start' AND '$end' ";
+                                                    $resCsum = $db->fetch($strSQL, false, false);
+                                                    if($resCsum){
+                                                        echo number_format($resCsum['sm'], 0, '', ','); $summ_paid += $resCsum['sm']; 
+                                                    }else{
+                                                        echo number_format(0, 0, '', ','); $summ_paid += 0; 
+                                                    }
+                                                    //echo number_format($row['sm'], 0, '', ','); $summ_paid += $row['sm']; 
+                                                    ?> 
+                                                </td>
+                                                <td>
+                                                    <?php 
+                                                    $strSQL = "SELECT inv_due_date FROM bnc_invoice WHERE inv_company = '".$row['inv_company']."' AND inv_check = '".$row['inv_check']."' AND inv_delete = 'N' AND inv_due_date BETWEEN '$start' AND '$end' ";
+                                                    $resCsum = $db->fetch($strSQL, false, false);
+                                                    if($resCsum){
+                                                        echo $resCsum['inv_due_date']; 
+                                                    }else{
+                                                        echo '-'; 
+                                                    }
+                                                    //echo number_format($row['sm'], 0, '', ','); $summ_paid += $row['sm']; 
+                                                    ?> 
+                                                    <?php //echo $row['inv_due_date'];?> 
                                                 </td>
                                             </tr>
                                             <?php
@@ -439,7 +495,7 @@ if((isset($_GET['filter'])) && ($_GET['filter'] == '1')){
 
             if($check != 0){ return ;}
 
-            window.location = 'app-report-8.php?filter=1&start=' + $('#txtFilterStart').val() + '&end=' + $('#txtFilterEnd').val() 
+            window.location = 'app-report-8.php?filter=1&end=' + $('#txtFilterYY').val() + '-' + $('#txtFilterMM').val() + '-' + $('#txtFilterDD').val()
         }
     </script>
 

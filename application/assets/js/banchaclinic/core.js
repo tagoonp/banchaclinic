@@ -1,8 +1,8 @@
 let server_stage = 'local'
 // let server_stage = 'server'
 
-var authen_api = 'http://localhost:8888/banchaclinic/application/api/'
-var authen_controller = 'http://localhost:8888/banchaclinic/application/controller/'
+var authen_api = 'http://localhost/banchaclinic/application/api/'
+var authen_controller = 'http://localhost/banchaclinic/application/controller/'
 
 if(server_stage != 'local'){
     authen_api = 'https://banchaclinic.wisnior.com/application/api/'

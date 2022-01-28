@@ -15,7 +15,7 @@ $page_id = 9;
 $billstatus = '';
 $billsearch = '';
 $start = date('Y-')."01-01";
-$end = $date;
+$end = date('Y-')."12-31";
 $filter = 0;
 if((isset($_GET['filter'])) && ($_GET['filter'] == '1')){
     $filter = 1;
@@ -44,7 +44,7 @@ if(isset($_REQUEST['searchkey'])){
 
 $searchResponse = null;
 $searchResponse_count = 0;
-$strSQL = "SELECT * FROM bnc_invoice WHERE inv_delete = 'N' $searchkey AND inv_date BETWEEN '$start' AND '$end' ORDER BY inv_date DESC";
+$strSQL = "SELECT * FROM bnc_invoice WHERE inv_delete = 'N' ORDER BY inv_date DESC";
 
 
 if($filter == 1){
