@@ -1482,7 +1482,7 @@ function checkDrugFrom(){
                             {
                               icon: "success",
                               title: 'สำเร็จ',
-                              text: 'ข้อมูลจาดังกล่าวถูกปรับปรุงเรียบร้อยแล้ว',
+                              text: 'ข้อมูลยาดังกล่าวถูกปรับปรุงเรียบร้อยแล้ว',
                               confirmButtonClass: 'btn btn-success',
                             }
                           )

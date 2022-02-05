@@ -39,7 +39,7 @@ if($stage == 'info'){
     $by = mysqli_real_escape_string($conn, $_REQUEST['by']);
 
     if($by == 'id'){
-        $strSQL = "SELECT * FROM bnc_drug_tmp WHERE ID = '$id'";
+        $strSQL = "SELECT * FROM bnc_drug_tmp WHERE ID = '$id' AND ddelete = '0'";
         $res = $db->fetch($strSQL, false);
         if($res){
             $return['status'] = 'Success';
@@ -49,7 +49,7 @@ if($stage == 'info'){
             $return['error_stage'] = '2';
         }
     }else{
-        $strSQL = "SELECT * FROM bnc_drug_tmp WHERE did = '$id'";
+        $strSQL = "SELECT * FROM bnc_drug_tmp WHERE did = '$id' AND ddelete = '0'";
         $res = $db->fetch($strSQL, false);
         if($res){
             $return['status'] = 'Success';
