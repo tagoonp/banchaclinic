@@ -791,7 +791,7 @@ if(!$lasted_adm){
                                             
                                         </th>
                                         <th style="width: 160px;" class="th">วันที่</th>
-                                        <th class="th">รายละเอียดการนัดกมาย</th>
+                                        <th class="th">รายละเอียดการนัดหมาย</th>
                                     </tr>
                                 </thead>
                                 <tbody>
