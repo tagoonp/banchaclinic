@@ -15,6 +15,9 @@ $(document).ready(function() {
     ****************************************/
 
     $('.zero-configuration').DataTable();
+    $('.zero-configuration-1').DataTable({
+        "ordering": false
+    });
 
     /********************************************
      *        js of Order by the grouping        *
@@ -99,6 +102,22 @@ $(document).ready(function() {
                 extend: 'pdfHtml5',
                 exportOptions: {
                     columns: ':visible'
+                },
+                customize: function(doc) {
+                    doc['footer'] = (function(page, pages) {
+                        return {
+                        columns: [
+                            {
+                            alignment: 'center',
+                            text: [
+                                { text: page.toString(), italics: true },
+                                ' of ',
+                                { text: pages.toString(), italics: true }
+                            ]
+                        }],
+                        margin: [10, 0]
+                        }
+                    });
                 }
             },
             {
@@ -106,7 +125,12 @@ $(document).ready(function() {
                 exportOptions: {
                     columns: ':visible'
                 },
-                messageTop: '<div style="padding-top: 20px; font-size: 20px;" >รายการยา ราคาทุนและราคาขาย</div>'
+                messageTop: '<div style="padding-top: 20px; font-size: 20px;" >รายการยา ราคาทุนและราคาขาย</div>',
+                autoPrint: true,
+                    exportOptions: { columns: ':visible' },
+                    customize: function (win) {
+                        $(win.document.body).find('table').addClass('display').css('font-size', '10px');
+                }
             }
         ]
     });
@@ -119,6 +143,22 @@ $(document).ready(function() {
                 extend: 'pdfHtml5',
                 exportOptions: {
                     columns: ':visible'
+                },
+                customize: function(doc) {
+                    doc['footer'] = (function(page, pages) {
+                        return {
+                        columns: [
+                            {
+                            alignment: 'center',
+                            text: [
+                                { text: page.toString(), italics: true },
+                                ' of ',
+                                { text: pages.toString(), italics: true }
+                            ]
+                        }],
+                        margin: [10, 0]
+                        }
+                    });
                 }
             },
             {
@@ -140,6 +180,22 @@ $(document).ready(function() {
                 extend: 'pdfHtml5',
                 exportOptions: {
                     columns: ':visible'
+                },
+                customize: function(doc) {
+                    doc['footer'] = (function(page, pages) {
+                        return {
+                        columns: [
+                            {
+                            alignment: 'center',
+                            text: [
+                                { text: page.toString(), italics: true },
+                                ' of ',
+                                { text: pages.toString(), italics: true }
+                            ]
+                        }],
+                        margin: [10, 0]
+                        }
+                    });
                 }
             },
             {
@@ -548,11 +604,54 @@ function saveOterDrug(){
     var param = {
         otherItem: $('#txtOtheritem').val(), 
         otherCost: $('#txtOthercost').val(),
-        patient_id: $('#txtfPid').val()
+        patient_id: $('#txtfPid').val(),
+        service_id: $('#txtServiceId').val()
     }
 
     preload.show();
     var jst = $.post(authen_api + 'drug.php?stage=saveOther', param, function(){}, 'json')
+               .always(function(snap){
+                   console.log(snap);
+                    preload.hide()
+                    if(snap.status == 'Success'){
+                        $("#modalAddOther").modal('hide')
+                        getDruglist()
+                        $('#txtOtheritem').val('')
+                        $('#txtOthercost').val('')
+                    }else{
+
+                    }
+              })
+}
+
+function saveOterDrug2(){
+    $check = 0;
+    $('.form-control').removeClass('is-invalid')
+    if($('#txtOthercost').val() == ''){
+        $('#txtOthercost').addClass('is-invalid')
+        $('#txtOthercost').focus()
+        $check++;
+    }
+
+    if($('#txtOtheritem').val() == ''){
+        $('#txtOtheritem').addClass('is-invalid')
+        $('#txtOtheritem').focus()
+        $check++;
+    }
+
+    if($check != 0){
+        return ;
+    }
+
+    var param = {
+        otherItem: $('#txtOtheritem').val(), 
+        otherCost: $('#txtOthercost').val(),
+        patient_id: $('#txtfPid').val(),
+        service_id: $('#txtServiceId').val()
+    }
+
+    preload.show();
+    var jst = $.post(authen_api + 'drug.php?stage=saveOther2', param, function(){}, 'json')
                .always(function(snap){
                    console.log(snap);
                     preload.hide()
@@ -1484,6 +1583,16 @@ function checkDrugFrom(){
                               title: 'สำเร็จ',
                               text: 'ข้อมูลยาดังกล่าวถูกปรับปรุงเรียบร้อยแล้ว',
                               confirmButtonClass: 'btn btn-success',
+                            }
+                          )
+                       }else{
+                        preload.hide()
+                        Swal.fire(
+                            {
+                              icon: "warning",
+                              title: 'ไม่สามารถดำเนินการได้',
+                              text: 'อาจใช้รหัสยาซ้ำ กรุณาตรวจสอบก่อนดำเนินการ',
+                              confirmButtonClass: 'btn btn-danger',
                             }
                           )
                        }

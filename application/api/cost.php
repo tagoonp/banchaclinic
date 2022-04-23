@@ -53,7 +53,13 @@ if($stage == 'add'){
         $res = $db->execute($strSQL);
         $return['status'] = 'Success';
     }else{
+
         $ocdate = $year."-".$mon."-30";
+        $date = new DateTime($ocdate);
+        $date->modify('last day of this month');
+        $ocdate = $date->format('Y-m-d');
+
+        
         $strSQL = "INSERT INTO bnc_othercost 
                     (`oc_month`, `oc_year`, `oc_date`, `oc_electrticity`, `oc_cellphone`, `oc_salary`, `oc_other`, `oc_datetime`, `oc_udatetime`)
                    VALUES 
@@ -66,6 +72,7 @@ if($stage == 'add'){
         }else{
             $return['status'] = 'Fail';
             $return['error_stage'] = '2';
+            $return['error_message'] = $strSQL;
         }
     }
     echo json_encode($return);

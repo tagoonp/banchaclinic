@@ -28,6 +28,7 @@ if($searchkey != ''){
            AND a.patient_delete = '0'
            AND a.patient_record_status = '1'
            AND b.pl_patient_lasted = '1'
+           ORDER BY pl_datetime DESC
           ";
     $res = $db->fetch($strSQL, true, true);
     if(($res) && ($res['status'])){
@@ -329,7 +330,7 @@ if($searchkey != ''){
                                 </div>
                             </div>
 
-                            <table class="table table-striped th  zero-configuration" style="margin-top: 40px;">
+                            <table class="table table-striped th  zero-configuration-1" style="margin-top: 40px;">
                                 <thead>
                                     <tr>
                                         <th>รหัสผู้ป่วย</th>

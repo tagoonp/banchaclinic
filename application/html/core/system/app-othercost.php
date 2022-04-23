@@ -306,7 +306,7 @@ $page_id = 16;
                         <div class="col-12 col-sm-5">
                             <div class="card">
                                 <div class="card-header">
-                                    <h4>เพิ่ม/แก้ไขข้อมูลรายจ่ายยอื่น ๆ</h4>
+                                    <h4>เพิ่ม/แก้ไขข้อมูลรายจ่ายอื่น ๆ</h4>
                                 </div>
                                 <div class="card-body">
                                     <form class="form form-horizontal" id="costForm" onsubmit="return false;">
@@ -320,7 +320,7 @@ $page_id = 16;
                                                         <option value="">-- เลือกเดือน --</option>
                                                         <option value="01">ม.ค.</option>
                                                         <option value="02">ก.พ.</option>
-                                                        <option value="03">มึ.ค.</option>
+                                                        <option value="03">มี.ค.</option>
                                                         <option value="04">เม.ย.</option>
                                                         <option value="05">พ.ค.</option>
                                                         <option value="06">มิ.ย.</option>

@@ -186,23 +186,25 @@ $page_id = 11;
                                 <table class="table table-striped dataex-html5-selectors">
                                     <thead>
                                         <tr style="background: #4a5751; font-weight: 400; color: #fff;">
+                                            <td style="width: 40px;">#</td>
                                             <td>Trade name</td>
                                             <td>Generic name</td>
                                             <td>Dose</td>
-                                            <td style="width: 80px;">ราคาทุน</td>
-                                            <td style="width: 80px;">ราคาขาย</td>
+                                            <td style="width: 80px;">Cost price</td>
+                                            <td style="width: 80px;">Selling price</td>
                                             
                                         </tr>
                                     </thead>
                                     <tbody>
                                     <?php 
-                                    $strSQL = "SELECT * FROM bnc_drug_tmp WHERE ddelete = '0'";
+                                    $strSQL = "SELECT * FROM bnc_drug_tmp WHERE ddelete = '0' ORDER BY dname";
                                     $result = $db->fetch($strSQL, true);
                                     if($result['status']){
                                         $c = 1;
                                         foreach ($result['data'] as $row) {
                                             ?>
                                             <tr>
+                                                <td style="width: 40px;"><?php echo $c; ?></td>
                                                 <td id="dname_<?php echo $row['ID']; ?>"><?php echo $row['dname'];?></td>
                                                 <td id="dcname_<?php echo $row['ID']; ?>"><?php echo $row['dcname'];?></td>
                                                 <td id="ddose_<?php echo $row['ID']; ?>"><?php echo $row['ddose'];?></td>
@@ -214,6 +216,7 @@ $page_id = 11;
                                                 </td> -->
                                             </tr>
                                             <?php
+                                            $c++;
                                         }
                                     }
                                     ?>

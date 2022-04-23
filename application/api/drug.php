@@ -280,9 +280,11 @@ if($stage == 'saveOther'){
     $patient_id = mysqli_real_escape_string($conn, $_REQUEST['patient_id']);
     $otherItem = mysqli_real_escape_string($conn, $_REQUEST['otherItem']);
     $otherCost = mysqli_real_escape_string($conn, $_REQUEST['otherCost']);
+    // $service_id = mysqli_real_escape_string($conn, $_REQUEST['service_id']);
     
 
     $strSQL = "SELECT * FROM bnc_service WHERE service_patient_id = '$patient_id' AND service_date = '$date' AND service_status = 'admit' ORDER BY service_cdatetime DESC LIMIT 1 ";
+    // $strSQL = "SELECT * FROM bnc_service WHERE service_patient_id = '$patient_id' AND service_id = '$service_id' ORDER BY service_cdatetime DESC LIMIT 1 ";
     $lasted_adm = $db->fetch($strSQL, false);
 
     if($lasted_adm){
@@ -296,6 +298,47 @@ if($stage == 'saveOther'){
         // }
 
         // $drug_sumcost = $drug_qty * $drug_cost;
+
+        $strSQL = "INSERT INTO bnc_druglist 
+                   (`dlist_seq`, `dlist_did`, `dlist_drugname`, `dlist_qty`, `dlist_cost`, 
+                   `dlist_price`, `dlist_sumcost`, `dlist_sumprice`, `dlist_datetime`, `dlist_patient_id`) 
+                   VALUES (
+                       '$seq', '99999', '$otherItem', '1', '$otherCost', 
+                       '$otherCost', '$otherCost', '$otherCost', '$datetime', '$patient_id'
+                   )
+                   ";
+        $res = $db->insert($strSQL, false);
+        if($res){
+            $return['status'] = 'Success';
+        }else{
+            $return['status'] = 'Fail';
+            $return['error_stage'] = '2';
+        }
+    }else{
+        $return['status'] = 'Fail';
+        $return['error_stage'] = '3';
+        $return['error_command'] = $strSQL;
+    }
+    
+    echo json_encode($return);
+    $db->close(); 
+    die(); 
+}
+
+if($stage == 'saveOther2'){
+
+    $patient_id = mysqli_real_escape_string($conn, $_REQUEST['patient_id']);
+    $otherItem = mysqli_real_escape_string($conn, $_REQUEST['otherItem']);
+    $otherCost = mysqli_real_escape_string($conn, $_REQUEST['otherCost']);
+    $service_id = mysqli_real_escape_string($conn, $_REQUEST['service_id']);
+    
+
+    // $strSQL = "SELECT * FROM bnc_service WHERE service_patient_id = '$patient_id' AND service_date = '$date' AND service_status = 'admit' ORDER BY service_cdatetime DESC LIMIT 1 ";
+    $strSQL = "SELECT * FROM bnc_service WHERE service_patient_id = '$patient_id' AND service_id = '$service_id' ORDER BY service_cdatetime DESC LIMIT 1 ";
+    $lasted_adm = $db->fetch($strSQL, false);
+
+    if($lasted_adm){
+        $seq = $lasted_adm['service_seq'];
 
         $strSQL = "INSERT INTO bnc_druglist 
                    (`dlist_seq`, `dlist_did`, `dlist_drugname`, `dlist_qty`, `dlist_cost`, 
@@ -668,6 +711,17 @@ if($stage == 'update'){
     $strSQL = "SELECT * FROM bnc_drug_tmp WHERE ID = '$id'";
     $res = $db->fetch($strSQL, false);
     if($res){
+
+        $strSQL = "SELECT * FROM bnc_drug_tmp WHERE did = '$did' AND ID != '$id' AND ddelete = '0'";
+        $resCheck = $db->fetch($strSQL, false);
+
+        if($res){
+            $return['status'] = 'Fail';
+            $return['error_stage'] = '3';
+            echo json_encode($return);
+            $db->close(); 
+            die(); 
+        }
         
         $strSQL = "UPDATE bnc_drug_tmp
                    SET 

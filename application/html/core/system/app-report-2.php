@@ -244,6 +244,7 @@ if((isset($_GET['filter'])) && ($_GET['filter'] == '1')){
                                 <table class="table table-striped dataex-html5-selectors-2">
                                     <thead>
                                         <tr style="background: #4a5751; font-weight: 400; color: #fff;">
+                                            <td style="width: 40px;">#</td>
                                             <td>Trade name</td>
                                             <td>Generic name</td>
                                             <td>Dose</td>
@@ -259,11 +260,13 @@ if((isset($_GET['filter'])) && ($_GET['filter'] == '1')){
                                         foreach ($result['data'] as $row) {
                                             ?>
                                             <tr>
+                                                <td style="width: 40px;"><?php echo $c; ?></td>
                                                 <td id="dname_<?php echo $row['ID']; ?>"><?php echo $row['dname'];?></td>
                                                 <td id="dcname_<?php echo $row['ID']; ?>"><?php echo $row['dcname'];?></td>
                                                 <td id="ddose_<?php echo $row['ID']; ?>"><?php echo $row['ddose'];?></td>
                                             </tr>
                                             <?php
+                                            $c++;
                                         }
                                     }
                                     ?>
