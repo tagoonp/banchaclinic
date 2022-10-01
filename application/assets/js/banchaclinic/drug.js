@@ -95,7 +95,7 @@ $(document).ready(function() {
     ***************************************************************/
 
     $('.dataex-html5-selectors').DataTable( {
-        // "order": [[ 1, "asc" ]],
+        "order": [[ 1, "asc" ]],
         dom: 'Bfrtip',
         buttons: [
             {

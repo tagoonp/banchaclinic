@@ -116,6 +116,7 @@ if($stage == 'new'){
         if($res){
             $return['status'] = 'Fail';
             $return['error_stage'] = '2';
+		$return['command'] = $strSQL;
             echo json_encode($return);
             $db->close(); 
             die(); 

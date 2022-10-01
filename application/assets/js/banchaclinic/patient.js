@@ -494,7 +494,7 @@ $(function(){
         $('#modalNewPatient').modal('hide')
 
         var jst = $.post(authen_api + 'patient.php?stage=new', param, function(){}, 'json')
-                   .always(function(snap){
+                   .always(function(snap){ console.log(snap)
                       preload.hide()
                        if(snap.status == 'Success'){
                         window.location = 'app-cashing.php?searchkey=' + $('#txtHn').val()
