@@ -353,9 +353,9 @@ if((isset($_GET['filter'])) && ($_GET['filter'] == '1')){
                                                     $strSQL = "SELECT SUM(inv_cost) sm FROM bnc_invoice WHERE inv_company = '".$row['inv_company']."' AND inv_check = '".$row['inv_check']."' AND inv_delete = 'N' AND inv_due_date BETWEEN '$start' AND '$end' ";
                                                     $resCsum = $db->fetch($strSQL, false, false);
                                                     if($resCsum){
-                                                        echo number_format($resCsum['sm'], 0, '', ','); $summ_paid += $resCsum['sm']; 
+                                                        echo number_format($resCsum['sm'], 2, '.', ','); $summ_paid += $resCsum['sm']; 
                                                     }else{
-                                                        echo number_format(0, 0, '', ','); $summ_paid += 0; 
+                                                        echo number_format(0, 2, '.', ','); $summ_paid += 0; 
                                                     }
                                                     //echo number_format($row['sm'], 0, '', ','); $summ_paid += $row['sm']; 
                                                     ?> 
@@ -385,7 +385,7 @@ if((isset($_GET['filter'])) && ($_GET['filter'] == '1')){
                                                 <div id="textInfo">
                                                     <div class="row">
                                                         <div class="col-sm-12 text-right">
-                                                            จำนวนเงินที่จ่ายทั้งหมด = <?php echo number_format($summ_paid, 0, '', ','); ?> บาท
+                                                            จำนวนเงินที่จ่ายทั้งหมด = <?php echo number_format($summ_paid, 2, '.', ','); ?> บาท
                                                         </div>
                                                     </div>
                                                 </div>
