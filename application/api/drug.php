@@ -414,6 +414,9 @@ if($stage == 'finishservice'){
     $strSQL = "SELECT * FROM bnc_service WHERE service_seq = '$seq' AND service_patient_id = '$patient_id' LIMIT 1";
     $res = $db->fetch($strSQL,false);
     if($res){
+
+        $prev_stage = $res['service_status'];
+
         $strSQL = "UPDATE bnc_service 
                    SET 
                    service_edatetime = '$datetime', 
@@ -441,8 +444,39 @@ if($stage == 'finishservice'){
                 $resD = $db->fetch($strSQL, false);
                 if($resD){
 
-                    $dold = $resD['dstock'];
-                    $newq = $resD['dstock'] - $dq;
+                    if($prev_stage == 'discharge'){
+                        $strSQL = "SELECT ss_id FROM bnc_stock_stagement WHERE ss_drug_id = '".$resD['ID']."' ORDER BY ss_datetime DESC LIMIT 1";
+                        $resCheck1 = $db->fetch($strSQL, false, false);
+                        if($resCheck1){
+                            $exclude_id = $resCheck1['ss_id'];
+                            $strSQL = "SELECT ss_qty FROM bnc_stock_stagement WHERE ss_drug_id = '".$resD['ID']."' AND ss_id != '$exclude_id' ORDER BY ss_datetime DESC LIMIT 1";
+                            $resCheck = $db->fetch($strSQL, false, false);
+                            if($resCheck){
+                                $prev = $resCheck['ss_qty'];
+                                $newq = $prev - $dq;
+
+                                $strSQL = "DELETE FROM bnc_stock_stagement WHERE ss_id = '$exclude_id'";
+                                $res = $db->execute($strSQL);
+                                
+                            }else{
+                                $dold = $resD['dstock'];
+                                $newq = $resD['dstock'] - $dq; 
+                            }
+                        }else{
+                            $dold = $resD['dstock'];
+                            $newq = $resD['dstock'] - $dq;
+                        }
+                    }else{
+                        $dold = $resD['dstock'];
+                        $newq = $resD['dstock'] - $dq;
+                    }
+
+                    
+
+                    
+
+                    // $dold = $resD['dstock'];
+                    // $newq = $resD['dstock'] - $dq;
 
                     if($newq < 0){
                         $newq = 0;
