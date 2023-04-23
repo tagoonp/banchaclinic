@@ -172,6 +172,21 @@ if($stage == 'addlist'){
     $drug_sum = mysqli_real_escape_string($conn, $_REQUEST['drug_sum']);
     $drug_price = mysqli_real_escape_string($conn, $_REQUEST['drug_price']);
     $drug_cost = mysqli_real_escape_string($conn, $_REQUEST['drug_cost']);
+
+    // Chave available drug in stock
+    $strSQL = "SELECT dstock FROM bnc_drug_tmp WHERE ddelete = '0' AND did = '$ref_drug_id'";
+    $res = $db->fetch($strSQL, false, false);
+    if($res){
+        if($res['dstock'] < $drug_qty){
+            $return['status'] = 'Fail';
+            $return['error_stage'] = '4';
+            $return['error_return'] = $res['dstock'];
+            $return['error_command'] = $strSQL;
+            echo json_encode($return);
+            $db->close(); 
+            die(); 
+        }
+    }
     
 
     $strSQL = "SELECT * FROM bnc_service WHERE service_patient_id = '$patient_id' AND service_date = '$date' AND service_status IN ('admit', 'wait') ORDER BY service_cdatetime DESC LIMIT 1 ";
@@ -425,6 +440,7 @@ if($stage == 'finishservice'){
                 $strSQL = "SELECT ID, dstock FROM bnc_drug_tmp WHERE did = '".$row['dlist_did']."' LIMIT 1";
                 $resD = $db->fetch($strSQL, false);
                 if($resD){
+
                     $dold = $resD['dstock'];
                     $newq = $resD['dstock'] - $dq;
 
@@ -502,31 +518,31 @@ if($stage == 'finishservicewait'){
         $res = $db->execute($strSQL);
         $return['status'] = 'Success';
 
-        $strSQL = "SELECT * FROM bnc_druglist WHERE dlist_seq = '$seq' AND dlist_patient_id = '$patient_id'";
-        $resDlist = $db->fetch($strSQL, true, false);
-        if(($resDlist) && ($resDlist['status'])){
-            foreach($resDlist['data'] as $row){
-                $dq = $row['dlist_qty'];
-                $strSQL = "SELECT ID, dstock FROM bnc_drug_tmp WHERE did = '".$row['dlist_did']."' LIMIT 1";
-                $resD = $db->fetch($strSQL, false);
-                if($resD){
-                    $dold = $resD['dstock'];
-                    $newq = $resD['dstock'] - $dq;
+        // $strSQL = "SELECT * FROM bnc_druglist WHERE dlist_seq = '$seq' AND dlist_patient_id = '$patient_id'";
+        // $resDlist = $db->fetch($strSQL, true, false);
+        // if(($resDlist) && ($resDlist['status'])){
+        //     foreach($resDlist['data'] as $row){
+        //         $dq = $row['dlist_qty'];
+        //         $strSQL = "SELECT ID, dstock FROM bnc_drug_tmp WHERE did = '".$row['dlist_did']."' LIMIT 1";
+        //         $resD = $db->fetch($strSQL, false);
+        //         if($resD){
+        //             $dold = $resD['dstock'];
+        //             $newq = $resD['dstock'] - $dq;
 
-                    if($newq < 0){
-                        $newq = 0;
-                    }
-                    $id = $resD['ID']; 
+        //             if($newq < 0){
+        //                 $newq = 0;
+        //             }
+        //             $id = $resD['ID']; 
 
-                    $strSQL = "UPDATE bnc_drug_tmp SET dstock = '$newq' WHERE ID = '$id'";
-                    $res = $db->execute($strSQL);
+        //             $strSQL = "UPDATE bnc_drug_tmp SET dstock = '$newq' WHERE ID = '$id'";
+        //             $res = $db->execute($strSQL);
 
-                    $strSQL = "INSERT INTO bnc_stock_stagement (`ss_drug_id`, `ss_stage`, `ss_qty`, `ss_datetime`) VALUES ('$id', 'service', '$newq', '$datetime')";
-                    $res = $db->execute($strSQL);
+        //             $strSQL = "INSERT INTO bnc_stock_stagement (`ss_drug_id`, `ss_stage`, `ss_qty`, `ss_datetime`) VALUES ('$id', 'service', '$newq', '$datetime')";
+        //             $res = $db->execute($strSQL);
 
-                }
-            }
-        }
+        //         }
+        //     }
+        // }
     }else{
         $return['status'] = 'Fail';
         $return['error_stage'] = '2';

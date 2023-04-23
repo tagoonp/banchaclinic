@@ -395,7 +395,7 @@ $page_id = 0;
                                                            )
                                                            "; 
                                                 $res = $db->fetch($strSQL, false);
-                                                if($res){
+                                                if(($res) && ($res['total'] != null)){
                                                     echo number_format($res['total'], '2', '.', ','). " บาท";
                                                 }else{
                                                     echo "0";
@@ -437,7 +437,7 @@ $page_id = 0;
                                                                             "; 
                                                                     $res = $db->fetch($strSQL, false);
                                                                     $cost = 0;
-                                                                    if($res){
+                                                                    if(($res) && ($res['total'] != null)){
                                                                         $cost = $res['total'];
                                                                         echo number_format($res['total'], '2', '.', ','). " บาท";
                                                                     }else{

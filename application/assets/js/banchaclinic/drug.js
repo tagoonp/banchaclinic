@@ -800,7 +800,25 @@ function addDruglistQuick(){
                        $('#txtqDrugUnit').val('')
                        setTimeout(() => { $('#txtqDrugId').focus() }, 400)
                    }else{
-
+                        preload.hide()
+                        console.log(snap);
+                        if(snap.error_stage == '4'){
+                            Swal.fire({
+                                icon: "error",
+                                title: 'เกิดข้อผิดพลาาด',
+                                text: 'จำนวนยาในคลังไม่เพียงพอ (จำนวนคงเหลือ ' + snap.error_return + ' หน่วย)',
+                                confirmButtonText: 'ลองใหม่',
+                                confirmButtonClass: 'btn btn-danger',
+                            })
+                        }else{
+                            Swal.fire({
+                                icon: "error",
+                                title: 'เกิดข้อผิดพลาาด',
+                                text: 'ไม่สามารถเพิ่มรายการยาได้',
+                                confirmButtonText: 'ลองใหม่',
+                                confirmButtonClass: 'btn btn-danger',
+                            })
+                        }
                    }
                })
 
@@ -876,7 +894,25 @@ function addDruglist(){
                        $('#modalMedPHR').modal('hide')
                        getDruglist()
                    }else{
-
+                        preload.hide()
+                        console.log(snap);
+                        if(snap.error_stage == '4'){
+                            Swal.fire({
+                                icon: "error",
+                                title: 'เกิดข้อผิดพลาาด',
+                                text: 'จำนวนยาในคลังไม่เพียงพอ (จำนวนคงเหลือ ' + snap.error_return + ' หน่วย)',
+                                confirmButtonText: 'ลองใหม่',
+                                confirmButtonClass: 'btn btn-danger',
+                            })
+                        }else{
+                            Swal.fire({
+                                icon: "error",
+                                title: 'เกิดข้อผิดพลาาด',
+                                text: 'ไม่สามารถเพิ่มรายการยาได้',
+                                confirmButtonText: 'ลองใหม่',
+                                confirmButtonClass: 'btn btn-danger',
+                            })
+                        }
                    }
                })
 }
@@ -907,7 +943,25 @@ function addDruglist2(){
                        $('#modalMedPHR').modal('hide')
                        getDruglist()
                    }else{
-
+                        preload.hide()
+                        console.log(snap);
+                        if(snap.error_stage == '4'){
+                            Swal.fire({
+                                icon: "error",
+                                title: 'เกิดข้อผิดพลาาด',
+                                text: 'จำนวนยาในคลังไม่เพียงพอ (จำนวนคงเหลือ ' + snap.error_return + ' หน่วย)',
+                                confirmButtonText: 'ลองใหม่',
+                                confirmButtonClass: 'btn btn-danger',
+                            })
+                        }else{
+                            Swal.fire({
+                                icon: "error",
+                                title: 'เกิดข้อผิดพลาาด',
+                                text: 'ไม่สามารถเพิ่มรายการยาได้',
+                                confirmButtonText: 'ลองใหม่',
+                                confirmButtonClass: 'btn btn-danger',
+                            })
+                        }
                    }
                })
 }
