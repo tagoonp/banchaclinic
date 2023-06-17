@@ -12,11 +12,8 @@ if(server_stage != 'local'){
 // let authen_api = 'https://banchaclinic.wisnior.com/application/api/'
 // let authen_controller = 'https://banchaclinic.wisnior.com/application/controller/'
 
-// let inv_authen_api = 'https://banchaclinic.wisnior.com/application/api/'
-// let inv_authen_controller = 'https://banchaclinic.wisnior.com/application/controller/'
-
-let inv_authen_api = 'http://localhost/application/api/'
-let inv_authen_controller = 'http://localhost/application/controller/'
+let inv_authen_api = 'https://banchaclinic.wisnior.com/application/api/'
+let inv_authen_controller = 'https://banchaclinic.wisnior.com/application/controller/'
 
 
 function toggleFullscreen(elem) {

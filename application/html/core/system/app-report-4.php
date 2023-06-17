@@ -305,23 +305,28 @@ if((isset($_GET['filter'])) && ($_GET['filter'] == '1')){
                                                 <td id="dname_<?php echo $row['ID']; ?>"><?php echo $row['dname'];?></td>
                                                 <td id="dcname_<?php echo $row['ID']; ?>">
                                                     <?php  
-                                                    $strSQL = "SELECT SUM(dlist_qty) cq, SUM(dlist_cost) cc FROM bnc_druglist 
+                                                    $strSQL = "SELECT SUM(dlist_qty) cq, SUM(dlist_sumcost) cc FROM bnc_druglist 
                                                                WHERE 
                                                                dlist_did = '".$row['did']."' 
                                                                AND dlist_seq IN (SELECT service_seq FROM bnc_service WHERE service_status = 'discharge' AND service_delete = '0' AND service_date BETWEEN '$start' AND '$end')
                                                                ";
                                                     $resSuvm = $db->fetch($strSQL, false);
+                                                    $numuse = 0;
                                                     if($resSuvm){
+                                                        $numuse = $resSuvm['cq'];
                                                         echo number_format($resSuvm['cq'], 0, '', ',');
                                                     }else{
                                                         echo "0";
                                                     }
+
+                                                    // echo $strSQL;
                                                     ?>
                                                 </td>
                                                 <td id="ddose_<?php echo $row['ID']; ?>">
                                                     <?php 
                                                     if($resSuvm){
-                                                        echo number_format(($resSuvm['cc'] * $resSuvm['cq']), 0, '', ',');
+                                                        // echo number_format(($resSuvm['cc'] * $resSuvm['cq']), 0, '', ',');
+                                                        echo number_format(($resSuvm['cc']), 2, '.', ',');
                                                     }else{
                                                         echo "0";
                                                     }
