@@ -195,6 +195,9 @@ if($stage == 'addlist'){
     if($lasted_adm){
         $seq = $lasted_adm['service_seq'];
 
+        // echo $seq;
+        // die();
+
         $strSQL = "SELECT * FROM bnc_druglist WHERE dlist_did = '$ref_drug_id' AND dlist_patient_id = '$patient_id' AND dlist_seq = '$seq'";
         $resCheck = $db->fetch($strSQL, false);
         if($resCheck){
@@ -214,8 +217,12 @@ if($stage == 'addlist'){
                    ";
         $res = $db->insert($strSQL, false);
         if($res){
+            // echo $strSQL;
+            // die();
             $return['status'] = 'Success';
         }else{
+            // echo "b";
+            // die();
             $return['status'] = 'Fail';
             $return['error_stage'] = '2';
         }

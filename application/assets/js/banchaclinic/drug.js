@@ -344,6 +344,10 @@ $(function(){
         $('#txtuSumprice').val(($unit * $price).toFixed(2))
     })
 
+    $('#txtqDrugId').focus(function(){
+        $('#txtqDrugUnit').val('')
+    })
+
     $('#txtqDrugId').keyup(function(){
         $str = $('#txtqDrugId').val()
         console.log($str.length);
@@ -785,6 +789,7 @@ function addDruglistQuick(){
     // console.log(param);
     // return ;
     preload.show()
+    // $('#txtqDrugId').focus()
     var jst = $.post(authen_api + 'drug.php?stage=addlist', param, function(){}, 'json')
                .always(function(snap){
                    console.log(snap);
@@ -798,7 +803,7 @@ function addDruglistQuick(){
                        $('#txtqDrugCost').val('')
                        $('#txtqSumprice').val('')
                        $('#txtqDrugUnit').val('')
-                       setTimeout(() => { $('#txtqDrugId').focus() }, 400)
+                       setTimeout(() => { $('#txtqDrugId').focus() }, 200)
                    }else{
                         preload.hide()
                         console.log(snap);
@@ -845,6 +850,9 @@ function addDruglistQuick2(){
     // console.log(param);
     // return ;
     preload.show()
+
+    // $('#txtqDrugId').focus()
+
     var jst = $.post(authen_api + 'drug.php?stage=addlist2', param, function(){}, 'json')
                .always(function(snap){
                 //    console.log(snap);
@@ -859,7 +867,7 @@ function addDruglistQuick2(){
                        $('#txtqDrugCost').val('')
                        $('#txtqSumprice').val('')
                        $('#txtqDrugUnit').val('')
-                       setTimeout(() => { $('#txtqDrugId').focus() }, 400)
+                       setTimeout(() => { $('#txtqDrugId').focus() }, 200)
                    }else{
 
                    }
@@ -992,6 +1000,12 @@ function getDruglist(){
                         });
                         $('#txtFinalPrice').val($summ.toFixed(2))
                         $('#txtFinalCost').val($summcost.toFixed(2))
+                   }else{
+                    summ = 0;
+                        $summcost = 0;
+                        $("#drugList").empty();
+                        $('#txtFinalPrice').val('')
+                        $('#txtFinalCost').val('')
                    }
                })
 }
@@ -1025,13 +1039,14 @@ function deleteMEDLIST(id){
                             getDruglist()
                          }else{
                              preload.hide()
-                             Swal.fire({
-                                icon: "error",
-                                title: 'เกิดข้อผิดพลาาด',
-                                text: 'ไม่สามารถลบยาได้',
-                                confirmButtonText: 'ลองใหม่',
-                                confirmButtonClass: 'btn btn-danger',
-                            })
+                            //  getDruglist()
+                            //  Swal.fire({
+                            //     icon: "error",
+                            //     title: 'เกิดข้อผิดพลาาด',
+                            //     text: 'ไม่สามารถลบยาได้',
+                            //     confirmButtonText: 'ลองใหม่',
+                            //     confirmButtonClass: 'btn btn-danger',
+                            // })
                          }
                      })
         }

@@ -348,7 +348,7 @@ if(!$lasted_adm){
                                         <input type="number" class="form-control" id="txtuDrugCost" readonly name="txtuDrugCost" step="0.5" min="0" >
                                     </div>
                                     <div class="form-group col-6">
-                                        <label for="" style="font-size: 18px !important;">ราคาขาย : <span class="text-danger">*</span></label>
+                                        <label for="" style="font-size: 18px !important;">ราคาขาย  : <span class="text-danger">*</span></label>
                                         <input type="number" class="form-control" id="txtuDrugPrice" readonly name="txtuDrugPrice" step="0.5" min="0" >
                                     </div>
                                     <div class="form-group col-6">
@@ -428,7 +428,7 @@ if(!$lasted_adm){
                                         <input type="number" class="form-control" id="txtqDrugCost" readonly name="txtqDrugCost" step="0.5" min="0" >
                                     </div>
                                     <div class="form-group col-6">
-                                        <label for="" style="font-size: 18px !important;">ราคาขาย : <span class="text-danger">*</span></label>
+                                        <label for="" style="font-size: 18px !important;">ราคาขาย  : <span class="text-danger">*</span></label>
                                         <input type="number" class="form-control" id="txtqDrugPrice" readonly name="txtqDrugPrice" step="0.5" min="0" >
                                     </div>
                                     <div class="form-group col-6">
