@@ -1,5 +1,5 @@
-$arr1 = ["ก", "ข", "ค", "ฆ", "ง", "จ"];
-$arr2 = ["ว", "ม", "ส", "ษ", "ศ", "ฆ"];
+$arr1 = ["ก", "ข", "ฃ", "ค", "ฅ", "ฆ", "ง", "จ"];
+$arr2 = ["ว", "ม", "ส", "ษ", "ศ"];
 $arr3 = ["ฉ", "ช", "ซ", "ห", "ฌ", "อ", "ฮ"];
 $arr4 = ["ณ", "ญ", "น", "ร", "ล", "ย", "ฬ", "ฤ"];
 $arr5 = ["ด", "ต", "ถ", "ท", "ธ", "ฐ", "ฎ", "ฏ", "ฑ", "ฒ"];
@@ -33,7 +33,8 @@ $(function(){
                 $lname = $lname_b[1];
             }
 
-            console.log($lname);
+            // console.log($lname);
+            // return ;
 
             $b = [];
             for (var i = 0; i < $lname.length; i++) {
@@ -43,8 +44,10 @@ $(function(){
             }
 
             $lname = $b.join('');
-            
 
+            console.log($lname);
+
+            $prev_index = '';
             for (var i = 0; i < $lname.length; i++) {
                 if(i == 0){
                     if($prefix_found == false){
@@ -56,42 +59,90 @@ $(function(){
                 }else{
                     if($arr1.includes($lname.charAt(i))){
                         if($arr_thchar.includes($lname.charAt(i))){
-                            // $code_lname.push('1')
-                            if($code_lname.length <= 1){ $code_lname.push('1')}else{ if($code_lname[$code_lname.length - 1] != '1'){ $code_lname.push('1') } }
+                            if($prev_index == ''){ $prev_index = 1; }else{ }
+                            if($code_lname.length <= 1){
+                                $code_lname.push('1')
+                            }else{ 
+                                if($code_lname[$code_lname.length - 1] != '1'){ 
+                                    if($prev_index != 1) {
+                                        $code_lname.push('1') 
+                                    }
+                                } 
+                            }
                         }
                     }
                     if($arr2.includes($lname.charAt(i))){
                         if($arr_thchar.includes($lname.charAt(i))){
-                            // $code_lname.push('2')
-                            if($code_lname.length <= 1){ $code_lname.push('2')}else{ if($code_lname[$code_lname.length - 1] != '2'){ $code_lname.push('2') } }
+                            if($prev_index == ''){ $prev_index = 2; }else{ }
+                            if($code_lname.length <= 1){ 
+                                $code_lname.push('2')
+                            }else{ 
+                                if($code_lname[$code_lname.length - 1] != '2'){ 
+                                    if($prev_index != 2) {
+                                        $code_lname.push('2') 
+                                    }
+                                } 
+                            }
                         }
                     }
         
                     if($arr3.includes($lname.charAt(i))){
                         if($arr_thchar.includes($lname.charAt(i))){
-                            // $code_lname.push('3')
-                            if($code_lname.length <= 1){ $code_lname.push('3')}else{ if($code_lname[$code_lname.length - 1] != '3'){ $code_lname.push('3') } }
+                            if($prev_index == ''){ $prev_index = 3; }else{ }
+                            if($code_lname.length <= 1){ 
+                                $code_lname.push('3')
+                            }else{ 
+                                if($code_lname[$code_lname.length - 1] != '3'){ 
+                                    if($prev_index != 3) {
+                                        $code_lname.push('3') 
+                                    }
+                                } 
+                            }
                         }
                     }
         
                     if($arr4.includes($lname.charAt(i))){
                         if($arr_thchar.includes($lname.charAt(i))){
-                            // $code_lname.push('4')
-                            if($code_lname.length <= 1){ $code_lname.push('4')}else{ if($code_lname[$code_lname.length - 1] != '4'){ $code_lname.push('4') } }
+                            if($prev_index == ''){ $prev_index = 4; }else{ }
+                            if($code_lname.length <= 1){ 
+                                $code_lname.push('4')
+                            }else{ 
+                                if($code_lname[$code_lname.length - 1] != '4'){ 
+                                    if($prev_index != 4) {
+                                        $code_lname.push('4') 
+                                    }
+                                } 
+                            }
                         }
                     }
         
                     if($arr5.includes($lname.charAt(i))){
                         if($arr_thchar.includes($lname.charAt(i))){
-                            // $code_lname.push('5')
-                            if($code_lname.length <= 1){ $code_lname.push('5')}else{ if($code_lname[$code_lname.length - 1] != '5'){ $code_lname.push('5') } }
+                            if($prev_index == ''){ $prev_index = 5; }else{ }
+                            if($code_lname.length <= 1){ 
+                                $code_lname.push('5')
+                            }else{ 
+                                if($code_lname[$code_lname.length - 1] != '5'){ 
+                                    if($prev_index != 5) {
+                                        $code_lname.push('5') 
+                                    }
+                                } 
+                            }
                         }
                     }
         
                     if($arr6.includes($lname.charAt(i))){
                         if($arr_thchar.includes($lname.charAt(i))){
-                            // $code_lname.push('6')
-                            if($code_lname.length <= 1){ $code_lname.push('6')}else{ if($code_lname[$code_lname.length - 1] != '6'){ $code_lname.push('6') } }
+                            if($prev_index == ''){ $prev_index = 6; }else{ }
+                            if($code_lname.length <= 1){ 
+                                $code_lname.push('6')
+                            }else{ 
+                                if($code_lname[$code_lname.length - 1] != '6'){ 
+                                    if($prev_index != 6) {
+                                        $code_lname.push('6') 
+                                    }
+                                } 
+                            }
                         }
                     }
                 }
@@ -132,45 +183,94 @@ $(function(){
 
             $fname = $b.join('');
 
+            $prev_fname_index = '';
             for (var i = 0; i < $fname.length; i++) {
                 if($arr1.includes($fname.charAt(i))){
+                    if($prev_fname_index == ''){ $prev_fname_index = 1; }else{ }
                     if($arr_thchar.includes($fname.charAt(i))){
-                        if($code_fname.length <= 1){ $code_fname.push('1')}else{ if($code_fname[$code_fname.length - 1] != '1'){ $code_fname.push('1') } }
+                        if($code_fname.length <= 1){ 
+                            $code_fname.push('1')
+                        }else{ 
+                            if($code_fname[$code_fname.length - 1] != '1'){ 
+                                if($prev_fname_index != 1){
+                                    $code_fname.push('1') 
+                                }
+                            } 
+                        }
                     }
                 }
 
                 if($arr2.includes($fname.charAt(i))){
                     if($arr_thchar.includes($fname.charAt(i))){
-                        // $code_fname.push('2')
-                        if($code_fname.length <= 1){ $code_fname.push('2')}else{ if($code_fname[$code_fname.length - 1] != '2'){ $code_fname.push('2') } }
+                        if($prev_fname_index == ''){ $prev_fname_index = 2; }else{ }
+                        if($code_fname.length <= 1){ 
+                            $code_fname.push('2')}else{ 
+                                if($code_fname[$code_fname.length - 1] != '2'){ 
+                                    if($prev_fname_index != 2){
+                                        $code_fname.push('2') 
+                                    }
+                                } 
+                            }
                     }
                 }
 
                 if($arr3.includes($fname.charAt(i))){
                     if($arr_thchar.includes($fname.charAt(i))){
-                        // $code_fname.push('3')
-                        if($code_fname.length <= 1){ $code_fname.push('3')}else{ if($code_fname[$code_fname.length - 1] != '3'){ $code_fname.push('3') } }
+                        if($prev_fname_index == ''){ $prev_fname_index = 3; }else{ }
+                        if($code_fname.length <= 1){ 
+                            $code_fname.push('3')
+                        }else{ 
+                            if($code_fname[$code_fname.length - 1] != '3'){ 
+                                if($prev_fname_index != 3){
+                                    $code_fname.push('3') 
+                                }
+                            } 
+                        }
                     }
                 }
 
                 if($arr4.includes($fname.charAt(i))){
                     if($arr_thchar.includes($fname.charAt(i))){
-                        // $code_fname.push('4')
-                        if($code_fname.length <= 1){ $code_fname.push('4')}else{ if($code_fname[$code_fname.length - 1] != '4'){ $code_fname.push('4') } }
+                        if($prev_fname_index == ''){ $prev_fname_index = 4; }else{ }
+                        if($code_fname.length <= 1){ 
+                            $code_fname.push('4')
+                        }else{ 
+                            if($code_fname[$code_fname.length - 1] != '4'){ 
+                                if($prev_fname_index != 4){
+                                    $code_fname.push('4') 
+                                }
+                            } 
+                        }
                     }
                 }
 
                 if($arr5.includes($fname.charAt(i))){
                     if($arr_thchar.includes($fname.charAt(i))){
-                        // $code_fname.push('5')
-                        if($code_fname.length <= 1){ $code_fname.push('5')}else{ if($code_fname[$code_fname.length - 1] != '5'){ $code_fname.push('5') } }
+                        if($prev_fname_index == ''){ $prev_fname_index = 5; }else{ }
+                        if($code_fname.length <= 1){ 
+                            $code_fname.push('5')
+                        }else{ 
+                            if($code_fname[$code_fname.length - 1] != '5'){ 
+                                if($prev_fname_index != 5){
+                                    $code_fname.push('5') 
+                                }
+                            } 
+                        }
                     }
                 }
 
                 if($arr6.includes($fname.charAt(i))){
                     if($arr_thchar.includes($fname.charAt(i))){
-                        // $code_fname.push('6')
-                        if($code_fname.length <= 1){ $code_fname.push('6')}else{ if($code_fname[$code_fname.length - 1] != '6'){ $code_fname.push('6') } }
+                        if($prev_fname_index == ''){ $prev_fname_index = 6; }else{ }
+                        if($code_fname.length <= 1){ 
+                            $code_fname.push('6')
+                        }else{ 
+                            if($code_fname[$code_fname.length - 1] != '6'){ 
+                                if($prev_fname_index != 6){
+                                    $code_fname.push('6') 
+                                }
+                            } 
+                        }
                     }
                 }
             }
@@ -233,46 +333,6 @@ $(function(){
             
 
             for (var i = 0; i < $lname.length; i++) {
-                // if($prefix_found == false){
-                //     if($arr_thchar.includes($lname.charAt(i))){
-                //         $code_prefix = ($lname.charAt(i) + '.')
-                //         $prefix_found = true;
-                //     }
-                // }
-                // if($arr1.includes($lname.charAt(i))){
-                //     if($arr_thchar.includes($lname.charAt(i))){
-                //         $code_lname.push('1')
-                //     }
-                // }
-                // if($arr2.includes($lname.charAt(i))){
-                //     if($arr_thchar.includes($lname.charAt(i))){
-                //         $code_lname.push('2')
-                //     }
-                // }
-    
-                // if($arr3.includes($lname.charAt(i))){
-                //     if($arr_thchar.includes($lname.charAt(i))){
-                //         $code_lname.push('3')
-                //     }
-                // }
-    
-                // if($arr4.includes($lname.charAt(i))){
-                //     if($arr_thchar.includes($lname.charAt(i))){
-                //         $code_lname.push('4')
-                //     }
-                // }
-    
-                // if($arr5.includes($lname.charAt(i))){
-                //     if($arr_thchar.includes($lname.charAt(i))){
-                //         $code_lname.push('5')
-                //     }
-                // }
-    
-                // if($arr6.includes($lname.charAt(i))){
-                //     if($arr_thchar.includes($lname.charAt(i))){
-                //         $code_lname.push('6')
-                //     }
-                // }
 
                 if(i == 0){
                     if($prefix_found == false){
@@ -282,46 +342,136 @@ $(function(){
                         }
                     }
                 }else{
+                    // if($arr1.includes($lname.charAt(i))){
+                    //     if($arr_thchar.includes($lname.charAt(i))){
+                    //         // $code_lname.push('1')
+                    //         if($code_lname.length <= 1){ $code_lname.push('1')}else{ if($code_lname[$code_lname.length - 1] != '1'){ $code_lname.push('1') } }
+                    //     }
+                    // }
+                    // if($arr2.includes($lname.charAt(i))){
+                    //     if($arr_thchar.includes($lname.charAt(i))){
+                    //         // $code_lname.push('2')
+                    //         if($code_lname.length <= 1){ $code_lname.push('2')}else{ if($code_lname[$code_lname.length - 1] != '2'){ $code_lname.push('2') } }
+                    //     }
+                    // }
+        
+                    // if($arr3.includes($lname.charAt(i))){
+                    //     if($arr_thchar.includes($lname.charAt(i))){
+                    //         // $code_lname.push('3')
+                    //         if($code_lname.length <= 1){ $code_lname.push('3')}else{ if($code_lname[$code_lname.length - 1] != '3'){ $code_lname.push('3') } }
+                    //     }
+                    // }
+        
+                    // if($arr4.includes($lname.charAt(i))){
+                    //     if($arr_thchar.includes($lname.charAt(i))){
+                    //         // $code_lname.push('4')
+                    //         if($code_lname.length <= 1){ $code_lname.push('4')}else{ if($code_lname[$code_lname.length - 1] != '4'){ $code_lname.push('4') } }
+                    //     }
+                    // }
+        
+                    // if($arr5.includes($lname.charAt(i))){
+                    //     if($arr_thchar.includes($lname.charAt(i))){
+                    //         // $code_lname.push('5')
+                    //         if($code_lname.length <= 1){ $code_lname.push('5')}else{ if($code_lname[$code_lname.length - 1] != '5'){ $code_lname.push('5') } }
+                    //     }
+                    // }
+        
+                    // if($arr6.includes($lname.charAt(i))){
+                    //     if($arr_thchar.includes($lname.charAt(i))){
+                    //         // $code_lname.push('6')
+                    //         if($code_lname.length <= 1){ $code_lname.push('6')}else{ if($code_lname[$code_lname.length - 1] != '6'){ $code_lname.push('6') } }
+                    //     }
+                    // }
+
                     if($arr1.includes($lname.charAt(i))){
                         if($arr_thchar.includes($lname.charAt(i))){
-                            // $code_lname.push('1')
-                            if($code_lname.length <= 1){ $code_lname.push('1')}else{ if($code_lname[$code_lname.length - 1] != '1'){ $code_lname.push('1') } }
+                            if($prev_index == ''){ $prev_index = 1; }else{ }
+                            if($code_lname.length <= 1){
+                                $code_lname.push('1')
+                            }else{ 
+                                if($code_lname[$code_lname.length - 1] != '1'){ 
+                                    if($prev_index != 1) {
+                                        $code_lname.push('1') 
+                                    }
+                                } 
+                            }
                         }
                     }
                     if($arr2.includes($lname.charAt(i))){
                         if($arr_thchar.includes($lname.charAt(i))){
-                            // $code_lname.push('2')
-                            if($code_lname.length <= 1){ $code_lname.push('2')}else{ if($code_lname[$code_lname.length - 1] != '2'){ $code_lname.push('2') } }
+                            if($prev_index == ''){ $prev_index = 2; }else{ }
+                            if($code_lname.length <= 1){ 
+                                $code_lname.push('2')
+                            }else{ 
+                                if($code_lname[$code_lname.length - 1] != '2'){ 
+                                    if($prev_index != 2) {
+                                        $code_lname.push('2') 
+                                    }
+                                } 
+                            }
                         }
                     }
         
                     if($arr3.includes($lname.charAt(i))){
                         if($arr_thchar.includes($lname.charAt(i))){
-                            // $code_lname.push('3')
-                            if($code_lname.length <= 1){ $code_lname.push('3')}else{ if($code_lname[$code_lname.length - 1] != '3'){ $code_lname.push('3') } }
+                            if($prev_index == ''){ $prev_index = 3; }else{ }
+                            if($code_lname.length <= 1){ 
+                                $code_lname.push('3')
+                            }else{ 
+                                if($code_lname[$code_lname.length - 1] != '3'){ 
+                                    if($prev_index != 3) {
+                                        $code_lname.push('3') 
+                                    }
+                                } 
+                            }
                         }
                     }
         
                     if($arr4.includes($lname.charAt(i))){
                         if($arr_thchar.includes($lname.charAt(i))){
-                            // $code_lname.push('4')
-                            if($code_lname.length <= 1){ $code_lname.push('4')}else{ if($code_lname[$code_lname.length - 1] != '4'){ $code_lname.push('4') } }
+                            if($prev_index == ''){ $prev_index = 4; }else{ }
+                            if($code_lname.length <= 1){ 
+                                $code_lname.push('4')
+                            }else{ 
+                                if($code_lname[$code_lname.length - 1] != '4'){ 
+                                    if($prev_index != 4) {
+                                        $code_lname.push('4') 
+                                    }
+                                } 
+                            }
                         }
                     }
         
                     if($arr5.includes($lname.charAt(i))){
                         if($arr_thchar.includes($lname.charAt(i))){
-                            // $code_lname.push('5')
-                            if($code_lname.length <= 1){ $code_lname.push('5')}else{ if($code_lname[$code_lname.length - 1] != '5'){ $code_lname.push('5') } }
+                            if($prev_index == ''){ $prev_index = 5; }else{ }
+                            if($code_lname.length <= 1){ 
+                                $code_lname.push('5')
+                            }else{ 
+                                if($code_lname[$code_lname.length - 1] != '5'){ 
+                                    if($prev_index != 5) {
+                                        $code_lname.push('5') 
+                                    }
+                                } 
+                            }
                         }
                     }
         
                     if($arr6.includes($lname.charAt(i))){
                         if($arr_thchar.includes($lname.charAt(i))){
-                            // $code_lname.push('6')
-                            if($code_lname.length <= 1){ $code_lname.push('6')}else{ if($code_lname[$code_lname.length - 1] != '6'){ $code_lname.push('6') } }
+                            if($prev_index == ''){ $prev_index = 6; }else{ }
+                            if($code_lname.length <= 1){ 
+                                $code_lname.push('6')
+                            }else{ 
+                                if($code_lname[$code_lname.length - 1] != '6'){ 
+                                    if($prev_index != 6) {
+                                        $code_lname.push('6') 
+                                    }
+                                } 
+                            }
                         }
                     }
+
                 }
             }
         }else{
@@ -351,7 +501,7 @@ $(function(){
             }
 
             $fname = $b.join('');
-
+            $prev_fname_index = '';
             for (var i = 0; i < $fname.length; i++) {
                 // if($arr1.includes($fname.charAt(i))){
                 //     if($arr_thchar.includes($fname.charAt(i))){
@@ -389,46 +539,136 @@ $(function(){
                 //     }
                 // }
 
+                // if($arr1.includes($fname.charAt(i))){
+                //     if($arr_thchar.includes($fname.charAt(i))){
+                //         if($code_fname.length <= 1){ $code_fname.push('1')}else{ if($code_fname[$code_fname.length - 1] != '1'){ $code_fname.push('1') } }
+                //     }
+                // }
+
+                // if($arr2.includes($fname.charAt(i))){
+                //     if($arr_thchar.includes($fname.charAt(i))){
+                //         // $code_fname.push('2')
+                //         if($code_fname.length <= 1){ $code_fname.push('2')}else{ if($code_fname[$code_fname.length - 1] != '2'){ $code_fname.push('2') } }
+                //     }
+                // }
+
+                // if($arr3.includes($fname.charAt(i))){
+                //     if($arr_thchar.includes($fname.charAt(i))){
+                //         // $code_fname.push('3')
+                //         if($code_fname.length <= 1){ $code_fname.push('3')}else{ if($code_fname[$code_fname.length - 1] != '3'){ $code_fname.push('3') } }
+                //     }
+                // }
+
+                // if($arr4.includes($fname.charAt(i))){
+                //     if($arr_thchar.includes($fname.charAt(i))){
+                //         // $code_fname.push('4')
+                //         if($code_fname.length <= 1){ $code_fname.push('4')}else{ if($code_fname[$code_fname.length - 1] != '4'){ $code_fname.push('4') } }
+                //     }
+                // }
+
+                // if($arr5.includes($fname.charAt(i))){
+                //     if($arr_thchar.includes($fname.charAt(i))){
+                //         // $code_fname.push('5')
+                //         if($code_fname.length <= 1){ $code_fname.push('5')}else{ if($code_fname[$code_fname.length - 1] != '5'){ $code_fname.push('5') } }
+                //     }
+                // }
+
+                // if($arr6.includes($fname.charAt(i))){
+                //     if($arr_thchar.includes($fname.charAt(i))){
+                //         // $code_fname.push('6')
+                //         if($code_fname.length <= 1){ $code_fname.push('6')}else{ if($code_fname[$code_fname.length - 1] != '6'){ $code_fname.push('6') } }
+                //     }
+                // }
+
                 if($arr1.includes($fname.charAt(i))){
+                    if($prev_fname_index == ''){ $prev_fname_index = 1; }else{ }
                     if($arr_thchar.includes($fname.charAt(i))){
-                        if($code_fname.length <= 1){ $code_fname.push('1')}else{ if($code_fname[$code_fname.length - 1] != '1'){ $code_fname.push('1') } }
+                        if($code_fname.length <= 1){ 
+                            $code_fname.push('1')
+                        }else{ 
+                            if($code_fname[$code_fname.length - 1] != '1'){ 
+                                if($prev_fname_index != 1){
+                                    $code_fname.push('1') 
+                                }
+                            } 
+                        }
                     }
                 }
 
                 if($arr2.includes($fname.charAt(i))){
                     if($arr_thchar.includes($fname.charAt(i))){
-                        // $code_fname.push('2')
-                        if($code_fname.length <= 1){ $code_fname.push('2')}else{ if($code_fname[$code_fname.length - 1] != '2'){ $code_fname.push('2') } }
+                        if($prev_fname_index == ''){ $prev_fname_index = 2; }else{ }
+                        if($code_fname.length <= 1){ 
+                            $code_fname.push('2')}else{ 
+                                if($code_fname[$code_fname.length - 1] != '2'){ 
+                                    if($prev_fname_index != 2){
+                                        $code_fname.push('2') 
+                                    }
+                                } 
+                            }
                     }
                 }
 
                 if($arr3.includes($fname.charAt(i))){
                     if($arr_thchar.includes($fname.charAt(i))){
-                        // $code_fname.push('3')
-                        if($code_fname.length <= 1){ $code_fname.push('3')}else{ if($code_fname[$code_fname.length - 1] != '3'){ $code_fname.push('3') } }
+                        if($prev_fname_index == ''){ $prev_fname_index = 3; }else{ }
+                        if($code_fname.length <= 1){ 
+                            $code_fname.push('3')
+                        }else{ 
+                            if($code_fname[$code_fname.length - 1] != '3'){ 
+                                if($prev_fname_index != 3){
+                                    $code_fname.push('3') 
+                                }
+                            } 
+                        }
                     }
                 }
 
                 if($arr4.includes($fname.charAt(i))){
                     if($arr_thchar.includes($fname.charAt(i))){
-                        // $code_fname.push('4')
-                        if($code_fname.length <= 1){ $code_fname.push('4')}else{ if($code_fname[$code_fname.length - 1] != '4'){ $code_fname.push('4') } }
+                        if($prev_fname_index == ''){ $prev_fname_index = 4; }else{ }
+                        if($code_fname.length <= 1){ 
+                            $code_fname.push('4')
+                        }else{ 
+                            if($code_fname[$code_fname.length - 1] != '4'){ 
+                                if($prev_fname_index != 4){
+                                    $code_fname.push('4') 
+                                }
+                            } 
+                        }
                     }
                 }
 
                 if($arr5.includes($fname.charAt(i))){
                     if($arr_thchar.includes($fname.charAt(i))){
-                        // $code_fname.push('5')
-                        if($code_fname.length <= 1){ $code_fname.push('5')}else{ if($code_fname[$code_fname.length - 1] != '5'){ $code_fname.push('5') } }
+                        if($prev_fname_index == ''){ $prev_fname_index = 5; }else{ }
+                        if($code_fname.length <= 1){ 
+                            $code_fname.push('5')
+                        }else{ 
+                            if($code_fname[$code_fname.length - 1] != '5'){ 
+                                if($prev_fname_index != 5){
+                                    $code_fname.push('5') 
+                                }
+                            } 
+                        }
                     }
                 }
 
                 if($arr6.includes($fname.charAt(i))){
                     if($arr_thchar.includes($fname.charAt(i))){
-                        // $code_fname.push('6')
-                        if($code_fname.length <= 1){ $code_fname.push('6')}else{ if($code_fname[$code_fname.length - 1] != '6'){ $code_fname.push('6') } }
+                        if($prev_fname_index == ''){ $prev_fname_index = 6; }else{ }
+                        if($code_fname.length <= 1){ 
+                            $code_fname.push('6')
+                        }else{ 
+                            if($code_fname[$code_fname.length - 1] != '6'){ 
+                                if($prev_fname_index != 6){
+                                    $code_fname.push('6') 
+                                }
+                            } 
+                        }
                     }
                 }
+
             }
         }
 
