@@ -38,7 +38,8 @@ if((isset($_GET['filter'])) && ($_GET['filter'] == '1')){
     $b = explode("-", $end);
     $lb = $b[2];
 
-    $start = date('Y-').$b[1]."-01";
+    // $start = date('Y-').$b[1]."-01";
+    $start = $b[0].'-'.$b[1]."-01";
 
     $lm = $b[1];
     $ly = $b[0];
@@ -335,7 +336,13 @@ if((isset($_GET['filter'])) && ($_GET['filter'] == '1')){
                                     // $strSQL = "SELECT inv_check, inv_company, SUM(inv_cost) sm, inv_due_date FROM bnc_invoice WHERE inv_delete = 'N' AND inv_due_date BETWEEN '$start' AND '$end' ORDER BY inv_check GROUP BY inv_company";
                                     // SELECT inv_company FROM bnc_invoice WHERE inv_delete = 'N' AND inv_due_date BETWEEN '2022-01-01' AND '2022-01-31' GROUP BY inv_company
 
-                                    $strSQL = "SELECT inv_company,inv_check FROM bnc_invoice WHERE inv_delete = 'N' AND inv_due_date BETWEEN '$start' AND '$end' GROUP BY inv_company, inv_check ORDER BY inv_company";
+                                    $strSQL = "SELECT inv_company,inv_check FROM bnc_invoice 
+                                               WHERE inv_delete = 'N' AND inv_due_date BETWEEN '$start' AND '$end' 
+                                               GROUP BY inv_company, inv_check ORDER BY inv_company";
+                                    
+                                    // echo $strSQL;
+                                    // die();
+
                                     $result = $db->fetch($strSQL, true);
                                     if(($result) && ($result['status'])){
                                         $c = 1;

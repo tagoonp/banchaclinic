@@ -7,6 +7,9 @@ $arr6 = ["บ", "ป", "พ", "ฟ", "ผ", "ฝ", "ภ"];
 
 $arr_thchar = ["ภ", "ก", "ข", "ค", "ฆ", "ง", "จ", "ว", "ม", "ส", "ษ", "ศ", "ฆ", "ฉ", "ช", "ซ", "ห", "ฌ", "อ", "ฮ", "ณ", "ญ", "น", "ร", "ล", "ย", "ฬ", "ฤ", "ด", "ต", "ถ", "ท", "ธ", "ฐ", "ฎ", "ฏ", "ฑ", "ฒ", "บ", "ป", "พ", "ฟ", "ผ", "ฝ"];
 
+// ทองอ่อน
+
+// ท. องอ
 
 
 $(function(){
@@ -45,7 +48,7 @@ $(function(){
 
             $lname = $b.join('');
 
-            console.log($lname);
+            console.log('origin -> ' + $lname);
 
             $prev_index = '';
             for (var i = 0; i < $lname.length; i++) {
@@ -62,10 +65,12 @@ $(function(){
                             if($prev_index == ''){ $prev_index = 1; }else{ }
                             if($code_lname.length <= 1){
                                 $code_lname.push('1')
+                                $prev_index = 1;
                             }else{ 
                                 if($code_lname[$code_lname.length - 1] != '1'){ 
                                     if($prev_index != 1) {
                                         $code_lname.push('1') 
+                                        $prev_index = 1;
                                     }
                                 } 
                             }
@@ -76,10 +81,12 @@ $(function(){
                             if($prev_index == ''){ $prev_index = 2; }else{ }
                             if($code_lname.length <= 1){ 
                                 $code_lname.push('2')
+                                $prev_index = 2;
                             }else{ 
                                 if($code_lname[$code_lname.length - 1] != '2'){ 
                                     if($prev_index != 2) {
                                         $code_lname.push('2') 
+                                        $prev_index = 2;
                                     }
                                 } 
                             }
@@ -91,10 +98,12 @@ $(function(){
                             if($prev_index == ''){ $prev_index = 3; }else{ }
                             if($code_lname.length <= 1){ 
                                 $code_lname.push('3')
+                                $prev_index = 3;
                             }else{ 
                                 if($code_lname[$code_lname.length - 1] != '3'){ 
                                     if($prev_index != 3) {
                                         $code_lname.push('3') 
+                                        $prev_index = 3;
                                     }
                                 } 
                             }
@@ -106,10 +115,12 @@ $(function(){
                             if($prev_index == ''){ $prev_index = 4; }else{ }
                             if($code_lname.length <= 1){ 
                                 $code_lname.push('4')
+                                $prev_index = 4;
                             }else{ 
                                 if($code_lname[$code_lname.length - 1] != '4'){ 
                                     if($prev_index != 4) {
                                         $code_lname.push('4') 
+                                        $prev_index = 4;
                                     }
                                 } 
                             }
@@ -121,10 +132,12 @@ $(function(){
                             if($prev_index == ''){ $prev_index = 5; }else{ }
                             if($code_lname.length <= 1){ 
                                 $code_lname.push('5')
+                                $prev_index = 5;
                             }else{ 
                                 if($code_lname[$code_lname.length - 1] != '5'){ 
                                     if($prev_index != 5) {
                                         $code_lname.push('5') 
+                                        $prev_index = 5;
                                     }
                                 } 
                             }
@@ -136,10 +149,12 @@ $(function(){
                             if($prev_index == ''){ $prev_index = 6; }else{ }
                             if($code_lname.length <= 1){ 
                                 $code_lname.push('6')
+                                $prev_index = 6;
                             }else{ 
                                 if($code_lname[$code_lname.length - 1] != '6'){ 
                                     if($prev_index != 6) {
                                         $code_lname.push('6') 
+                                        $prev_index = 6;
                                     }
                                 } 
                             }
@@ -190,10 +205,12 @@ $(function(){
                     if($arr_thchar.includes($fname.charAt(i))){
                         if($code_fname.length <= 1){ 
                             $code_fname.push('1')
+                            $prev_fname_index = 1;
                         }else{ 
                             if($code_fname[$code_fname.length - 1] != '1'){ 
                                 if($prev_fname_index != 1){
                                     $code_fname.push('1') 
+                                    $prev_fname_index = 1;
                                 }
                             } 
                         }
@@ -204,10 +221,13 @@ $(function(){
                     if($arr_thchar.includes($fname.charAt(i))){
                         if($prev_fname_index == ''){ $prev_fname_index = 2; }else{ }
                         if($code_fname.length <= 1){ 
-                            $code_fname.push('2')}else{ 
+                            $code_fname.push('2')
+                            $prev_fname_index = 2;
+                        }else{ 
                                 if($code_fname[$code_fname.length - 1] != '2'){ 
                                     if($prev_fname_index != 2){
                                         $code_fname.push('2') 
+                                        $prev_fname_index = 2;
                                     }
                                 } 
                             }
@@ -219,10 +239,12 @@ $(function(){
                         if($prev_fname_index == ''){ $prev_fname_index = 3; }else{ }
                         if($code_fname.length <= 1){ 
                             $code_fname.push('3')
+                            $prev_fname_index = 3;
                         }else{ 
                             if($code_fname[$code_fname.length - 1] != '3'){ 
                                 if($prev_fname_index != 3){
                                     $code_fname.push('3') 
+                                    $prev_fname_index = 3;
                                 }
                             } 
                         }
@@ -234,10 +256,12 @@ $(function(){
                         if($prev_fname_index == ''){ $prev_fname_index = 4; }else{ }
                         if($code_fname.length <= 1){ 
                             $code_fname.push('4')
+                            $prev_fname_index = 4;
                         }else{ 
                             if($code_fname[$code_fname.length - 1] != '4'){ 
                                 if($prev_fname_index != 4){
                                     $code_fname.push('4') 
+                                    $prev_fname_index = 4;
                                 }
                             } 
                         }
@@ -249,10 +273,12 @@ $(function(){
                         if($prev_fname_index == ''){ $prev_fname_index = 5; }else{ }
                         if($code_fname.length <= 1){ 
                             $code_fname.push('5')
+                            $prev_fname_index = 5;
                         }else{ 
                             if($code_fname[$code_fname.length - 1] != '5'){ 
                                 if($prev_fname_index != 5){
                                     $code_fname.push('5') 
+                                    $prev_fname_index = 5;
                                 }
                             } 
                         }
@@ -264,10 +290,12 @@ $(function(){
                         if($prev_fname_index == ''){ $prev_fname_index = 6; }else{ }
                         if($code_fname.length <= 1){ 
                             $code_fname.push('6')
+                            $prev_fname_index = 6;
                         }else{ 
                             if($code_fname[$code_fname.length - 1] != '6'){ 
                                 if($prev_fname_index != 6){
                                     $code_fname.push('6') 
+                                    $prev_fname_index = 6;
                                 }
                             } 
                         }
@@ -388,10 +416,12 @@ $(function(){
                             if($prev_index == ''){ $prev_index = 1; }else{ }
                             if($code_lname.length <= 1){
                                 $code_lname.push('1')
+                                $prev_index = 1;
                             }else{ 
                                 if($code_lname[$code_lname.length - 1] != '1'){ 
                                     if($prev_index != 1) {
                                         $code_lname.push('1') 
+                                        $prev_index = 1;
                                     }
                                 } 
                             }
@@ -402,10 +432,12 @@ $(function(){
                             if($prev_index == ''){ $prev_index = 2; }else{ }
                             if($code_lname.length <= 1){ 
                                 $code_lname.push('2')
+                                $prev_index = 2;
                             }else{ 
                                 if($code_lname[$code_lname.length - 1] != '2'){ 
                                     if($prev_index != 2) {
                                         $code_lname.push('2') 
+                                        $prev_index = 2;
                                     }
                                 } 
                             }
@@ -417,10 +449,12 @@ $(function(){
                             if($prev_index == ''){ $prev_index = 3; }else{ }
                             if($code_lname.length <= 1){ 
                                 $code_lname.push('3')
+                                $prev_index = 3;
                             }else{ 
                                 if($code_lname[$code_lname.length - 1] != '3'){ 
                                     if($prev_index != 3) {
                                         $code_lname.push('3') 
+                                        $prev_index = 3;
                                     }
                                 } 
                             }
@@ -432,10 +466,12 @@ $(function(){
                             if($prev_index == ''){ $prev_index = 4; }else{ }
                             if($code_lname.length <= 1){ 
                                 $code_lname.push('4')
+                                $prev_index = 4;
                             }else{ 
                                 if($code_lname[$code_lname.length - 1] != '4'){ 
                                     if($prev_index != 4) {
                                         $code_lname.push('4') 
+                                        $prev_index = 4;
                                     }
                                 } 
                             }
@@ -447,10 +483,12 @@ $(function(){
                             if($prev_index == ''){ $prev_index = 5; }else{ }
                             if($code_lname.length <= 1){ 
                                 $code_lname.push('5')
+                                $prev_index = 5;
                             }else{ 
                                 if($code_lname[$code_lname.length - 1] != '5'){ 
                                     if($prev_index != 5) {
                                         $code_lname.push('5') 
+                                        $prev_index = 5;
                                     }
                                 } 
                             }
@@ -462,10 +500,12 @@ $(function(){
                             if($prev_index == ''){ $prev_index = 6; }else{ }
                             if($code_lname.length <= 1){ 
                                 $code_lname.push('6')
+                                $prev_index = 6;
                             }else{ 
                                 if($code_lname[$code_lname.length - 1] != '6'){ 
                                     if($prev_index != 6) {
                                         $code_lname.push('6') 
+                                        $prev_index = 6;
                                     }
                                 } 
                             }
@@ -585,10 +625,12 @@ $(function(){
                     if($arr_thchar.includes($fname.charAt(i))){
                         if($code_fname.length <= 1){ 
                             $code_fname.push('1')
+                            $prev_fname_index = 1;
                         }else{ 
                             if($code_fname[$code_fname.length - 1] != '1'){ 
                                 if($prev_fname_index != 1){
                                     $code_fname.push('1') 
+                                    $prev_fname_index = 1;
                                 }
                             } 
                         }
@@ -599,10 +641,13 @@ $(function(){
                     if($arr_thchar.includes($fname.charAt(i))){
                         if($prev_fname_index == ''){ $prev_fname_index = 2; }else{ }
                         if($code_fname.length <= 1){ 
-                            $code_fname.push('2')}else{ 
+                            $code_fname.push('2')
+                            $prev_fname_index = 2;
+                        }else{ 
                                 if($code_fname[$code_fname.length - 1] != '2'){ 
                                     if($prev_fname_index != 2){
                                         $code_fname.push('2') 
+                                        $prev_fname_index = 2;
                                     }
                                 } 
                             }
@@ -614,10 +659,12 @@ $(function(){
                         if($prev_fname_index == ''){ $prev_fname_index = 3; }else{ }
                         if($code_fname.length <= 1){ 
                             $code_fname.push('3')
+                            $prev_fname_index = 3;
                         }else{ 
                             if($code_fname[$code_fname.length - 1] != '3'){ 
                                 if($prev_fname_index != 3){
                                     $code_fname.push('3') 
+                                    $prev_fname_index = 3;
                                 }
                             } 
                         }
@@ -629,10 +676,12 @@ $(function(){
                         if($prev_fname_index == ''){ $prev_fname_index = 4; }else{ }
                         if($code_fname.length <= 1){ 
                             $code_fname.push('4')
+                            $prev_fname_index = 4;
                         }else{ 
                             if($code_fname[$code_fname.length - 1] != '4'){ 
                                 if($prev_fname_index != 4){
                                     $code_fname.push('4') 
+                                    $prev_fname_index = 4;
                                 }
                             } 
                         }
@@ -644,10 +693,12 @@ $(function(){
                         if($prev_fname_index == ''){ $prev_fname_index = 5; }else{ }
                         if($code_fname.length <= 1){ 
                             $code_fname.push('5')
+                            $prev_fname_index = 5;
                         }else{ 
                             if($code_fname[$code_fname.length - 1] != '5'){ 
                                 if($prev_fname_index != 5){
                                     $code_fname.push('5') 
+                                    $prev_fname_index = 5;
                                 }
                             } 
                         }
@@ -659,10 +710,12 @@ $(function(){
                         if($prev_fname_index == ''){ $prev_fname_index = 6; }else{ }
                         if($code_fname.length <= 1){ 
                             $code_fname.push('6')
+                            $prev_fname_index = 6;
                         }else{ 
                             if($code_fname[$code_fname.length - 1] != '6'){ 
                                 if($prev_fname_index != 6){
                                     $code_fname.push('6') 
+                                    $prev_fname_index = 6;
                                 }
                             } 
                         }
