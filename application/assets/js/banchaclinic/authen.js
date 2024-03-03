@@ -19,6 +19,7 @@ var authen = {
         
         var jxr = $.post(authen_api + 'authen.php?stage=checklogin', { username : $('#txtUsername').val() , password : $('#txtPassword').val()}, function(){}, 'json')
                    .always(function(snap){
+                        console.log(snap);
                        if(snap.status == 'Success'){
                            window.location = authen_controller + 'authen.php?stage=createsession&uid=' + snap.uid
                        }else{

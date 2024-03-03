@@ -445,12 +445,12 @@ if($stage == 'finishservice'){
         $strSQL = "SELECT * FROM bnc_druglist WHERE dlist_seq = '$seq' AND dlist_patient_id = '$patient_id'";
         $resDlist = $db->fetch($strSQL, true, false);
         if(($resDlist) && ($resDlist['status'])){
+
             foreach($resDlist['data'] as $row){
                 $dq = $row['dlist_qty'];
                 $strSQL = "SELECT ID, dstock FROM bnc_drug_tmp WHERE did = '".$row['dlist_did']."' LIMIT 1";
                 $resD = $db->fetch($strSQL, false);
                 if($resD){
-
                     if($prev_stage == 'discharge'){
                         $strSQL = "SELECT ss_id FROM bnc_stock_stagement WHERE ss_drug_id = '".$resD['ID']."' ORDER BY ss_datetime DESC LIMIT 1";
                         $resCheck1 = $db->fetch($strSQL, false, false);
