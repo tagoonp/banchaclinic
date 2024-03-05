@@ -397,7 +397,7 @@ if(!$lasted_adm){
                 <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
                     <div class="modal-content">
                         <div class="modal-header bg-success">
-                            <h5 class="modal-title white" id="myModalLabel110"><i class="bx bxs-user-plus"></i> เพิ่มยา</h5>
+                            <h5 class="modal-title white" id="myModalLabel110"><i class="bx bxs-user-plus"></i> เพิ่มยาอย่างรวดเร็ว</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close"  onclick="resetDrugform();">
                                 <i class="bx bx-x"></i>
                             </button>

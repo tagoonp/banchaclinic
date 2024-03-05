@@ -111,7 +111,7 @@ if($stage == 'getlist'){
     $patient_id = mysqli_real_escape_string($conn, $_REQUEST['patient_id']);
     $seq = mysqli_real_escape_string($conn, $_REQUEST['seq']);
 
-    $strSQL = "SELECT * FROM bnc_druglist WHERE dlist_seq = '$seq' AND dlist_patient_id = '$patient_id' ORDER BY dlist_drugname";
+    $strSQL = "SELECT * FROM bnc_druglist WHERE dlist_seq = '$seq' AND dlist_patient_id = '$patient_id'";
     $res = $db->fetch($strSQL, true, false);
     if(($res) && ($res['status'])){
         $return['status'] = 'Success';
@@ -195,12 +195,15 @@ if($stage == 'addlist'){
     if($lasted_adm){
         $seq = $lasted_adm['service_seq'];
 
-        // $strSQL = "SELECT * FROM bnc_druglist WHERE dlist_did = '$ref_drug_id' AND dlist_patient_id = '$patient_id' AND dlist_seq = '$seq' AND drug_finish_payment = 'N'";
-        // $resCheck = $db->fetch($strSQL, false);
-        // if($resCheck){
-        //     $strSQL = "DELETE FROM bnc_druglist WHERE dlist_did = '$ref_drug_id' AND dlist_patient_id = '$patient_id' AND dlist_seq = '$seq'";
-        //     $db->execute($strSQL);
-        // }
+        // echo $seq;
+        // die();
+
+        $strSQL = "SELECT * FROM bnc_druglist WHERE dlist_did = '$ref_drug_id' AND dlist_patient_id = '$patient_id' AND dlist_seq = '$seq'";
+        $resCheck = $db->fetch($strSQL, false);
+        if($resCheck){
+            $strSQL = "DELETE FROM bnc_druglist WHERE dlist_did = '$ref_drug_id' AND dlist_patient_id = '$patient_id' AND dlist_seq = '$seq'";
+            $db->execute($strSQL);
+        }
 
         $drug_sumcost = $drug_qty * $drug_cost;
 
@@ -264,10 +267,10 @@ if($stage == 'addlist2'){
 
     $seq = $service_seq;
 
-    $strSQL = "SELECT * FROM bnc_druglist WHERE dlist_did = '$ref_drug_id' AND dlist_patient_id = '$patient_id' AND dlist_seq = '$seq' AND drug_finish_payment = 'N'";
+    $strSQL = "SELECT * FROM bnc_druglist WHERE dlist_did = '$ref_drug_id' AND dlist_patient_id = '$patient_id' AND dlist_seq = '$seq'";
     $resCheck = $db->fetch($strSQL, false);
     if($resCheck){
-        $strSQL = "DELETE FROM bnc_druglist WHERE dlist_did = '$ref_drug_id' AND dlist_patient_id = '$patient_id' AND dlist_seq = '$seq' AND drug_finish_payment = 'N'";
+        $strSQL = "DELETE FROM bnc_druglist WHERE dlist_did = '$ref_drug_id' AND dlist_patient_id = '$patient_id' AND dlist_seq = '$seq'";
         $db->execute($strSQL);
     }
 
@@ -439,17 +442,12 @@ if($stage == 'finishservice'){
         $res = $db->execute($strSQL);
         $return['status'] = 'Success';
 
-        $strSQL = "SELECT * FROM bnc_druglist WHERE dlist_seq = '$seq' AND dlist_patient_id = '$patient_id' AND drug_finish_payment = 'N'";
+        $strSQL = "SELECT * FROM bnc_druglist WHERE dlist_seq = '$seq' AND dlist_patient_id = '$patient_id'";
         $resDlist = $db->fetch($strSQL, true, false);
         if(($resDlist) && ($resDlist['status'])){
 
             foreach($resDlist['data'] as $row){
-
-
                 $dq = $row['dlist_qty'];
-                $dlist_id = $row['dlist_id'];
-
-
                 $strSQL = "SELECT ID, dstock FROM bnc_drug_tmp WHERE did = '".$row['dlist_did']."' LIMIT 1";
                 $resD = $db->fetch($strSQL, false);
                 if($resD){
@@ -480,20 +478,24 @@ if($stage == 'finishservice'){
                         $newq = $resD['dstock'] - $dq;
                     }
 
+                    
+
+                    
+
+                    // $dold = $resD['dstock'];
+                    // $newq = $resD['dstock'] - $dq;
+
                     if($newq < 0){
                         $newq = 0;
                     }
                     $id = $resD['ID']; 
-
-                    $strSQL = "UPDATE bnc_druglist SET drug_finish_payment = 'Y' WHERE dlist_id = '$dlist_id'";
-                    $resUpdate = $db->execute($strSQL);
-                    
 
                     $strSQL = "UPDATE bnc_drug_tmp SET dstock = '$newq' WHERE ID = '$id'";
                     $res = $db->execute($strSQL);
 
                     $strSQL = "INSERT INTO bnc_stock_stagement (`ss_drug_id`, `ss_stage`, `ss_qty`, `ss_datetime`) VALUES ('$id', 'service', '$newq', '$datetime')";
                     $res = $db->execute($strSQL);
+
                 }
             }
         }

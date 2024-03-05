@@ -983,18 +983,33 @@ function getDruglist(){
                         $summ = 0;
                         $summcost = 0;
                         snap.data.forEach(i => {
+
+                            $pay = '';
+                            if(i.drug_finish_payment == 'Y'){
+                                // $pay = 'dn'
+                                $("#drugList").append('<tr><td>' + i.dlist_did + '</td>' + 
+                                        '<td>' + i.dlist_drugname + '</td>' +
+                                        '<td>' + i.dlist_qty + '</td>' + 
+                                        '<td>' + i.dlist_price + '</td>' + 
+                                        '<td>' + i.dlist_sumcost + '</td>' + 
+                                        '<td>' + i.dlist_sumprice + '</td>' + 
+                                        '<td class="pl-0 pr-0">ชำระแล้ว</td>' + 
+                                '</tr>')
+                            }else{
+                                $("#drugList").append('<tr><td>' + i.dlist_did + '</td>' + 
+                                        '<td>' + i.dlist_drugname + '</td>' +
+                                        '<td>' + i.dlist_qty + '</td>' + 
+                                        '<td>' + i.dlist_price + '</td>' + 
+                                        '<td>' + i.dlist_sumcost + '</td>' + 
+                                        '<td>' + i.dlist_sumprice + '</td>' + 
+                                        '<td class="pl-0 pr-0">' + 
+                                            '<button class="btn pl-1 pr-1 ' + $pay + '" onclick="updateMEDLIST(\'' + i.dlist_did + '\', \'' + i.dlist_qty + '\')"><i class="bx bx-pencil text-muted" ></i></button>' +
+                                            '<button class="btn pl-1 pr-1 ' + $pay + '" onclick="deleteMEDLIST(\'' + i.dlist_id + '\')"><i class="bx bx-trash text-danger"></i></button>' +
+                                        '</td>' + 
+                                '</tr>')
+                            }
                             
-                            $("#drugList").append('<tr><td>' + i.dlist_did + '</td>' + 
-                                    '<td>' + i.dlist_drugname + '</td>' +
-                                    '<td>' + i.dlist_qty + '</td>' + 
-                                    '<td>' + i.dlist_price + '</td>' + 
-                                    '<td>' + i.dlist_sumcost + '</td>' + 
-                                    '<td>' + i.dlist_sumprice + '</td>' + 
-                                    '<td class="pl-0 pr-0">' + 
-                                        '<button class="btn pl-1 pr-1" onclick="updateMEDLIST(\'' + i.dlist_did + '\', \'' + i.dlist_qty + '\')"><i class="bx bx-pencil text-muted" ></i></button>' +
-                                        '<button class="btn pl-1 pr-1" onclick="deleteMEDLIST(\'' + i.dlist_id + '\')"><i class="bx bx-trash text-danger"></i></button>' +
-                                    '</td>' + 
-                            '</tr>')
+                            
                             $summcost += parseFloat(i.dlist_sumcost);
                             $summ += parseFloat(i.dlist_sumprice)
                         });
